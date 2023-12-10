@@ -1,0 +1,568 @@
+openapi: 3.0.0
+info:
+  title: Game^3 API
+  version: 1.0.0
+  description: traQ v3 API
+  license:
+    name: MIT
+    url: ''
+  contact:
+    name: game3-back
+    url: 'https://github.com/traPtitech/game3-back'
+servers:
+  - url: ''
+tags:
+  - name: games
+    description: ゲームAPI
+  - name: events
+    description: イベントAPI
+  - name: auth
+    description: 認証API
+  - name: users
+    description: ユーザーAPI
+  - name: contacts
+    description: コンタクトAPI
+paths:
+  /games:
+    post:
+      summary: ゲームを登録
+      tags:
+        - games
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PostGameRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/GameImageRequest'
+      responses:
+        '201':
+          description: 成功 - ゲーム登録
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Game"
+        '400':
+          description: Bad Request
+        '404':
+          description: Not Found
+
+  /games/{gameId}:
+    patch:
+      summary: ゲーム情報を変更
+      tags:
+        - games
+      parameters:
+        - $ref: '#/components/parameters/gameIdInPath'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Game'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/GameImageRequest'
+      responses:
+        '204':
+          description: No Content - 変更されました
+        '400':
+          description: Bad Request
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
+
+    get:
+      summary: ゲーム情報を取得
+      tags:
+        - games
+      parameters:
+        - $ref: '#/components/parameters/gameIdInPath'
+      responses:
+        '200':
+          description: 成功 - ゲーム情報取得
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Game'
+        '404':
+          description: Not Found
+  /games/{gameId}/image:
+    get:
+      summary: ゲームの画像を取得
+      tags:
+        - games
+      parameters:
+        - $ref: '#/components/parameters/gameIdInPath'
+      responses:
+        '200':
+          description: 成功 - ゲームの画像を取得
+          content:
+            image/png:
+              schema:
+                $ref: '#/components/schemas/ImageResponse'
+        '404':
+          description: Not Found
+
+  /events:
+    post:
+      summary: イベントを登録
+      tags:
+        - events
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PostEventRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/EventImageRequest'
+
+      responses:
+        '201':
+          description: 成功 - イベント登録
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Event'
+        '400':
+          description: Bad Request
+        '404':
+          description: Not Found
+    get:
+      summary: イベントのリストを取得
+      tags:
+        - events
+      responses:
+        '200':
+          description: 成功 - イベントリスト取得
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Event'
+        '404':
+          description: Not Found
+  /events/now:
+    get:
+      summary: 開催中のイベントを取得
+      tags:
+        - events
+      responses:
+        '200':
+          description: 成功 - 開催中のイベント取得
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Event'
+        '404':
+          description: Not Found
+  /events/{eventId}:
+    patch:
+      summary: イベントの情報を変更
+      tags:
+        - events
+      parameters:
+        - $ref: '#/components/parameters/eventIdInPath'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Event'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/EventImageRequest'
+      responses:
+        '204':
+          description: No Content - 変更されました
+        '400':
+          description: Bad Request
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
+    get:
+      summary: イベントの情報を取得
+      tags:
+        - events
+      parameters:
+        - $ref: '#/components/parameters/eventIdInPath'
+      responses:
+        '200':
+          description: 成功 - イベント情報取得
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Event'
+        '404':
+          description: Not Found
+  /events/{eventId}/image:
+    get:
+      summary: イベントの画像を取得
+      tags:
+        - events
+      parameters:
+        - $ref: '#/components/parameters/eventIdInPath'
+      responses:
+        '200':
+          description: 成功 - イベント画像取得
+          content:
+            image/png:
+              schema:
+                $ref: '#/components/schemas/ImageResponse'
+        '404':
+          description: Not Found
+  /events/{eventId}/games:
+    get:
+      summary: イベントに登録されているゲームのリストを取得
+      tags:
+        - events
+        - games
+      parameters:
+        - $ref: '#/components/parameters/eventIdInPath'
+      responses:
+        '200':
+          description: 成功 - イベントに登録されているゲームのリスト取得
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Game'
+        '404':
+          description: Not Found
+  /events/{eventId}/csv:
+    get:
+      summary: イベントとイベントに登録されているゲームの情報をCSV形式で取得
+      tags:
+        - events
+      parameters:
+        - $ref: '#/components/parameters/eventIdInPath'
+      responses:
+        '200':
+          description: 成功 - CSV形式で情報取得
+          content:
+            text/csv:
+              schema:
+                $ref: '#/components/schemas/GetEventCsvResponse'
+        '404':
+          description: Not Found
+
+  /auth/login:
+    post:
+      summary: ログイン
+      tags:
+        - auth
+      description: Discord OAuthを使ったログイン。
+      responses:
+        '204':
+          description: No Content - ログインしました。
+        '400':
+          description: Bad Request
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+  /auth/logout:
+    post:
+      summary: ログアウト
+      tags:
+        - auth
+      responses:
+        '204':
+          description: No Content - ログアウトしました。
+
+  /users/me:
+    get:
+      summary: 自分のユーザー情報を取得
+      tags:
+        - users
+      responses:
+        '200':
+          description: 成功 - ユーザー情報取得
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        '404':
+          description: Not Found
+  /users/me/games:
+    get:
+      summary: 自分が登録したゲームのリストを取得
+      tags:
+        - users
+      responses:
+        '200':
+          description: 成功 - 登録ゲームリスト取得
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  games:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Game'
+        '404':
+          description: Not Found
+  /users/{userId}:
+    get:
+      summary: ユーザー情報を取得
+      tags:
+        - users
+      parameters:
+        - $ref: '#/components/parameters/userIdInPath'
+      responses:
+        '200':
+          description: 成功 - ユーザー情報取得
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        '404':
+          description: Not Found
+  /users/{userId}/games:
+    get:
+      summary: ユーザーが登録したゲームのリストを取得
+      tags:
+        - users
+      parameters:
+        - $ref: '#/components/parameters/userIdInPath'
+      responses:
+        '200':
+          description: 成功 - 登録ゲームリスト取得
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  games:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Game'
+        '404':
+          description: Not Found
+
+  /contacts:
+    post:
+      summary: コンタクト用メールを送信
+      tags:
+        - contacts
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PostContactsRequest'
+      responses:
+        '200':
+          description: OK
+        '400':
+          description: Bad Request
+
+components:
+  parameters:
+    gameIdInPath:
+      in: path
+      name: gameId
+      required: true
+      schema:
+        type: string
+        description: ゲームID
+    eventIdInPath:
+      in: path
+      name: eventId
+      required: true
+      schema:
+        type: string
+        description: イベントID
+    userIdInPath:
+      in: path
+      name: userId
+      required: true
+      schema:
+        type: string
+
+  schemas:
+    Game:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: ゲームID
+        creatorName:
+          type: string
+          description: ブース展示者名
+        organization:
+          type: string
+          description: 所属団体
+        twitterId:
+          type: string
+          description: Twitter ID
+        websiteUrl:
+          type: string
+          description: Webサイト等のURL
+        title:
+          type: string
+          description: 展示するゲームタイトル
+        genre:
+          type: string
+          description: 展示するゲームのジャンル
+        developmentEnvironment:
+          type: string
+          description: ゲームの開発環境
+        description:
+          type: string
+          description: ゲームの説明
+        term:
+          type: string
+          description: 用語
+        eventId:
+          type: string
+          format: uuid
+          description: イベントID
+        discordUserId:
+          type: string
+          description: DiscordのユーザーID
+      required:
+        - gameId
+        - creatorName
+        - gameTitle
+
+    Event:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: イベントID
+        slug:
+          type: string
+          description: イベントのURL
+        title:
+          type: string
+          description: "イベントのタイトル (例: 第18回)"
+        gameSubmissionPeriodStart:
+          type: string
+          format: date-time
+          description: ゲーム展示の募集開始期間
+        gameSubmissionPeriodEnd:
+          type: string
+          format: date-time
+          description: ゲーム展示の募集終了期間
+      required:
+        - eventId
+        - slug
+        - title
+        - gameSubmissionPeriodStart
+        - gameSubmissionPeriodEnd
+
+    User:
+      type: object
+      properties:
+        user:
+          type: object
+          properties:
+            userId:
+              type: string
+            username:
+              type: string
+            profileImageUrl:
+              type: string
+            role:
+              type: string
+
+    PostGameRequest:
+      type: object
+      properties:
+        creatorName:
+          type: string
+          description: ブース展示者名
+          example: "展示者名"
+        organization:
+          type: string
+          description: 所属団体
+        twitterId:
+          type: string
+          description: Twitter ID
+        websiteUrl:
+          type: string
+          description: Webサイト等のURL
+        title:
+          type: string
+          description: 展示するゲームタイトル
+          example: "ゲームタイトル"
+        genre:
+          type: string
+          description: 展示するゲームのジャンル
+        developmentEnvironment:
+          type: string
+          description: ゲームの開発環境
+        description:
+          type: string
+          description: ゲームの説明
+      required:
+        - creatorName
+        - title
+    GameImageRequest:
+      type: object
+      properties:
+        image:
+          type: string
+          format: binary
+          description: ゲームの画像
+    ImageResponse:
+      type: string
+      format: binary
+    PostEventRequest:
+      type: object
+      properties:
+        slug:
+          type: string
+          description: URL
+        title:
+          type: string
+          description: "第18回"
+        gameSubmissionPeriodStart:
+          type: string
+          description: ゲーム展示の募集期間
+          format: date-time
+        gameSubmissionPeriodEnd:
+          type: string
+          description: ゲーム展示の募集期間
+          format: date-time
+      required:
+        - slug
+        - title
+    EventImageRequest:
+      type: object
+      properties:
+        image:
+          type: string
+          format: binary
+          description: イベントの画像
+    GetEventCsvResponse:
+      type: string
+    PostContactsRequest:
+      type: object
+      properties:
+        name:
+          type: string
+          description: 名前
+        email:
+          type: string
+          description: メールアドレス
+        message:
+          type: string
+          description: お問い合わせ内容
+      required:
+        - name
+        - email
+        - message
