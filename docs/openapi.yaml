@@ -3,9 +3,6 @@ info:
   title: Game^3 API
   version: 1.0.1
   description: Game^3 API
-  license:
-    name: MIT
-    url: ''
   contact:
     name: game3-back
     url: 'https://github.com/traPtitech/game3-back'
