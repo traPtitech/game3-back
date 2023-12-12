@@ -26,6 +26,7 @@ paths:
   /games:
     post:
       summary: ゲームを登録
+      operationId: postGame
       tags:
         - games
       requestBody:
@@ -52,6 +53,7 @@ paths:
   /games/{gameId}:
     patch:
       summary: ゲーム情報を変更
+      operationId: patchGame
       tags:
         - games
       parameters:
@@ -77,6 +79,7 @@ paths:
 
     get:
       summary: ゲーム情報を取得
+      operationId: getGame
       tags:
         - games
       parameters:
@@ -93,6 +96,7 @@ paths:
   /games/{gameId}/image:
     get:
       summary: ゲームの画像を取得
+      operationId: getGameImage
       tags:
         - games
       parameters:
@@ -110,6 +114,7 @@ paths:
   /events:
     post:
       summary: イベントを登録
+      operationId: postEvent
       tags:
         - events
       requestBody:
@@ -135,6 +140,7 @@ paths:
           description: Not Found
     get:
       summary: イベントのリストを取得
+      operationId: getEvents
       tags:
         - events
       responses:
@@ -151,6 +157,7 @@ paths:
   /events/now:
     get:
       summary: 開催中のイベントを取得
+      operationId: getCurrentEvent
       tags:
         - events
       responses:
@@ -165,6 +172,7 @@ paths:
   /events/{eventId}:
     patch:
       summary: イベントの情報を変更
+      operationId: patchEvent
       tags:
         - events
       parameters:
@@ -189,6 +197,7 @@ paths:
           description: Not Found
     get:
       summary: イベントの情報を取得
+      operationId: getEvent
       tags:
         - events
       parameters:
@@ -205,6 +214,7 @@ paths:
   /events/{eventId}/image:
     get:
       summary: イベントの画像を取得
+      operationId: getEventImage
       tags:
         - events
       parameters:
@@ -221,6 +231,7 @@ paths:
   /events/{eventId}/games:
     get:
       summary: イベントに登録されているゲームのリストを取得
+      operationId: getEventGames
       tags:
         - events
         - games
@@ -240,6 +251,7 @@ paths:
   /events/{eventId}/csv:
     get:
       summary: イベントとイベントに登録されているゲームの情報をCSV形式で取得
+      operationId: getEventCsv
       tags:
         - events
       parameters:
@@ -257,6 +269,7 @@ paths:
   /auth/login:
     post:
       summary: ログイン
+      operationId: login
       tags:
         - auth
       description: Discord OAuthを使ったログイン。
@@ -272,6 +285,7 @@ paths:
   /auth/logout:
     post:
       summary: ログアウト
+      operationId: logout
       tags:
         - auth
       responses:
@@ -281,6 +295,7 @@ paths:
   /users/me:
     get:
       summary: 自分のユーザー情報を取得
+      operationId: getMe
       tags:
         - users
       responses:
@@ -295,6 +310,7 @@ paths:
   /users/me/games:
     get:
       summary: 自分が登録したゲームのリストを取得
+      operationId: getMeGames
       tags:
         - users
       responses:
@@ -314,6 +330,7 @@ paths:
   /users/{userId}:
     get:
       summary: ユーザー情報を取得
+      operationId: getUser
       tags:
         - users
       parameters:
@@ -330,6 +347,7 @@ paths:
   /users/{userId}/games:
     get:
       summary: ユーザーが登録したゲームのリストを取得
+      operationId: getUserGames
       tags:
         - users
       parameters:
@@ -352,6 +370,7 @@ paths:
   /contacts:
     post:
       summary: コンタクト用メールを送信
+      operationId: postContacts
       tags:
         - contacts
       requestBody:
