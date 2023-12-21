@@ -5,9 +5,12 @@ info:
   description: Game^3 API
   contact:
     name: game3-back
-    url: 'https://github.com/traPtitech/game3-back'
+    url: "https://github.com/traPtitech/game3-back"
 servers:
-  - url: ''
+  - url: "http://localhost:8080/api"
+    description: ローカル環境
+  - url: "https://game3.trap.games/api"
+    description: 本番環境
 tags:
   - name: games
     description: ゲームAPI
@@ -29,23 +32,20 @@ paths:
       requestBody:
         required: true
         content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/PostGameRequest'
           multipart/form-data:
             schema:
-              $ref: '#/components/schemas/GameImageRequest'
+              $ref: "#/components/schemas/PostGameRequest"
       responses:
-        '201':
-          description: 成功 - ゲーム登録
+        "201":
+          description: Created
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/Game"
-        '400':
+        "400":
           description: Bad Request
-        '404':
-          description: Not Found
+        "403":
+          description: Forbidden
 
   /games/{gameId}:
     patch:
@@ -54,24 +54,21 @@ paths:
       tags:
         - games
       parameters:
-        - $ref: '#/components/parameters/gameIdInPath'
+        - $ref: "#/components/parameters/gameIdInPath"
       requestBody:
         required: true
         content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/Game'
           multipart/form-data:
             schema:
-              $ref: '#/components/schemas/GameImageRequest'
+              $ref: "#/components/schemas/PatchGameRequest"
       responses:
-        '204':
+        "204":
           description: No Content - 変更されました
-        '400':
+        "400":
           description: Bad Request
-        '403':
+        "403":
           description: Forbidden
-        '404':
+        "404":
           description: Not Found
 
     get:
@@ -80,15 +77,15 @@ paths:
       tags:
         - games
       parameters:
-        - $ref: '#/components/parameters/gameIdInPath'
+        - $ref: "#/components/parameters/gameIdInPath"
       responses:
-        '200':
+        "200":
           description: 成功 - ゲーム情報取得
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Game'
-        '404':
+                $ref: "#/components/schemas/Game"
+        "404":
           description: Not Found
   /games/{gameId}/image:
     get:
@@ -97,15 +94,15 @@ paths:
       tags:
         - games
       parameters:
-        - $ref: '#/components/parameters/gameIdInPath'
+        - $ref: "#/components/parameters/gameIdInPath"
       responses:
-        '200':
+        "200":
           description: 成功 - ゲームの画像を取得
           content:
             image/png:
               schema:
-                $ref: '#/components/schemas/ImageResponse'
-        '404':
+                $ref: "#/components/schemas/ImageResponse"
+        "404":
           description: Not Found
 
   /events:
@@ -117,39 +114,35 @@ paths:
       requestBody:
         required: true
         content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/PostEventRequest'
           multipart/form-data:
             schema:
-              $ref: '#/components/schemas/EventImageRequest'
+              $ref: "#/components/schemas/PostEventRequest"
 
       responses:
-        '201':
+        "201":
           description: 成功 - イベント登録
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Event'
-        '400':
+                $ref: "#/components/schemas/Event"
+        "400":
           description: Bad Request
-        '404':
-          description: Not Found
+
     get:
       summary: イベントのリストを取得
       operationId: getEvents
       tags:
         - events
       responses:
-        '200':
+        "200":
           description: 成功 - イベントリスト取得
           content:
             application/json:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/Event'
-        '404':
+                  $ref: "#/components/schemas/Event"
+        "404":
           description: Not Found
   /events/now:
     get:
@@ -158,13 +151,13 @@ paths:
       tags:
         - events
       responses:
-        '200':
+        "200":
           description: 成功 - 開催中のイベント取得
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Event'
-        '404':
+                $ref: "#/components/schemas/Event"
+        "404":
           description: Not Found
   /events/{eventId}:
     patch:
@@ -173,24 +166,21 @@ paths:
       tags:
         - events
       parameters:
-        - $ref: '#/components/parameters/eventIdInPath'
+        - $ref: "#/components/parameters/eventIdInPath"
       requestBody:
         required: true
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/Event'
-          multipart/form-data:
-            schema:
-              $ref: '#/components/schemas/EventImageRequest'
+              $ref: "#/components/schemas/PatchEventRequest"
       responses:
-        '204':
+        "204":
           description: No Content - 変更されました
-        '400':
+        "400":
           description: Bad Request
-        '403':
+        "403":
           description: Forbidden
-        '404':
+        "404":
           description: Not Found
     get:
       summary: イベントの情報を取得
@@ -198,15 +188,15 @@ paths:
       tags:
         - events
       parameters:
-        - $ref: '#/components/parameters/eventIdInPath'
+        - $ref: "#/components/parameters/eventIdInPath"
       responses:
-        '200':
+        "200":
           description: 成功 - イベント情報取得
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Event'
-        '404':
+                $ref: "#/components/schemas/Event"
+        "404":
           description: Not Found
   /events/{eventId}/image:
     get:
@@ -215,15 +205,15 @@ paths:
       tags:
         - events
       parameters:
-        - $ref: '#/components/parameters/eventIdInPath'
+        - $ref: "#/components/parameters/eventIdInPath"
       responses:
-        '200':
+        "200":
           description: 成功 - イベント画像取得
           content:
             image/png:
               schema:
-                $ref: '#/components/schemas/ImageResponse'
-        '404':
+                $ref: "#/components/schemas/ImageResponse"
+        "404":
           description: Not Found
   /events/{eventId}/games:
     get:
@@ -233,17 +223,17 @@ paths:
         - events
         - games
       parameters:
-        - $ref: '#/components/parameters/eventIdInPath'
+        - $ref: "#/components/parameters/eventIdInPath"
       responses:
-        '200':
+        "200":
           description: 成功 - イベントに登録されているゲームのリスト取得
           content:
             application/json:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/Game'
-        '404':
+                  $ref: "#/components/schemas/Game"
+        "404":
           description: Not Found
   /events/{eventId}/csv:
     get:
@@ -252,15 +242,15 @@ paths:
       tags:
         - events
       parameters:
-        - $ref: '#/components/parameters/eventIdInPath'
+        - $ref: "#/components/parameters/eventIdInPath"
       responses:
-        '200':
+        "200":
           description: 成功 - CSV形式で情報取得
           content:
             text/csv:
               schema:
-                $ref: '#/components/schemas/GetEventCsvResponse'
-        '404':
+                $ref: "#/components/schemas/GetEventCsvResponse"
+        "404":
           description: Not Found
 
   /auth/login:
@@ -271,13 +261,13 @@ paths:
         - auth
       description: Discord OAuthを使ったログイン。
       responses:
-        '204':
+        "204":
           description: No Content - ログインしました。
-        '400':
+        "400":
           description: Bad Request
-        '401':
+        "401":
           description: Unauthorized
-        '403':
+        "403":
           description: Forbidden
   /auth/logout:
     post:
@@ -286,7 +276,7 @@ paths:
       tags:
         - auth
       responses:
-        '204':
+        "204":
           description: No Content - ログアウトしました。
 
   /users/me:
@@ -296,13 +286,13 @@ paths:
       tags:
         - users
       responses:
-        '200':
+        "200":
           description: 成功 - ユーザー情報取得
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/User'
-        '404':
+                $ref: "#/components/schemas/User"
+        "404":
           description: Not Found
   /users/me/games:
     get:
@@ -311,7 +301,7 @@ paths:
       tags:
         - users
       responses:
-        '200':
+        "200":
           description: 成功 - 登録ゲームリスト取得
           content:
             application/json:
@@ -321,8 +311,8 @@ paths:
                   games:
                     type: array
                     items:
-                      $ref: '#/components/schemas/Game'
-        '404':
+                      $ref: "#/components/schemas/Game"
+        "404":
           description: Not Found
   /users/{userId}:
     get:
@@ -331,15 +321,15 @@ paths:
       tags:
         - users
       parameters:
-        - $ref: '#/components/parameters/userIdInPath'
+        - $ref: "#/components/parameters/userIdInPath"
       responses:
-        '200':
+        "200":
           description: 成功 - ユーザー情報取得
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/User'
-        '404':
+                $ref: "#/components/schemas/User"
+        "404":
           description: Not Found
   /users/{userId}/games:
     get:
@@ -348,9 +338,9 @@ paths:
       tags:
         - users
       parameters:
-        - $ref: '#/components/parameters/userIdInPath'
+        - $ref: "#/components/parameters/userIdInPath"
       responses:
-        '200':
+        "200":
           description: 成功 - 登録ゲームリスト取得
           content:
             application/json:
@@ -360,8 +350,8 @@ paths:
                   games:
                     type: array
                     items:
-                      $ref: '#/components/schemas/Game'
-        '404':
+                      $ref: "#/components/schemas/Game"
+        "404":
           description: Not Found
 
   /contacts:
@@ -375,11 +365,11 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/PostContactsRequest'
+              $ref: "#/components/schemas/PostContactsRequest"
       responses:
-        '200':
+        "200":
           description: OK
-        '400':
+        "400":
           description: Bad Request
 
 components:
@@ -404,6 +394,7 @@ components:
       required: true
       schema:
         type: string
+        description: ユーザーID
 
   schemas:
     Game:
@@ -448,52 +439,9 @@ components:
           type: string
           description: DiscordのユーザーID
       required:
-        - gameId
+        - id
         - creatorName
-        - gameTitle
-
-    Event:
-      type: object
-      properties:
-        id:
-          type: string
-          format: uuid
-          description: イベントID
-        slug:
-          type: string
-          description: イベントのURL
-        title:
-          type: string
-          description: "イベントのタイトル (例: 第18回)"
-        gameSubmissionPeriodStart:
-          type: string
-          format: date-time
-          description: ゲーム展示の募集開始期間
-        gameSubmissionPeriodEnd:
-          type: string
-          format: date-time
-          description: ゲーム展示の募集終了期間
-      required:
-        - eventId
-        - slug
         - title
-        - gameSubmissionPeriodStart
-        - gameSubmissionPeriodEnd
-
-    User:
-      type: object
-      properties:
-        user:
-          type: object
-          properties:
-            userId:
-              type: string
-            username:
-              type: string
-            profileImageUrl:
-              type: string
-            role:
-              type: string
 
     PostGameRequest:
       type: object
@@ -524,25 +472,47 @@ components:
         description:
           type: string
           description: ゲームの説明
-      required:
-        - creatorName
-        - title
-    GameImageRequest:
-      type: object
-      properties:
         image:
           type: string
           format: binary
           description: ゲームの画像
-    ImageResponse:
-      type: string
-      format: binary
+      required:
+        - creatorName
+        - title
+
+    PatchGameRequest:
+      $ref: "#/components/schemas/PostGameRequest"
+
+    Event:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: イベントID (slugとしても使用)
+        title:
+          type: string
+          description: "イベントのタイトル (例: 第18回)"
+        gameSubmissionPeriodStart:
+          type: string
+          format: date-time
+          description: ゲーム展示の募集開始期間
+        gameSubmissionPeriodEnd:
+          type: string
+          format: date-time
+          description: ゲーム展示の募集終了期間
+      required:
+        - id
+        - title
+        - gameSubmissionPeriodStart
+        - gameSubmissionPeriodEnd
+
     PostEventRequest:
       type: object
       properties:
         slug:
           type: string
-          description: URL
+          description: "slug (URL内で使用, unique)"
         title:
           type: string
           description: "第18回"
@@ -554,18 +524,22 @@ components:
           type: string
           description: ゲーム展示の募集期間
           format: date-time
-      required:
-        - slug
-        - title
-    EventImageRequest:
-      type: object
-      properties:
         image:
           type: string
           format: binary
-          description: イベントの画像
+          description: パンフレット用画像
+      required:
+        - slug
+        - title
+        - gameSubmissionPeriodStart
+        - gameSubmissionPeriodEnd
+
+    PatchEventRequest:
+      $ref: "#/components/schemas/PostEventRequest"
+
     GetEventCsvResponse:
       type: string
+
     PostContactsRequest:
       type: object
       properties:
@@ -582,3 +556,22 @@ components:
         - name
         - email
         - message
+
+    ImageResponse:
+      type: string
+      format: binary
+
+    User:
+      type: object
+      properties:
+        userId:
+          type: string
+        username:
+          type: string
+        profileImageUrl:
+          type: string
+        role:
+          type: string
+          enum:
+            - admin
+            - user
