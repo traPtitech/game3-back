@@ -2,6 +2,7 @@ package handler
 
 import (
 	"github.com/labstack/echo/v4"
+	"github.com/traPtitech/game3-back/internal/api/models"
 	"github.com/traPtitech/game3-back/internal/repository"
 )
 
@@ -15,18 +16,78 @@ func New(repo *repository.Repository) *Handler {
 	}
 }
 
-func (h *Handler) SetupRoutes(api *echo.Group) {
-	// ping API
-	pingAPI := api.Group("/ping")
-	{
-		pingAPI.GET("", h.Ping)
-	}
+func (h *Handler) Login(c echo.Context) error {
+	panic("implement me")
+}
 
-	// user API
-	userAPI := api.Group("/users")
-	{
-		userAPI.GET("", h.GetUsers)
-		userAPI.POST("", h.CreateUser)
-		userAPI.GET("/:userID", h.GetUser)
-	}
+func (h *Handler) Logout(c echo.Context) error {
+	panic("implement me")
+}
+
+func (h *Handler) PostContacts(c echo.Context) error {
+	panic("implement me")
+}
+
+func (h *Handler) GetEvents(c echo.Context) error {
+	panic("implement me")
+}
+
+func (h *Handler) PostEvent(c echo.Context) error {
+	panic("implement me")
+}
+
+func (h *Handler) GetCurrentEvent(c echo.Context) error {
+	panic("implement me")
+}
+
+func (h *Handler) GetEvent(c echo.Context, eventId models.EventIdInPath) error {
+	panic("implement me")
+}
+
+func (h *Handler) PatchEvent(c echo.Context, eventId models.EventIdInPath) error {
+	panic("implement me")
+}
+
+func (h *Handler) GetEventCsv(c echo.Context, eventId models.EventIdInPath) error {
+	panic("implement me")
+}
+
+func (h *Handler) GetEventGames(c echo.Context, eventId models.EventIdInPath) error {
+	panic("implement me")
+}
+
+func (h *Handler) GetEventImage(c echo.Context, eventId models.EventIdInPath) error {
+	panic("implement me")
+}
+
+func (h *Handler) PostGame(ctx echo.Context) error {
+	panic("implement me")
+}
+
+func (h *Handler) GetGame(ctx echo.Context, gameId models.GameIdInPath) error {
+	panic("implement me")
+}
+
+func (h *Handler) PatchGame(ctx echo.Context, gameId models.GameIdInPath) error {
+	panic("implement me")
+}
+
+func (h *Handler) GetGameImage(ctx echo.Context, gameId models.GameIdInPath) error {
+	panic("implement me")
+}
+
+func (h *Handler) GetMe(ctx echo.Context) error {
+	panic("implement me")
+}
+
+func (h *Handler) GetMeGames(ctx echo.Context) error {
+	panic("implement me")
+}
+
+func (h *Handler) GetUser(ctx echo.Context, userId models.UserIdInPath) error {
+	panic("implement me")
+}
+
+func (h *Handler) GetUserGames(ctx echo.Context, userId models.UserIdInPath) error {
+	panic("implement me")
 }
