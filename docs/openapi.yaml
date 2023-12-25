@@ -249,7 +249,7 @@ paths:
           content:
             text/csv:
               schema:
-                $ref: '#/components/schemas/GetEventCsvResponse'
+                $ref: '#/components/schemas/GetEventCSVResponse'
         '404':
           description: Not Found
 
@@ -537,7 +537,7 @@ components:
     PatchEventRequest:
       $ref: '#/components/schemas/PostEventRequest'
 
-    GetEventCsvResponse:
+    GetEventCSVResponse:
       type: string
 
     PostContactsRequest:
