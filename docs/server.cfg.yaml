@@ -1,0 +1,8 @@
+package: api
+generate:
+  echo-server: true
+  embedded-spec: true
+additional-imports:
+  - package: github.com/traPtitech/game3-back/internal/api/models
+    alias: .
+output: ../internal/api/server.gen.go
