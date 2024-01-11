@@ -259,16 +259,56 @@ paths:
       operationId: login
       tags:
         - auth
-      description: Discord OAuthを使ったログイン。
+      description: Discord OAuthを使ったログイン。ログイン後にリダイレクトするURLを指定。
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                redirect:
+                  type: string
+                  description: リダイレクト先のURL
       responses:
-        '204':
-          description: No Content - ログインしました。
+        '302':
+          description: Redirect to Discord OAuth URL
+          headers:
+            Location:
+              schema:
+                type: string
+                description: Discord OAuthのログインURL
+            Set-Cookie:
+              schema:
+                type: string
+                description: セッショントークン
+        '400':
+          description: Bad Request
+  /auth/callback:
+    get:
+      summary: OAuth認証コールバック
+      operationId: oauthCallback
+      tags:
+        - auth
+      parameters:
+        - in: query
+          name: code
+          required: true
+          schema:
+            type: string
+          description: Discordからの認証コード
+      responses:
+        '302':
+          description: Redirect to original URL
+          headers:
+            Location:
+              schema:
+                type: string
+                description: もともと開いていたURL
         '400':
           description: Bad Request
         '401':
           description: Unauthorized
-        '403':
-          description: Forbidden
   /auth/logout:
     post:
       summary: ログアウト
