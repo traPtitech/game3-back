@@ -1,6 +1,7 @@
 package main
 
 // これは上手く動く
+// cd docs
 // oapi-codegen --config=models.cfg.yaml openapi.yaml
 // oapi-codegen --config=server.cfg.yaml openapi.yaml
 

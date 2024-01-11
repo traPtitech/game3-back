@@ -161,6 +161,21 @@ type GameIdInPath = string
 // UserIdInPath ユーザーID
 type UserIdInPath = string
 
+// OauthCallbackParams defines parameters for OauthCallback.
+type OauthCallbackParams struct {
+	// Code Discordからの認証コード
+	Code string `form:"code" json:"code"`
+}
+
+// LoginJSONBody defines parameters for Login.
+type LoginJSONBody struct {
+	// Redirect リダイレクト先のURL
+	Redirect *string `json:"redirect,omitempty"`
+}
+
+// LoginJSONRequestBody defines body for Login for application/json ContentType.
+type LoginJSONRequestBody LoginJSONBody
+
 // PostContactsJSONRequestBody defines body for PostContacts for application/json ContentType.
 type PostContactsJSONRequestBody = PostContactsRequest
 
