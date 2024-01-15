@@ -23,6 +23,26 @@ tags:
   - name: contacts
     description: コンタクトAPI
 paths:
+  /ping:
+    get:
+      summary: サーバーの生存確認
+      operationId: pingServer
+      responses:
+        '200':
+          description: Pong
+          content:
+            text/plain:
+              schema:
+                type: string
+                example: pong
+  /test:
+    get:
+      summary: テスト用
+      operationId: test
+      responses:
+        '200':
+          description: OK
+
   /games:
     post:
       summary: ゲームを登録
