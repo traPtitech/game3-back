@@ -2,7 +2,9 @@ package main
 
 import (
 	"fmt"
+	"github.com/getkin/kin-openapi/openapi3"
 	"github.com/labstack/echo/v4"
+	oapimiddleware "github.com/oapi-codegen/echo-middleware"
 	"github.com/traPtitech/game3-back/internal/api"
 	"github.com/traPtitech/game3-back/internal/handler"
 	"github.com/traPtitech/game3-back/internal/migration"
@@ -12,7 +14,6 @@ import (
 
 	"github.com/jmoiron/sqlx"
 	"github.com/labstack/echo/v4/middleware"
-	oapimiddleware "github.com/oapi-codegen/echo-middleware"
 )
 
 func main() {
@@ -24,10 +25,7 @@ func main() {
 		os.Exit(1)
 	}
 
-	// Clear out the servers array in the swagger spec, that skips validating
-	// that server names match. We don't know how this thing will be run.
-	swagger.Servers = nil
-
+	swagger.Servers = openapi3.Servers{&openapi3.Server{URL: "/api"}}
 	// middlewares
 	e.Use(middleware.Recover())
 	e.Use(middleware.Logger())
@@ -50,7 +48,7 @@ func main() {
 
 	// setup routes
 	h := handler.New(repo)
-	api.RegisterHandlersWithBaseURL(e, h, "/api")
+	api.RegisterHandlersWithBaseURL(e, h, "api")
 
 	e.Logger.Fatal(e.Start(config.AppAddr()))
 }
