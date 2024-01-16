@@ -50,7 +50,7 @@ func main() {
 
 	// setup routes
 	h := handler.New(repo)
-	api.RegisterHandlers(e, h)
+	api.RegisterHandlersWithBaseURL(e, h, "/api")
 
 	e.Logger.Fatal(e.Start(config.AppAddr()))
 }
