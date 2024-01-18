@@ -25,7 +25,8 @@ func main() {
 		os.Exit(1)
 	}
 
-	swagger.Servers = openapi3.Servers{&openapi3.Server{URL: "/api"}}
+	baseUrl := ""
+	swagger.Servers = openapi3.Servers{&openapi3.Server{URL: baseUrl}}
 	// middlewares
 	e.Use(middleware.Recover())
 	e.Use(middleware.Logger())
@@ -48,7 +49,7 @@ func main() {
 
 	// setup routes
 	h := handler.New(repo)
-	api.RegisterHandlersWithBaseURL(e, h, "api")
+	api.RegisterHandlersWithBaseURL(e, h, baseUrl)
 
 	e.Logger.Fatal(e.Start(config.AppAddr()))
 }
