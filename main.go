@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"github.com/getkin/kin-openapi/openapi3"
 	"github.com/labstack/echo/v4"
+	oapimiddleware "github.com/oapi-codegen/echo-middleware"
 	"github.com/traPtitech/game3-back/internal/api"
 	"github.com/traPtitech/game3-back/internal/handler"
 	"github.com/traPtitech/game3-back/internal/migration"
@@ -29,7 +30,7 @@ func main() {
 	// middlewares
 	e.Use(middleware.Recover())
 	e.Use(middleware.Logger())
-	// e.Use(oapimiddleware.OapiRequestValidator(swagger))
+	e.Use(oapimiddleware.OapiRequestValidator(swagger))
 
 	// connect to database
 	db, err := sqlx.Connect("mysql", config.MySQL().FormatDSN())
