@@ -107,6 +107,23 @@ paths:
                 $ref: '#/components/schemas/Game'
         '404':
           description: Not Found
+  /games/{gameId}/icon:
+    get:
+      summary: ゲームのアイコン画像を取得
+      operationId: getGameIcon
+      tags:
+        - games
+      parameters:
+        - $ref: '#/components/parameters/gameIdInPath'
+      responses:
+        '200':
+          description: 成功 - ゲームのアイコン画像を取得
+          content:
+            image/png:
+              schema:
+                $ref: '#/components/schemas/ImageResponse'
+        '404':
+          description: Not Found
   /games/{gameId}/image:
     get:
       summary: ゲームの画像を取得
@@ -466,25 +483,16 @@ components:
           description: ゲームID
         creatorName:
           type: string
-          description: ブース展示者名
-        organization:
+          description: ゲーム作成者
+        creatorPageUrl:
           type: string
-          description: 所属団体
-        twitterId:
+          description: ゲーム作成者のページのURL
+        gamePageUrl:
           type: string
-          description: Twitter ID
-        websiteUrl:
-          type: string
-          description: Webサイト等のURL
+          description: ゲームページのURL
         title:
           type: string
           description: 展示するゲームタイトル
-        genre:
-          type: string
-          description: 展示するゲームのジャンル
-        developmentEnvironment:
-          type: string
-          description: ゲームの開発環境
         description:
           type: string
           description: ゲームの説明
@@ -500,7 +508,7 @@ components:
           description: DiscordのユーザーID
       required:
         - id
-        - creatorName
+        - discordUserId
         - title
 
     PostGameRequest:
@@ -508,40 +516,61 @@ components:
       properties:
         creatorName:
           type: string
-          description: ブース展示者名
-          example: '展示者名'
-        organization:
+          description: ゲーム作成
+        creatorPageUrl:
           type: string
-          description: 所属団体
-        twitterId:
+          description: ゲーム作成者のページのURL
+        gamePageUrl:
           type: string
-          description: Twitter ID
-        websiteUrl:
-          type: string
-          description: Webサイト等のURL
+          description: ゲームページのURL
         title:
           type: string
           description: 展示するゲームタイトル
           example: 'ゲームタイトル'
-        genre:
-          type: string
-          description: 展示するゲームのジャンル
-        developmentEnvironment:
-          type: string
-          description: ゲームの開発環境
         description:
           type: string
           description: ゲームの説明
+        icon:
+          type: string
+          format: binary
+          description: ゲームのアイコン画像
         image:
           type: string
           format: binary
           description: ゲームの画像
       required:
-        - creatorName
         - title
+        - creatorName
+        - description
+        - icon
 
     PatchGameRequest:
-      $ref: '#/components/schemas/PostGameRequest'
+      type: object
+      properties:
+        creatorName:
+          type: string
+          description: ゲーム作成
+        creatorPageUrl:
+          type: string
+          description: ゲーム作成者のページのURL
+        gamePageUrl:
+          type: string
+          description: ゲームページのURL
+        title:
+          type: string
+          description: 展示するゲームタイトル
+          example: 'ゲームタイトル'
+        description:
+          type: string
+          description: ゲームの説明
+        icon:
+          type: string
+          format: binary
+          description: ゲームのアイコン画像
+        image:
+          type: string
+          format: binary
+          description: ゲームの画像
 
     Event:
       type: object
