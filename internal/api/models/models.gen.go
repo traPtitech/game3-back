@@ -32,41 +32,32 @@ type Event struct {
 
 // Game defines model for Game.
 type Game struct {
-	// CreatorName ブース展示者名
-	CreatorName string `json:"creatorName"`
+	// CreatorName ゲーム作成者
+	CreatorName *string `json:"creatorName,omitempty"`
+
+	// CreatorPageUrl ゲーム作成者のページのURL
+	CreatorPageUrl *string `json:"creatorPageUrl,omitempty"`
 
 	// Description ゲームの説明
 	Description *string `json:"description,omitempty"`
 
-	// DevelopmentEnvironment ゲームの開発環境
-	DevelopmentEnvironment *string `json:"developmentEnvironment,omitempty"`
-
 	// DiscordUserId DiscordのユーザーID
-	DiscordUserId *string `json:"discordUserId,omitempty"`
+	DiscordUserId string `json:"discordUserId"`
 
 	// EventId イベントID
 	EventId *openapi_types.UUID `json:"eventId,omitempty"`
 
-	// Genre 展示するゲームのジャンル
-	Genre *string `json:"genre,omitempty"`
+	// GamePageUrl ゲームページのURL
+	GamePageUrl *string `json:"gamePageUrl,omitempty"`
 
 	// Id ゲームID
 	Id openapi_types.UUID `json:"id"`
-
-	// Organization 所属団体
-	Organization *string `json:"organization,omitempty"`
 
 	// Term 用語
 	Term *string `json:"term,omitempty"`
 
 	// Title 展示するゲームタイトル
 	Title string `json:"title"`
-
-	// TwitterId Twitter ID
-	TwitterId *string `json:"twitterId,omitempty"`
-
-	// WebsiteUrl Webサイト等のURL
-	WebsiteUrl *string `json:"websiteUrl,omitempty"`
 }
 
 // GetEventCSVResponse defines model for GetEventCSVResponse.
@@ -79,7 +70,37 @@ type ImageResponse = openapi_types.File
 type PatchEventRequest = PostEventRequest
 
 // PatchGameRequest defines model for PatchGameRequest.
-type PatchGameRequest = PostGameRequest
+type PatchGameRequest struct {
+	// CreatorName ゲーム作成者
+	CreatorName *string `json:"creatorName,omitempty"`
+
+	// CreatorPageUrl ゲーム作成者のページのURL
+	CreatorPageUrl *string `json:"creatorPageUrl,omitempty"`
+
+	// Description ゲームの説明
+	Description *string `json:"description,omitempty"`
+
+	// DiscordUserId DiscordのユーザーID
+	DiscordUserId *string `json:"discordUserId,omitempty"`
+
+	// EventId イベントID
+	EventId *openapi_types.UUID `json:"eventId,omitempty"`
+
+	// GamePageUrl ゲームページのURL
+	GamePageUrl *string `json:"gamePageUrl,omitempty"`
+
+	// Icon ゲームのアイコン画像
+	Icon *openapi_types.File `json:"icon,omitempty"`
+
+	// Image ゲームの画像
+	Image *openapi_types.File `json:"image,omitempty"`
+
+	// Term 用語
+	Term *string `json:"term,omitempty"`
+
+	// Title 展示するゲームタイトル
+	Title *string `json:"title,omitempty"`
+}
 
 // PostContactsRequest defines model for PostContactsRequest.
 type PostContactsRequest struct {
@@ -113,32 +134,26 @@ type PostEventRequest struct {
 
 // PostGameRequest defines model for PostGameRequest.
 type PostGameRequest struct {
-	// CreatorName ブース展示者名
+	// CreatorName ゲーム作成
 	CreatorName string `json:"creatorName"`
 
+	// CreatorPageUrl ゲーム作成者のページのURL
+	CreatorPageUrl *string `json:"creatorPageUrl,omitempty"`
+
 	// Description ゲームの説明
-	Description *string `json:"description,omitempty"`
+	Description string `json:"description"`
 
-	// DevelopmentEnvironment ゲームの開発環境
-	DevelopmentEnvironment *string `json:"developmentEnvironment,omitempty"`
+	// GamePageUrl ゲームページのURL
+	GamePageUrl *string `json:"gamePageUrl,omitempty"`
 
-	// Genre 展示するゲームのジャンル
-	Genre *string `json:"genre,omitempty"`
+	// Icon ゲームのアイコン画像
+	Icon openapi_types.File `json:"icon"`
 
 	// Image ゲームの画像
 	Image *openapi_types.File `json:"image,omitempty"`
 
-	// Organization 所属団体
-	Organization *string `json:"organization,omitempty"`
-
 	// Title 展示するゲームタイトル
 	Title string `json:"title"`
-
-	// TwitterId Twitter ID
-	TwitterId *string `json:"twitterId,omitempty"`
-
-	// WebsiteUrl Webサイト等のURL
-	WebsiteUrl *string `json:"websiteUrl,omitempty"`
 }
 
 // User defines model for User.
