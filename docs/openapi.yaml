@@ -549,7 +549,7 @@ components:
       properties:
         creatorName:
           type: string
-          description: ゲーム作成
+          description: ゲーム作成者
         creatorPageUrl:
           type: string
           description: ゲーム作成者のページのURL
@@ -563,6 +563,16 @@ components:
         description:
           type: string
           description: ゲームの説明
+        term:
+          type: string
+          description: 用語
+        eventId:
+          type: string
+          format: uuid
+          description: イベントID
+        discordUserId:
+          type: string
+          description: DiscordのユーザーID
         icon:
           type: string
           format: binary
