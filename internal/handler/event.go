@@ -28,7 +28,10 @@ func (h *Handler) PatchEvent(c echo.Context, eventId models.EventIdInPath) error
 func (h *Handler) GetEventCsv(c echo.Context, eventId models.EventIdInPath) error {
 	panic("implement me")
 }
-
+func (h *Handler) GetEventTerms(ctx echo.Context, eventId models.EventIdInPath) error {
+	//TODO implement me
+	panic("implement me")
+}
 func (h *Handler) GetEventGames(c echo.Context, eventId models.EventIdInPath) error {
 	panic("implement me")
 }

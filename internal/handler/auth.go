@@ -184,3 +184,7 @@ func (h *Handler) Login(c echo.Context) error {
 
 	return c.Redirect(http.StatusSeeOther, discordURL)
 }
+
+func (h *Handler) Logout(c echo.Context) error {
+	panic("implement me")
+}

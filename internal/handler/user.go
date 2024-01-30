@@ -1,5 +1,25 @@
 package handler
 
+import (
+	"github.com/labstack/echo/v4"
+	"github.com/traPtitech/game3-back/internal/api/models"
+)
+
+func (h *Handler) GetMe(ctx echo.Context) error {
+	panic("implement me")
+}
+func (h *Handler) GetMeGames(ctx echo.Context) error {
+	panic("implement me")
+}
+
+func (h *Handler) GetUser(ctx echo.Context, userId models.UserIdInPath) error {
+	panic("implement me")
+}
+
+func (h *Handler) GetUserGames(ctx echo.Context, userId models.UserIdInPath) error {
+	panic("implement me")
+}
+
 //// スキーマ定義
 //type (
 //	GetUsersResponse []GetUserResponse
