@@ -481,6 +481,10 @@ components:
           type: string
           format: uuid
           description: ゲームID
+        termId:
+          type: string
+          format: uuid
+          description: タームID
         creatorName:
           type: string
           description: ゲーム作成者
@@ -496,9 +500,6 @@ components:
         description:
           type: string
           description: ゲームの説明
-        term:
-          type: string
-          description: 用語
         eventId:
           type: string
           format: uuid
@@ -547,6 +548,10 @@ components:
     PatchGameRequest:
       type: object
       properties:
+        termId:
+          type: string
+          format: uuid
+          description: タームID
         creatorName:
           type: string
           description: ゲーム作成者
@@ -563,13 +568,6 @@ components:
         description:
           type: string
           description: ゲームの説明
-        term:
-          type: string
-          description: 用語
-        eventId:
-          type: string
-          format: uuid
-          description: イベントID
         discordUserId:
           type: string
           description: DiscordのユーザーID
@@ -587,7 +585,6 @@ components:
       properties:
         id:
           type: string
-          format: uuid
           description: イベントID (slugとしても使用)
         title:
           type: string
@@ -611,7 +608,7 @@ components:
       properties:
         slug:
           type: string
-          description: 'slug (URL内で使用, unique)'
+          description: 'slug (URL内で使用, unique) 18th等'
         title:
           type: string
           description: '第18回'
