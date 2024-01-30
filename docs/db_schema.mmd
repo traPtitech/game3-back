@@ -1,0 +1,50 @@
+erDiagram
+    session {
+        uuid id PK
+        uuid discordUserId
+        string redirect
+        string access_token
+        string refresh_token
+        int expires_in
+        timestamp created_at
+        timestamp updated_at
+    }
+
+    event {
+        string slug PK
+        string title
+        timestamp startAt
+        timestamp endAt
+        timestamp created_at
+        timestamp updated_at
+    }
+
+    term {
+        uuid id PK
+        string eventSlug FK
+        bool isDefault
+        timestamp startAt
+        timestamp endAt
+        timestamp created_at
+        timestamp updated_at
+    }
+
+    game {
+        uuid id PK
+        uuid termId FK
+        uuid discordUserId FK
+        string creatorName
+        string creatorPageUrl
+        string gamePageUrl
+        string title
+        string description
+        string place
+        string icon
+        string image
+        timestamp created_at
+        timestamp updated_at
+    }
+
+    event ||--o{ term : ""
+    term ||--o{ game : ""
+    session }|--o{ game : ""
