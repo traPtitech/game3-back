@@ -38,7 +38,7 @@ func (h *Handler) GetCurrentEvent(c echo.Context) error {
 	return c.JSON(http.StatusOK, event)
 }
 
-func (h *Handler) GetEvent(c echo.Context, eventId models.EventIdInPath) error {
+func (h *Handler) GetEvent(c echo.Context, eventId models.EventSlugInPath) error {
 	event, err := h.repo.GetEvent(eventId)
 	if err != nil {
 		return echo.NewHTTPError(http.StatusInternalServerError, err.Error())
@@ -47,21 +47,21 @@ func (h *Handler) GetEvent(c echo.Context, eventId models.EventIdInPath) error {
 	return c.JSON(http.StatusOK, event)
 }
 
-func (h *Handler) PatchEvent(c echo.Context, eventId models.EventIdInPath) error {
+func (h *Handler) PatchEvent(c echo.Context, eventId models.EventSlugInPath) error {
 	panic("implement me")
 }
 
-func (h *Handler) GetEventCsv(c echo.Context, eventId models.EventIdInPath) error {
+func (h *Handler) GetEventCsv(c echo.Context, eventId models.EventSlugInPath) error {
 	panic("implement me")
 }
-func (h *Handler) GetEventTerms(ctx echo.Context, eventId models.EventIdInPath) error {
+func (h *Handler) GetEventTerms(ctx echo.Context, eventId models.EventSlugInPath) error {
 	//TODO implement me
 	panic("implement me")
 }
-func (h *Handler) GetEventGames(c echo.Context, eventId models.EventIdInPath) error {
+func (h *Handler) GetEventGames(c echo.Context, eventId models.EventSlugInPath) error {
 	panic("implement me")
 }
 
-func (h *Handler) GetEventImage(c echo.Context, eventId models.EventIdInPath) error {
+func (h *Handler) GetEventImage(c echo.Context, eventId models.EventSlugInPath) error {
 	panic("implement me")
 }

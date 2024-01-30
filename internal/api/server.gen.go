@@ -43,24 +43,24 @@ type ServerInterface interface {
 	// (GET /events/now)
 	GetCurrentEvent(ctx echo.Context) error
 	// イベントの情報を取得
-	// (GET /events/{eventId})
-	GetEvent(ctx echo.Context, eventId EventIdInPath) error
+	// (GET /events/{eventSlug})
+	GetEvent(ctx echo.Context, eventSlug EventSlugInPath) error
 	// イベントの情報を変更
-	// (PATCH /events/{eventId})
-	PatchEvent(ctx echo.Context, eventId EventIdInPath) error
+	// (PATCH /events/{eventSlug})
+	PatchEvent(ctx echo.Context, eventSlug EventSlugInPath) error
 	// イベントとイベントに登録されているゲームの情報をCSV形式で取得
-	// (GET /events/{eventId}/csv)
-	GetEventCsv(ctx echo.Context, eventId EventIdInPath) error
+	// (GET /events/{eventSlug}/csv)
+	GetEventCsv(ctx echo.Context, eventSlug EventSlugInPath) error
 	// イベントに登録されているゲームのリストを取得
-	// (GET /events/{eventId}/games)
-	GetEventGames(ctx echo.Context, eventId EventIdInPath) error
+	// (GET /events/{eventSlug}/games)
+	GetEventGames(ctx echo.Context, eventSlug EventSlugInPath) error
 	// イベントの画像を取得
-	// (GET /events/{eventId}/image)
-	GetEventImage(ctx echo.Context, eventId EventIdInPath) error
+	// (GET /events/{eventSlug}/image)
+	GetEventImage(ctx echo.Context, eventSlug EventSlugInPath) error
 	// イベントに登録されているタームのリストを取得
-	// (GET /events/{eventId}/terms)
-	GetEventTerms(ctx echo.Context, eventId EventIdInPath) error
-	// ゲームのリストを取得 GET /games?termId=X&eventId=X&userId=X&include=unpublished
+	// (GET /events/{eventSlug}/terms)
+	GetEventTerms(ctx echo.Context, eventSlug EventSlugInPath) error
+	// ゲームのリストを取得 GET /games?termId=X&eventSlug=X&userId=X&include=unpublished
 	// (GET /games)
 	GetGames(ctx echo.Context, params GetGamesParams) error
 	// ゲームを登録
@@ -193,96 +193,96 @@ func (w *ServerInterfaceWrapper) GetCurrentEvent(ctx echo.Context) error {
 // GetEvent converts echo context to params.
 func (w *ServerInterfaceWrapper) GetEvent(ctx echo.Context) error {
 	var err error
-	// ------------- Path parameter "eventId" -------------
-	var eventId EventIdInPath
+	// ------------- Path parameter "eventSlug" -------------
+	var eventSlug EventSlugInPath
 
-	err = runtime.BindStyledParameterWithLocation("simple", false, "eventId", runtime.ParamLocationPath, ctx.Param("eventId"), &eventId)
+	err = runtime.BindStyledParameterWithLocation("simple", false, "eventSlug", runtime.ParamLocationPath, ctx.Param("eventSlug"), &eventSlug)
 	if err != nil {
-		return echo.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("Invalid format for parameter eventId: %s", err))
+		return echo.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("Invalid format for parameter eventSlug: %s", err))
 	}
 
 	// Invoke the callback with all the unmarshaled arguments
-	err = w.Handler.GetEvent(ctx, eventId)
+	err = w.Handler.GetEvent(ctx, eventSlug)
 	return err
 }
 
 // PatchEvent converts echo context to params.
 func (w *ServerInterfaceWrapper) PatchEvent(ctx echo.Context) error {
 	var err error
-	// ------------- Path parameter "eventId" -------------
-	var eventId EventIdInPath
+	// ------------- Path parameter "eventSlug" -------------
+	var eventSlug EventSlugInPath
 
-	err = runtime.BindStyledParameterWithLocation("simple", false, "eventId", runtime.ParamLocationPath, ctx.Param("eventId"), &eventId)
+	err = runtime.BindStyledParameterWithLocation("simple", false, "eventSlug", runtime.ParamLocationPath, ctx.Param("eventSlug"), &eventSlug)
 	if err != nil {
-		return echo.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("Invalid format for parameter eventId: %s", err))
+		return echo.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("Invalid format for parameter eventSlug: %s", err))
 	}
 
 	// Invoke the callback with all the unmarshaled arguments
-	err = w.Handler.PatchEvent(ctx, eventId)
+	err = w.Handler.PatchEvent(ctx, eventSlug)
 	return err
 }
 
 // GetEventCsv converts echo context to params.
 func (w *ServerInterfaceWrapper) GetEventCsv(ctx echo.Context) error {
 	var err error
-	// ------------- Path parameter "eventId" -------------
-	var eventId EventIdInPath
+	// ------------- Path parameter "eventSlug" -------------
+	var eventSlug EventSlugInPath
 
-	err = runtime.BindStyledParameterWithLocation("simple", false, "eventId", runtime.ParamLocationPath, ctx.Param("eventId"), &eventId)
+	err = runtime.BindStyledParameterWithLocation("simple", false, "eventSlug", runtime.ParamLocationPath, ctx.Param("eventSlug"), &eventSlug)
 	if err != nil {
-		return echo.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("Invalid format for parameter eventId: %s", err))
+		return echo.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("Invalid format for parameter eventSlug: %s", err))
 	}
 
 	// Invoke the callback with all the unmarshaled arguments
-	err = w.Handler.GetEventCsv(ctx, eventId)
+	err = w.Handler.GetEventCsv(ctx, eventSlug)
 	return err
 }
 
 // GetEventGames converts echo context to params.
 func (w *ServerInterfaceWrapper) GetEventGames(ctx echo.Context) error {
 	var err error
-	// ------------- Path parameter "eventId" -------------
-	var eventId EventIdInPath
+	// ------------- Path parameter "eventSlug" -------------
+	var eventSlug EventSlugInPath
 
-	err = runtime.BindStyledParameterWithLocation("simple", false, "eventId", runtime.ParamLocationPath, ctx.Param("eventId"), &eventId)
+	err = runtime.BindStyledParameterWithLocation("simple", false, "eventSlug", runtime.ParamLocationPath, ctx.Param("eventSlug"), &eventSlug)
 	if err != nil {
-		return echo.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("Invalid format for parameter eventId: %s", err))
+		return echo.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("Invalid format for parameter eventSlug: %s", err))
 	}
 
 	// Invoke the callback with all the unmarshaled arguments
-	err = w.Handler.GetEventGames(ctx, eventId)
+	err = w.Handler.GetEventGames(ctx, eventSlug)
 	return err
 }
 
 // GetEventImage converts echo context to params.
 func (w *ServerInterfaceWrapper) GetEventImage(ctx echo.Context) error {
 	var err error
-	// ------------- Path parameter "eventId" -------------
-	var eventId EventIdInPath
+	// ------------- Path parameter "eventSlug" -------------
+	var eventSlug EventSlugInPath
 
-	err = runtime.BindStyledParameterWithLocation("simple", false, "eventId", runtime.ParamLocationPath, ctx.Param("eventId"), &eventId)
+	err = runtime.BindStyledParameterWithLocation("simple", false, "eventSlug", runtime.ParamLocationPath, ctx.Param("eventSlug"), &eventSlug)
 	if err != nil {
-		return echo.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("Invalid format for parameter eventId: %s", err))
+		return echo.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("Invalid format for parameter eventSlug: %s", err))
 	}
 
 	// Invoke the callback with all the unmarshaled arguments
-	err = w.Handler.GetEventImage(ctx, eventId)
+	err = w.Handler.GetEventImage(ctx, eventSlug)
 	return err
 }
 
 // GetEventTerms converts echo context to params.
 func (w *ServerInterfaceWrapper) GetEventTerms(ctx echo.Context) error {
 	var err error
-	// ------------- Path parameter "eventId" -------------
-	var eventId EventIdInPath
+	// ------------- Path parameter "eventSlug" -------------
+	var eventSlug EventSlugInPath
 
-	err = runtime.BindStyledParameterWithLocation("simple", false, "eventId", runtime.ParamLocationPath, ctx.Param("eventId"), &eventId)
+	err = runtime.BindStyledParameterWithLocation("simple", false, "eventSlug", runtime.ParamLocationPath, ctx.Param("eventSlug"), &eventSlug)
 	if err != nil {
-		return echo.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("Invalid format for parameter eventId: %s", err))
+		return echo.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("Invalid format for parameter eventSlug: %s", err))
 	}
 
 	// Invoke the callback with all the unmarshaled arguments
-	err = w.Handler.GetEventTerms(ctx, eventId)
+	err = w.Handler.GetEventTerms(ctx, eventSlug)
 	return err
 }
 
@@ -299,11 +299,11 @@ func (w *ServerInterfaceWrapper) GetGames(ctx echo.Context) error {
 		return echo.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("Invalid format for parameter termId: %s", err))
 	}
 
-	// ------------- Optional query parameter "eventId" -------------
+	// ------------- Optional query parameter "eventSlug" -------------
 
-	err = runtime.BindQueryParameter("form", true, false, "eventId", ctx.QueryParams(), &params.EventId)
+	err = runtime.BindQueryParameter("form", true, false, "eventSlug", ctx.QueryParams(), &params.EventSlug)
 	if err != nil {
-		return echo.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("Invalid format for parameter eventId: %s", err))
+		return echo.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("Invalid format for parameter eventSlug: %s", err))
 	}
 
 	// ------------- Optional query parameter "userId" -------------
@@ -567,12 +567,12 @@ func RegisterHandlersWithBaseURL(router EchoRouter, si ServerInterface, baseURL 
 	router.GET(baseURL+"/events", wrapper.GetEvents)
 	router.POST(baseURL+"/events", wrapper.PostEvent)
 	router.GET(baseURL+"/events/now", wrapper.GetCurrentEvent)
-	router.GET(baseURL+"/events/:eventId", wrapper.GetEvent)
-	router.PATCH(baseURL+"/events/:eventId", wrapper.PatchEvent)
-	router.GET(baseURL+"/events/:eventId/csv", wrapper.GetEventCsv)
-	router.GET(baseURL+"/events/:eventId/games", wrapper.GetEventGames)
-	router.GET(baseURL+"/events/:eventId/image", wrapper.GetEventImage)
-	router.GET(baseURL+"/events/:eventId/terms", wrapper.GetEventTerms)
+	router.GET(baseURL+"/events/:eventSlug", wrapper.GetEvent)
+	router.PATCH(baseURL+"/events/:eventSlug", wrapper.PatchEvent)
+	router.GET(baseURL+"/events/:eventSlug/csv", wrapper.GetEventCsv)
+	router.GET(baseURL+"/events/:eventSlug/games", wrapper.GetEventGames)
+	router.GET(baseURL+"/events/:eventSlug/image", wrapper.GetEventImage)
+	router.GET(baseURL+"/events/:eventSlug/terms", wrapper.GetEventTerms)
 	router.GET(baseURL+"/games", wrapper.GetGames)
 	router.POST(baseURL+"/games", wrapper.PostGame)
 	router.GET(baseURL+"/games/:gameId", wrapper.GetGame)
@@ -596,54 +596,54 @@ func RegisterHandlersWithBaseURL(router EchoRouter, si ServerInterface, baseURL 
 // Base64 encoded, gzipped, json marshaled Swagger object
 var swaggerSpec = []string{
 
-	"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",
+	"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",
 }
 
 // GetSwagger returns the content of the embedded swagger specification file

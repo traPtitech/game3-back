@@ -36,9 +36,9 @@ func (r *Repository) GetCurrentEvent() (*models.Event, error) {
 	return event, nil
 }
 
-func (r *Repository) GetEvent(eventId models.EventIdInPath) (*models.Event, error) {
+func (r *Repository) GetEvent(eventSlug models.EventSlugInPath) (*models.Event, error) {
 	event := &models.Event{}
-	if err := r.db.Get(event, "SELECT * FROM event WHERE slug = ?", eventId); err != nil {
+	if err := r.db.Get(event, "SELECT * FROM event WHERE slug = ?", eventSlug); err != nil {
 		return nil, err
 	}
 

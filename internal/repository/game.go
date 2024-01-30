@@ -21,9 +21,9 @@ func (r *Repository) GetGames(params models.GetGamesParams) ([]*domains.Game, er
 		whereClauses = append(whereClauses, "game.termId = ?")
 		args = append(args, params.TermId)
 	}
-	if params.EventId != nil {
+	if params.EventSlug != nil {
 		whereClauses = append(whereClauses, "game.eventId = ?")
-		args = append(args, params.EventId)
+		args = append(args, params.EventSlug)
 	}
 	if params.UserId != nil {
 		whereClauses = append(whereClauses, "game.discordUserId = ?")

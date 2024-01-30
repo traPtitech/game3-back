@@ -52,11 +52,7 @@ func (h *Handler) PostGame(c echo.Context) error {
 }
 
 func (h *Handler) GetGame(c echo.Context, gameID models.GameIdInPath) error {
-	gameUUID, err := uuid.Parse(gameID)
-	if err != nil {
-		return echo.NewHTTPError(http.StatusBadRequest, err.Error())
-	}
-	game, err := h.repo.GetGame(gameUUID)
+	game, err := h.repo.GetGame(gameID)
 	if err != nil {
 		return echo.NewHTTPError(http.StatusInternalServerError, err.Error())
 	}
@@ -64,14 +60,14 @@ func (h *Handler) GetGame(c echo.Context, gameID models.GameIdInPath) error {
 	return c.JSON(http.StatusOK, game)
 }
 
-func (h *Handler) PatchGame(c echo.Context, gameId models.GameIdInPath) error {
+func (h *Handler) PatchGame(c echo.Context, gameID models.GameIdInPath) error {
 	panic("implement me")
 }
 
-func (h *Handler) GetGameIcon(c echo.Context, gameId models.GameIdInPath) error {
+func (h *Handler) GetGameIcon(c echo.Context, gameID models.GameIdInPath) error {
 	//TODO implement me
 	panic("implement me")
 }
-func (h *Handler) GetGameImage(c echo.Context, gameId models.GameIdInPath) error {
+func (h *Handler) GetGameImage(c echo.Context, gameID models.GameIdInPath) error {
 	panic("implement me")
 }

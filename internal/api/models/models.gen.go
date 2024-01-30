@@ -23,8 +23,8 @@ type Event struct {
 	// GameSubmissionPeriodStart ゲーム展示の募集開始期間
 	GameSubmissionPeriodStart time.Time `json:"gameSubmissionPeriodStart"`
 
-	// Id イベントID (slugとしても使用)
-	Id string `json:"id"`
+	// Slug イベントslug (イベントのID的な立ち位置)
+	Slug string `json:"slug"`
 
 	// Title イベントのタイトル (例: 第18回)
 	Title string `json:"title"`
@@ -33,19 +33,16 @@ type Event struct {
 // Game defines model for Game.
 type Game struct {
 	// CreatorName ゲーム作成者
-	CreatorName *string `json:"creatorName,omitempty"`
+	CreatorName string `json:"creatorName"`
 
 	// CreatorPageUrl ゲーム作成者のページのURL
 	CreatorPageUrl *string `json:"creatorPageUrl,omitempty"`
 
 	// Description ゲームの説明
-	Description *string `json:"description,omitempty"`
+	Description string `json:"description"`
 
 	// DiscordUserId DiscordのユーザーID
-	DiscordUserId string `json:"discordUserId"`
-
-	// EventId イベントID
-	EventId *openapi_types.UUID `json:"eventId,omitempty"`
+	DiscordUserId openapi_types.UUID `json:"discordUserId"`
 
 	// GamePageUrl ゲームページのURL
 	GamePageUrl *string `json:"gamePageUrl,omitempty"`
@@ -57,7 +54,7 @@ type Game struct {
 	Place *string `json:"place,omitempty"`
 
 	// TermId タームID
-	TermId *openapi_types.UUID `json:"termId,omitempty"`
+	TermId openapi_types.UUID `json:"termId"`
 
 	// Title 展示するゲームタイトル
 	Title string `json:"title"`
@@ -215,17 +212,17 @@ type User struct {
 // UserRole defines model for User.Role.
 type UserRole string
 
-// EventIdInPath イベントID
-type EventIdInPath = string
+// EventSlugInPath イベントSlug
+type EventSlugInPath = string
 
 // GameIdInPath ゲームID
-type GameIdInPath = string
+type GameIdInPath = openapi_types.UUID
 
 // TermIdInPath タームID
 type TermIdInPath = openapi_types.UUID
 
 // UserIdInPath ユーザーID
-type UserIdInPath = string
+type UserIdInPath = openapi_types.UUID
 
 // OauthCallbackParams defines parameters for OauthCallback.
 type OauthCallbackParams struct {
@@ -244,8 +241,8 @@ type GetGamesParams struct {
 	// TermId タームID
 	TermId *openapi_types.UUID `form:"termId,omitempty" json:"termId,omitempty"`
 
-	// EventId イベントID
-	EventId *openapi_types.UUID `form:"eventId,omitempty" json:"eventId,omitempty"`
+	// EventSlug イベントID
+	EventSlug *string `form:"eventSlug,omitempty" json:"eventSlug,omitempty"`
 
 	// UserId ユーザーID
 	UserId *openapi_types.UUID `form:"userId,omitempty" json:"userId,omitempty"`
