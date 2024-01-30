@@ -48,7 +48,7 @@ func (h *Handler) PostGame(c echo.Context) error {
 		return echo.NewHTTPError(http.StatusInternalServerError, err.Error())
 	}
 
-	return c.JSON(http.StatusOK, game)
+	return c.JSON(http.StatusCreated, game)
 }
 
 func (h *Handler) GetGame(c echo.Context, gameID models.GameIdInPath) error {

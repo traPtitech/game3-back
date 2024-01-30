@@ -1,7 +1,6 @@
 package repository
 
 import (
-	"fmt"
 	"github.com/google/uuid"
 	"github.com/traPtitech/game3-back/internal/api/models"
 	"github.com/traPtitech/game3-back/internal/domains"
@@ -54,7 +53,7 @@ func (r *Repository) PostGame(game *models.PostGameRequest) (*uuid.UUID, error) 
 	if err != nil {
 		return nil, err
 	}
-	fmt.Println(game.Icon.Filename())
+
 	var imageData []byte
 	if game.Image != nil {
 		imageData, err = game.Image.Bytes()
