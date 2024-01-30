@@ -47,7 +47,7 @@ paths:
 
   /games:
     get:
-      summary: ゲームのリストを取得 GET /games?termId=X&eventId=X&userId=X&include=unpublished
+      summary: ゲームのリストを取得 GET /games?termId=X&eventSlug=X&userId=X&include=unpublished
       operationId: getGames
       tags:
         - games
@@ -59,10 +59,9 @@ paths:
             format: uuid
           description: タームID
         - in: query
-          name: eventId
+          name: eventSlug
           schema:
             type: string
-            format: uuid
           description: イベントID
         - in: query
           name: userId
@@ -333,14 +332,14 @@ paths:
                 $ref: '#/components/schemas/Event'
         '404':
           description: Not Found
-  /events/{eventId}:
+  /events/{eventSlug}:
     patch:
       summary: イベントの情報を変更
       operationId: patchEvent
       tags:
         - events
       parameters:
-        - $ref: '#/components/parameters/eventIdInPath'
+        - $ref: '#/components/parameters/eventSlugInPath'
       requestBody:
         required: true
         content:
@@ -362,7 +361,7 @@ paths:
       tags:
         - events
       parameters:
-        - $ref: '#/components/parameters/eventIdInPath'
+        - $ref: '#/components/parameters/eventSlugInPath'
       responses:
         '200':
           description: 成功 - イベント情報取得
@@ -372,14 +371,14 @@ paths:
                 $ref: '#/components/schemas/Event'
         '404':
           description: Not Found
-  /events/{eventId}/image:
+  /events/{eventSlug}/image:
     get:
       summary: イベントの画像を取得
       operationId: getEventImage
       tags:
         - events
       parameters:
-        - $ref: '#/components/parameters/eventIdInPath'
+        - $ref: '#/components/parameters/eventSlugInPath'
       responses:
         '200':
           description: 成功 - イベント画像取得
@@ -389,7 +388,7 @@ paths:
                 $ref: '#/components/schemas/ImageResponse'
         '404':
           description: Not Found
-  /events/{eventId}/terms:
+  /events/{eventSlug}/terms:
     get:
       summary: イベントに登録されているタームのリストを取得
       operationId: getEventTerms
@@ -397,7 +396,7 @@ paths:
         - events
         - games
       parameters:
-        - $ref: '#/components/parameters/eventIdInPath'
+        - $ref: '#/components/parameters/eventSlugInPath'
       responses:
         '200':
           description: 成功 - イベントに登録されているタームのリスト取得
@@ -409,7 +408,7 @@ paths:
                   $ref: '#/components/schemas/Term'
         '404':
           description: Not Found
-  /events/{eventId}/games:
+  /events/{eventSlug}/games:
     get:
       summary: イベントに登録されているゲームのリストを取得
       operationId: getEventGames
@@ -417,7 +416,7 @@ paths:
         - events
         - games
       parameters:
-        - $ref: '#/components/parameters/eventIdInPath'
+        - $ref: '#/components/parameters/eventSlugInPath'
       responses:
         '200':
           description: 成功 - イベントに登録されているゲームのリスト取得
@@ -429,14 +428,14 @@ paths:
                   $ref: '#/components/schemas/Game'
         '404':
           description: Not Found
-  /events/{eventId}/csv:
+  /events/{eventSlug}/csv:
     get:
       summary: イベントとイベントに登録されているゲームの情報をCSV形式で取得
       operationId: getEventCsv
       tags:
         - events
       parameters:
-        - $ref: '#/components/parameters/eventIdInPath'
+        - $ref: '#/components/parameters/eventSlugInPath'
       responses:
         '200':
           description: 成功 - CSV形式で情報取得
@@ -614,6 +613,7 @@ components:
       required: true
       schema:
         type: string
+        format: uuid
         description: ゲームID
     termIdInPath:
       in: path
@@ -623,19 +623,20 @@ components:
         type: string
         format: uuid
         description: タームID
-    eventIdInPath:
+    eventSlugInPath:
       in: path
-      name: eventId
+      name: eventSlug
       required: true
       schema:
         type: string
-        description: イベントID
+        description: イベントSlug
     userIdInPath:
       in: path
       name: userId
       required: true
       schema:
         type: string
+        format: uuid
         description: ユーザーID
 
   schemas:
@@ -668,10 +669,9 @@ components:
         place:
           type: string
           description: 展示場所
-        eventId:
+        eventSlug:
           type: string
-          format: uuid
-          description: イベントID
+          description: イベントslug
         discordUserId:
           type: string
           description: DiscordのユーザーID
