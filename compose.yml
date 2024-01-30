@@ -12,7 +12,7 @@ services:
       DB_USER: root
       DB_PASS: pass
       DB_HOST: db
-      DB_PORT: "3306"
+      DB_PORT: "3306:3306"
       DB_NAME: app
     depends_on:
       db:
@@ -29,7 +29,7 @@ services:
       MYSQL_ROOT_PASSWORD: pass
       MYSQL_DATABASE: app
     expose:
-      - "3306"
+      - "3306:3306"
     healthcheck:
       test: mariadb --user=root --password=pass --execute "SHOW DATABASES;"
       interval: 1s

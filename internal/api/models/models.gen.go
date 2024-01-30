@@ -24,7 +24,7 @@ type Event struct {
 	GameSubmissionPeriodStart time.Time `json:"gameSubmissionPeriodStart"`
 
 	// Id イベントID (slugとしても使用)
-	Id openapi_types.UUID `json:"id"`
+	Id string `json:"id"`
 
 	// Title イベントのタイトル (例: 第18回)
 	Title string `json:"title"`
@@ -53,8 +53,11 @@ type Game struct {
 	// Id ゲームID
 	Id openapi_types.UUID `json:"id"`
 
-	// Term 用語
-	Term *string `json:"term,omitempty"`
+	// Place 展示場所
+	Place *string `json:"place,omitempty"`
+
+	// TermId タームID
+	TermId *openapi_types.UUID `json:"termId,omitempty"`
 
 	// Title 展示するゲームタイトル
 	Title string `json:"title"`
@@ -80,11 +83,8 @@ type PatchGameRequest struct {
 	// Description ゲームの説明
 	Description *string `json:"description,omitempty"`
 
-	// DiscordUserId DiscordのユーザーID
-	DiscordUserId *string `json:"discordUserId,omitempty"`
-
-	// EventId イベントID
-	EventId *openapi_types.UUID `json:"eventId,omitempty"`
+	// DiscordUserId discordのユーザーID
+	DiscordUserId *openapi_types.UUID `json:"discordUserId,omitempty"`
 
 	// GamePageUrl ゲームページのURL
 	GamePageUrl *string `json:"gamePageUrl,omitempty"`
@@ -95,11 +95,29 @@ type PatchGameRequest struct {
 	// Image ゲームの画像
 	Image *openapi_types.File `json:"image,omitempty"`
 
-	// Term 用語
-	Term *string `json:"term,omitempty"`
+	// Place 展示場所
+	Place *string `json:"place,omitempty"`
+
+	// TermId タームID
+	TermId *openapi_types.UUID `json:"termId,omitempty"`
 
 	// Title 展示するゲームタイトル
 	Title *string `json:"title,omitempty"`
+}
+
+// PatchTermRequest defines model for PatchTermRequest.
+type PatchTermRequest struct {
+	// EndAt タームが終わる時間
+	EndAt *time.Time `json:"endAt,omitempty"`
+
+	// EventSlug イベントのslug
+	EventSlug *string `json:"eventSlug,omitempty"`
+
+	// IsDefault ゲーム登録時に割り当てられるTermならばTrue
+	IsDefault *bool `json:"isDefault,omitempty"`
+
+	// StartAt タームが始まる時間
+	StartAt *time.Time `json:"startAt,omitempty"`
 }
 
 // PostContactsRequest defines model for PostContactsRequest.
@@ -125,7 +143,7 @@ type PostEventRequest struct {
 	// Image パンフレット用画像
 	Image *openapi_types.File `json:"image,omitempty"`
 
-	// Slug slug (URL内で使用, unique)
+	// Slug slug (URL内で使用, unique) 18th等
 	Slug string `json:"slug"`
 
 	// Title 第18回
@@ -156,6 +174,36 @@ type PostGameRequest struct {
 	Title string `json:"title"`
 }
 
+// PostTermRequest defines model for PostTermRequest.
+type PostTermRequest struct {
+	// EndAt タームが終わる時間
+	EndAt time.Time `json:"endAt"`
+
+	// EventSlug イベントのslug
+	EventSlug string `json:"eventSlug"`
+
+	// StartAt タームが始まる時間
+	StartAt time.Time `json:"startAt"`
+}
+
+// Term defines model for Term.
+type Term struct {
+	// EndAt タームが終わる時間
+	EndAt *time.Time `json:"endAt,omitempty"`
+
+	// EventSlug イベントのslug
+	EventSlug *string `json:"eventSlug,omitempty"`
+
+	// Id タームのID
+	Id *openapi_types.UUID `json:"id,omitempty"`
+
+	// IsDefault ゲーム登録時に割り当てられるTermならばTrue
+	IsDefault *bool `json:"isDefault,omitempty"`
+
+	// StartAt タームが始まる時間
+	StartAt *time.Time `json:"startAt,omitempty"`
+}
+
 // User defines model for User.
 type User struct {
 	ProfileImageUrl *string   `json:"profileImageUrl,omitempty"`
@@ -173,6 +221,9 @@ type EventIdInPath = string
 // GameIdInPath ゲームID
 type GameIdInPath = string
 
+// TermIdInPath タームID
+type TermIdInPath = openapi_types.UUID
+
 // UserIdInPath ユーザーID
 type UserIdInPath = string
 
@@ -186,6 +237,21 @@ type OauthCallbackParams struct {
 type LoginJSONBody struct {
 	// Redirect リダイレクト先のURL
 	Redirect *string `json:"redirect,omitempty"`
+}
+
+// GetGamesParams defines parameters for GetGames.
+type GetGamesParams struct {
+	// TermId タームID
+	TermId *openapi_types.UUID `form:"termId,omitempty" json:"termId,omitempty"`
+
+	// EventId イベントID
+	EventId *openapi_types.UUID `form:"eventId,omitempty" json:"eventId,omitempty"`
+
+	// UserId ユーザーID
+	UserId *openapi_types.UUID `form:"userId,omitempty" json:"userId,omitempty"`
+
+	// Include 未公開のゲームを含むかどうか
+	Include *string `form:"include,omitempty" json:"include,omitempty"`
 }
 
 // LoginJSONRequestBody defines body for Login for application/json ContentType.
@@ -205,3 +271,9 @@ type PostGameMultipartRequestBody = PostGameRequest
 
 // PatchGameMultipartRequestBody defines body for PatchGame for multipart/form-data ContentType.
 type PatchGameMultipartRequestBody = PatchGameRequest
+
+// PostTermJSONRequestBody defines body for PostTerm for application/json ContentType.
+type PostTermJSONRequestBody = PostTermRequest
+
+// PatchTermJSONRequestBody defines body for PatchTerm for application/json ContentType.
+type PatchTermJSONRequestBody = PatchTermRequest
