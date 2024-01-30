@@ -3,7 +3,6 @@
 CREATE TABLE session
 (
     id            CHAR(36) PRIMARY KEY,
-    discordUserId CHAR(36),
     redirect      VARCHAR(255) NOT NULL,
     access_token  VARCHAR(255),
     refresh_token VARCHAR(255),
@@ -51,8 +50,8 @@ CREATE TABLE game
     title           VARCHAR(255) NOT NULL,
     description     TEXT,
     place           VARCHAR(255),
-    icon            VARCHAR(255),
-    image           VARCHAR(255),
+    icon            MEDIUMBLOB NOT NULL,
+    image           LONGBLOB,
     created_at      TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at      TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     FOREIGN KEY (termId) REFERENCES term(id),
