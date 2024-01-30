@@ -1,6 +1,7 @@
 package repository
 
 import (
+	"fmt"
 	"github.com/google/uuid"
 	"github.com/traPtitech/game3-back/internal/api/models"
 	"github.com/traPtitech/game3-back/internal/domains"
@@ -45,14 +46,27 @@ func (r *Repository) GetGames(params models.GetGamesParams) ([]*domains.Game, er
 	return games, nil
 }
 
-func (r *Repository) PostGame(game *models.PostGameRequest) (uuid.UUID, error) {
-	newGameId := uuid.New()
+func (r *Repository) PostGame(game *models.PostGameRequest) (*uuid.UUID, error) {
+	newGameID := uuid.New()
 	// TODO default termId and Session
-	_, err := r.db.Exec("INSERT INTO game (id, termId, discordUserId, creatorName, creatorPageUrl, gamePageUrl, title, description, icon, image) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", newGameId, uuid.UUID{}, uuid.UUID{}, game.CreatorName, game.CreatorPageUrl, game.GamePageUrl, game.Title, game.Description, game.Icon, game.Image)
+
+	iconData, err := game.Icon.Bytes()
 	if err != nil {
-		return newGameId, err
+		return nil, err
 	}
-	return newGameId, nil
+	fmt.Println(game.Icon.Filename())
+	var imageData []byte
+	if game.Image != nil {
+		imageData, err = game.Image.Bytes()
+		if err != nil {
+			return nil, err
+		}
+	}
+	_, err = r.db.Exec("INSERT INTO game (id, termId, discordUserId, creatorName, creatorPageUrl, gamePageUrl, title, description, icon, image) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", newGameID, uuid.UUID{}, uuid.UUID{}, game.CreatorName, game.CreatorPageUrl, game.GamePageUrl, game.Title, game.Description, iconData, imageData)
+	if err != nil {
+		return nil, err
+	}
+	return &newGameID, nil
 }
 
 func (r *Repository) GetGame(gameID uuid.UUID) (*domains.Game, error) {
