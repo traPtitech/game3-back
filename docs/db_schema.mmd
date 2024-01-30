@@ -32,7 +32,7 @@ erDiagram
     game {
         uuid id PK
         uuid termId FK
-        uuid discordUserId FK
+        uuid discordUserId
         string creatorName
         string creatorPageUrl
         string gamePageUrl
@@ -47,4 +47,3 @@ erDiagram
 
     event ||--o{ term : ""
     term ||--o{ game : ""
-    session }|--o{ game : ""
