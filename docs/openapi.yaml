@@ -651,6 +651,13 @@ components:
           type: string
           format: uuid
           description: タームID
+        discordUserId:
+          type: string
+          format: uuid
+          description: DiscordのユーザーID
+        title:
+          type: string
+          description: 展示するゲームタイトル
         creatorName:
           type: string
           description: ゲーム作成者
@@ -660,29 +667,27 @@ components:
         gamePageUrl:
           type: string
           description: ゲームページのURL
-        title:
-          type: string
-          description: 展示するゲームタイトル
         description:
           type: string
           description: ゲームの説明
         place:
           type: string
           description: 展示場所
-        eventSlug:
-          type: string
-          description: イベントslug
-        discordUserId:
-          type: string
-          description: DiscordのユーザーID
       required:
         - id
+        - termId
         - discordUserId
         - title
+        - creatorName
+        - description
 
     PostGameRequest:
       type: object
       properties:
+        title:
+          type: string
+          description: 展示するゲームタイトル
+          example: 'ゲームタイトル'
         creatorName:
           type: string
           description: ゲーム作成
@@ -692,10 +697,6 @@ components:
         gamePageUrl:
           type: string
           description: ゲームページのURL
-        title:
-          type: string
-          description: 展示するゲームタイトル
-          example: 'ゲームタイトル'
         description:
           type: string
           description: ゲームの説明
@@ -724,6 +725,10 @@ components:
           type: string
           format: uuid
           description: discordのユーザーID
+        title:
+          type: string
+          description: 展示するゲームタイトル
+          example: 'ゲームタイトル'
         creatorName:
           type: string
           description: ゲーム作成者
@@ -733,10 +738,6 @@ components:
         gamePageUrl:
           type: string
           description: ゲームページのURL
-        title:
-          type: string
-          description: 展示するゲームタイトル
-          example: 'ゲームタイトル'
         description:
           type: string
           description: ゲームの説明
@@ -815,9 +816,9 @@ components:
     Event:
       type: object
       properties:
-        id:
+        slug:
           type: string
-          description: イベントID (slugとしても使用)
+          description: イベントslug (イベントのID的な立ち位置)
         title:
           type: string
           description: 'イベントのタイトル (例: 第18回)'
@@ -830,7 +831,7 @@ components:
           format: date-time
           description: ゲーム展示の募集終了期間
       required:
-        - id
+        - slug
         - title
         - gameSubmissionPeriodStart
         - gameSubmissionPeriodEnd
