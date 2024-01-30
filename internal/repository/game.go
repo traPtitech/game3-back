@@ -45,27 +45,25 @@ func (r *Repository) GetGames(params models.GetGamesParams) ([]*domains.Game, er
 	return games, nil
 }
 
-func (r *Repository) PostGame(game *models.PostGameRequest) (*uuid.UUID, error) {
-	newGameID := uuid.New()
+func (r *Repository) PostGame(newGameID uuid.UUID, game *models.PostGameRequest) error {
 	// TODO default termId and Session
-
 	iconData, err := game.Icon.Bytes()
 	if err != nil {
-		return nil, err
+		return err
 	}
 
 	var imageData []byte
 	if game.Image != nil {
 		imageData, err = game.Image.Bytes()
 		if err != nil {
-			return nil, err
+			return err
 		}
 	}
 	_, err = r.db.Exec("INSERT INTO game (id, termId, discordUserId, creatorName, creatorPageUrl, gamePageUrl, title, description, icon, image) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", newGameID, uuid.UUID{}, uuid.UUID{}, game.CreatorName, game.CreatorPageUrl, game.GamePageUrl, game.Title, game.Description, iconData, imageData)
 	if err != nil {
-		return nil, err
+		return err
 	}
-	return &newGameID, nil
+	return nil
 }
 
 func (r *Repository) GetGame(gameID uuid.UUID) (*domains.Game, error) {

@@ -19,8 +19,9 @@ CREATE TABLE event
     title      VARCHAR(255) NOT NULL,
     startAt    TIMESTAMP    NOT NULL,
     endAt      TIMESTAMP    NOT NULL,
-    created_at TIMESTAMP    DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP    DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+    image      LONGBLOB,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 );
 -- +goose StatementEnd
 
@@ -29,33 +30,33 @@ CREATE TABLE term
 (
     id         CHAR(36) PRIMARY KEY,
     eventSlug  VARCHAR(255) NOT NULL,
-    isDefault  BOOLEAN NOT NULL,
-    startAt    TIMESTAMP NOT NULL,
-    endAt      TIMESTAMP NOT NULL,
+    isDefault  BOOLEAN      NOT NULL,
+    startAt    TIMESTAMP    NOT NULL,
+    endAt      TIMESTAMP    NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-    FOREIGN KEY (eventSlug) REFERENCES event(slug)
+    FOREIGN KEY (eventSlug) REFERENCES event (slug)
 );
 -- +goose StatementEnd
 
 -- +goose StatementBegin
 CREATE TABLE game
 (
-    id              CHAR(36) PRIMARY KEY,
-    termId          CHAR(36) NOT NULL,
-    discordUserId   CHAR(36) NOT NULL,
-    creatorName     VARCHAR(255) NOT NULL,
-    creatorPageUrl  VARCHAR(255),
-    gamePageUrl     VARCHAR(255),
-    title           VARCHAR(255) NOT NULL,
-    description     TEXT,
-    place           VARCHAR(255),
-    icon            MEDIUMBLOB NOT NULL,
-    image           LONGBLOB,
-    created_at      TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    updated_at      TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-    FOREIGN KEY (termId) REFERENCES term(id),
-    FOREIGN KEY (discordUserId) REFERENCES session(id)
+    id             CHAR(36) PRIMARY KEY,
+    termId         CHAR(36)     NOT NULL,
+    discordUserId  CHAR(36)     NOT NULL,
+    creatorName    VARCHAR(255) NOT NULL,
+    creatorPageUrl VARCHAR(255),
+    gamePageUrl    VARCHAR(255),
+    title          VARCHAR(255) NOT NULL,
+    description    TEXT,
+    place          VARCHAR(255),
+    icon           MEDIUMBLOB   NOT NULL,
+    image          LONGBLOB,
+    created_at     TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at     TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    FOREIGN KEY (termId) REFERENCES term (id),
+    FOREIGN KEY (discordUserId) REFERENCES session (id)
 );
 -- +goose StatementEnd
 

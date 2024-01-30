@@ -38,12 +38,12 @@ func (h *Handler) PostGame(c echo.Context) error {
 		req.Image.InitFromMultipart(imageFile)
 	}
 
-	newGameID, err := h.repo.PostGame(req)
-	if err != nil {
+	newGameID := uuid.New()
+	if err := h.repo.PostGame(newGameID, req); err != nil {
 		return echo.NewHTTPError(http.StatusInternalServerError, err.Error())
 	}
 
-	game, err := h.repo.GetGame(*newGameID)
+	game, err := h.repo.GetGame(newGameID)
 	if err != nil {
 		return echo.NewHTTPError(http.StatusInternalServerError, err.Error())
 	}
