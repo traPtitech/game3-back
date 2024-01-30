@@ -14,6 +14,8 @@ servers:
 tags:
   - name: games
     description: ゲームAPI
+  - name: terms
+    description: タームAPI
   - name: events
     description: イベントAPI
   - name: auth
@@ -142,6 +144,82 @@ paths:
         '404':
           description: Not Found
 
+  /terms:
+    get:
+      summary: イベントに登録されているタームのリストを取得
+      operationId: getTerms
+      tags:
+        - terms
+      responses:
+        '200':
+          description: 成功 - 全てのタームのリスト取得
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Term'
+        '404':
+          description: Not Found
+    post:
+      summary: タームを登録
+      operationId: postTerm
+      tags:
+        - terms
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PostTermRequest'
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Term'
+        '400':
+          description: Bad Request
+  /terms/{termId}:
+    get:
+      summary: ターム情報を取得
+      operationId: getTerm
+      tags:
+        - terms
+      parameters:
+        - $ref: '#/components/parameters/termIdInPath'
+      responses:
+        '200':
+          description: 成功 - ターム情報取得
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Term'
+        '404':
+          description: Not Found
+
+    patch:
+      summary: ターム情報を変更
+      operationId: patchTerm
+      tags:
+        - terms
+      parameters:
+        - $ref: '#/components/parameters/termIdInPath'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchTermRequest'
+      responses:
+        '204':
+          description: No Content - 変更されました
+        '400':
+          description: Bad Request
+        '404':
+          description: Not Found
+
   /events:
     post:
       summary: イベントを登録
@@ -250,6 +328,26 @@ paths:
             image/png:
               schema:
                 $ref: '#/components/schemas/ImageResponse'
+        '404':
+          description: Not Found
+  /events/{eventId}/terms:
+    get:
+      summary: イベントに登録されているタームのリストを取得
+      operationId: getEventTerms
+      tags:
+        - events
+        - games
+      parameters:
+        - $ref: '#/components/parameters/eventIdInPath'
+      responses:
+        '200':
+          description: 成功 - イベントに登録されているタームのリスト取得
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Term'
         '404':
           description: Not Found
   /events/{eventId}/games:
@@ -458,6 +556,14 @@ components:
       schema:
         type: string
         description: ゲームID
+    termIdInPath:
+      in: path
+      name: termId
+      required: true
+      schema:
+        type: string
+        format: uuid
+        description: タームID
     eventIdInPath:
       in: path
       name: eventId
@@ -500,6 +606,9 @@ components:
         description:
           type: string
           description: ゲームの説明
+        place:
+          type: string
+          description: 展示場所
         eventId:
           type: string
           format: uuid
@@ -552,6 +661,10 @@ components:
           type: string
           format: uuid
           description: タームID
+        discordUserId:
+          type: string
+          format: uuid
+          description: discordのユーザーID
         creatorName:
           type: string
           description: ゲーム作成者
@@ -568,9 +681,9 @@ components:
         description:
           type: string
           description: ゲームの説明
-        discordUserId:
+        place:
           type: string
-          description: DiscordのユーザーID
+          description: 展示場所
         icon:
           type: string
           format: binary
@@ -579,6 +692,66 @@ components:
           type: string
           format: binary
           description: ゲームの画像
+
+    Term:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: タームのID
+        eventSlug:
+          type: string
+          description: イベントのslug
+        isDefault:
+          type: boolean
+          description: ゲーム登録時に割り当てられるTermならばTrue
+        startAt:
+          type: string
+          format: date-time
+          description: タームが始まる時間
+        endAt:
+          type: string
+          format: date-time
+          description: タームが終わる時間
+
+
+    PostTermRequest:
+      type: object
+      properties:
+        eventSlug:
+          type: string
+          description: イベントのslug
+        startAt:
+          type: string
+          format: date-time
+          description: タームが始まる時間
+        endAt:
+          type: string
+          format: date-time
+          description: タームが終わる時間
+      required:
+        - eventSlug
+        - startAt
+        - endAt
+
+    PatchTermRequest:
+      type: object
+      properties:
+        eventSlug:
+          type: string
+          description: イベントのslug
+        isDefault:
+          type: boolean
+          description: ゲーム登録時に割り当てられるTermならばTrue
+        startAt:
+          type: string
+          format: date-time
+          description: タームが始まる時間
+        endAt:
+          type: string
+          format: date-time
+          description: タームが終わる時間
 
     Event:
       type: object
