@@ -46,6 +46,46 @@ paths:
           description: OK
 
   /games:
+    get:
+      summary: ゲームのリストを取得 GET /games?termId=X&eventId=X&userId=X&include=unpublished
+      operationId: getGames
+      tags:
+        - games
+      parameters:
+        - in: query
+          name: termId
+          schema:
+            type: string
+            format: uuid
+          description: タームID
+        - in: query
+          name: eventId
+          schema:
+            type: string
+            format: uuid
+          description: イベントID
+        - in: query
+          name: userId
+          schema:
+            type: string
+            format: uuid
+          description: ユーザーID
+        - in: query
+          name: include
+          schema:
+            type: string
+          description: 未公開のゲームを含むかどうか
+      responses:
+        '200':
+          description: 成功 - ゲームリスト取得
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Game'
+        '404':
+          description: Not Found
     post:
       summary: ゲームを登録
       operationId: postGame
@@ -217,6 +257,25 @@ paths:
           description: No Content - 変更されました
         '400':
           description: Bad Request
+        '404':
+          description: Not Found
+  /terms/{termId}/games:
+    get:
+      summary: タームに登録されているゲームのリストを取得
+      operationId: getTermGames
+      tags:
+        - terms
+      parameters:
+        - $ref: '#/components/parameters/termIdInPath'
+      responses:
+        '200':
+          description: 成功 - タームに登録されているゲームのリスト取得
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Game'
         '404':
           description: Not Found
 
