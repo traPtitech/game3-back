@@ -15,7 +15,7 @@ func (r *Repository) GetTerms() ([]*models.Term, error) {
 }
 
 func (r *Repository) PostTerm(newTermID uuid.UUID, req *models.PostTermRequest) error {
-	if _, err := r.db.Exec("INSERT INTO term (id, eventSlug, isDefault, startAt, endAt) VALUES (?, ?, ?, ?, ?)", newTermID, req.EventSlug, false, req.StartAt, req.EndAt); err != nil {
+	if _, err := r.db.Exec("INSERT INTO term (id, event_slug, is_default, start_at, end_at) VALUES (?, ?, ?, ?, ?)", newTermID, req.EventSlug, false, req.StartAt, req.EndAt); err != nil {
 		return err
 	}
 
@@ -32,9 +32,15 @@ func (r *Repository) GetTerm(termID uuid.UUID) (*models.Term, error) {
 }
 
 func (r *Repository) PatchTerm(termID uuid.UUID, req *models.PatchTermRequest) error {
-	if _, err := r.db.Exec("UPDATE term SET eventSlug = ?, isDefault = ?, startAt = ?, endAt = ? WHERE id = ?", req.EventSlug, req.IsDefault, req.StartAt, req.EndAt, termID); err != nil {
-		return err
+	return r.Patch("term", "id", termID, req)
+}
+
+func (r *Repository) GetEventTerms(eventSlug models.EventSlugInPath) ([]*models.Term, error) {
+	terms := []*models.Term{}
+	query := "SELECT term.* FROM term JOIN event ON term.event_slug = event.slug WHERE event.slug = ?"
+	if err := r.db.Select(&terms, query, eventSlug); err != nil {
+		return nil, err
 	}
 
-	return nil
+	return terms, nil
 }

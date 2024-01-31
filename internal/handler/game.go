@@ -1,7 +1,6 @@
 package handler
 
 import (
-	"errors"
 	"github.com/google/uuid"
 	"github.com/labstack/echo/v4"
 	"github.com/traPtitech/game3-back/internal/api/models"
@@ -19,23 +18,19 @@ func (h *Handler) GetGames(c echo.Context, params models.GetGamesParams) error {
 
 func (h *Handler) PostGame(c echo.Context) error {
 	req := &models.PostGameRequest{}
-	if err := c.Bind(req); err != nil {
+	err := c.Bind(req)
+	if err != nil {
 		return echo.NewHTTPError(http.StatusBadRequest, err.Error())
 	}
 
-	iconFile, err := c.FormFile("icon")
+	icon, err := h.handleFile(c, "icon")
 	if err != nil {
-		return echo.NewHTTPError(http.StatusBadRequest, "Failed to get icon file: "+err.Error())
-	}
-	req.Icon.InitFromMultipart(iconFile)
-
-	imageFile, err := c.FormFile("image")
-	if errors.Is(err, http.ErrMissingFile) {
-		// 画像がない場合はエラーにしない
-	} else if err != nil {
 		return echo.NewHTTPError(http.StatusInternalServerError, "Failed to get image file: "+err.Error())
-	} else {
-		req.Image.InitFromMultipart(imageFile)
+	}
+	req.Icon = *icon
+	req.Image, err = h.handleFile(c, "image")
+	if err != nil {
+		return echo.NewHTTPError(http.StatusInternalServerError, "Failed to get image file: "+err.Error())
 	}
 
 	newGameID := uuid.New()
@@ -61,13 +56,46 @@ func (h *Handler) GetGame(c echo.Context, gameID models.GameIdInPath) error {
 }
 
 func (h *Handler) PatchGame(c echo.Context, gameID models.GameIdInPath) error {
-	panic("implement me")
+	req := &models.PatchGameRequest{}
+	err := c.Bind(req)
+	if err != nil {
+		return echo.NewHTTPError(http.StatusBadRequest, err.Error())
+	}
+
+	req.Icon, err = h.handleFile(c, "icon")
+	if err != nil {
+		return echo.NewHTTPError(http.StatusInternalServerError, "Failed to get image file: "+err.Error())
+	}
+	req.Image, err = h.handleFile(c, "image")
+	if err != nil {
+		return echo.NewHTTPError(http.StatusInternalServerError, "Failed to get image file: "+err.Error())
+	}
+
+	if err := h.repo.PatchGame(gameID, req); err != nil {
+		return echo.NewHTTPError(http.StatusInternalServerError, err.Error())
+	}
+
+	game, err := h.repo.GetGame(gameID)
+	if err != nil {
+		return echo.NewHTTPError(http.StatusInternalServerError, err.Error())
+	}
+
+	return c.JSON(http.StatusOK, game)
 }
 
 func (h *Handler) GetGameIcon(c echo.Context, gameID models.GameIdInPath) error {
-	//TODO implement me
-	panic("implement me")
+	icon, err := h.repo.GetGameIcon(gameID)
+	if err != nil {
+		return echo.NewHTTPError(http.StatusInternalServerError, err.Error())
+	}
+
+	return c.Blob(http.StatusOK, "image/png", icon)
 }
 func (h *Handler) GetGameImage(c echo.Context, gameID models.GameIdInPath) error {
-	panic("implement me")
+	image, err := h.repo.GetGameImage(gameID)
+	if err != nil {
+		return echo.NewHTTPError(http.StatusInternalServerError, err.Error())
+	}
+
+	return c.Blob(http.StatusOK, "image/png", image)
 }
