@@ -72,34 +72,34 @@ type PatchEventRequest = PostEventRequest
 // PatchGameRequest defines model for PatchGameRequest.
 type PatchGameRequest struct {
 	// CreatorName ゲーム作成者
-	CreatorName *string `json:"creatorName,omitempty"`
+	CreatorName *string `form:"creatorName" json:"creatorName,omitempty"`
 
 	// CreatorPageUrl ゲーム作成者のページのURL
-	CreatorPageUrl *string `json:"creatorPageUrl,omitempty"`
+	CreatorPageUrl *string `form:"creatorPageUrl" json:"creatorPageUrl,omitempty"`
 
 	// Description ゲームの説明
-	Description *string `json:"description,omitempty"`
+	Description *string `form:"description" json:"description,omitempty"`
 
 	// DiscordUserId discordのユーザーID
-	DiscordUserId *openapi_types.UUID `json:"discordUserId,omitempty"`
+	DiscordUserId *openapi_types.UUID `form:"discordUserId" json:"discordUserId,omitempty"`
 
 	// GamePageUrl ゲームページのURL
-	GamePageUrl *string `json:"gamePageUrl,omitempty"`
+	GamePageUrl *string `form:"gamePageUrl" json:"gamePageUrl,omitempty"`
 
 	// Icon ゲームのアイコン画像
-	Icon *openapi_types.File `json:"icon,omitempty"`
+	Icon *openapi_types.File `form:"icon" json:"icon,omitempty"`
 
 	// Image ゲームの画像
-	Image *openapi_types.File `json:"image,omitempty"`
+	Image *openapi_types.File `form:"image" json:"image,omitempty"`
 
 	// Place 展示場所
-	Place *string `json:"place,omitempty"`
+	Place *string `form:"place" json:"place,omitempty"`
 
 	// TermId タームID
-	TermId *openapi_types.UUID `json:"termId,omitempty"`
+	TermId *openapi_types.UUID `form:"termId" json:"termId,omitempty"`
 
 	// Title 展示するゲームタイトル
-	Title *string `json:"title,omitempty"`
+	Title *string `form:"title" json:"title,omitempty"`
 }
 
 // PatchTermRequest defines model for PatchTermRequest.
@@ -132,43 +132,43 @@ type PostContactsRequest struct {
 // PostEventRequest defines model for PostEventRequest.
 type PostEventRequest struct {
 	// GameSubmissionPeriodEnd ゲーム展示の募集期間
-	GameSubmissionPeriodEnd time.Time `json:"gameSubmissionPeriodEnd"`
+	GameSubmissionPeriodEnd time.Time `form:"gameSubmissionPeriodEnd" json:"gameSubmissionPeriodEnd"`
 
 	// GameSubmissionPeriodStart ゲーム展示の募集期間
-	GameSubmissionPeriodStart time.Time `json:"gameSubmissionPeriodStart"`
+	GameSubmissionPeriodStart time.Time `form:"gameSubmissionPeriodStart" json:"gameSubmissionPeriodStart"`
 
 	// Image パンフレット用画像
-	Image *openapi_types.File `json:"image,omitempty"`
+	Image *openapi_types.File `form:"image" json:"image,omitempty"`
 
 	// Slug slug (URL内で使用, unique) 18th等
-	Slug string `json:"slug"`
+	Slug string `form:"slug" json:"slug"`
 
 	// Title 第18回
-	Title string `json:"title"`
+	Title string `form:"title" json:"title"`
 }
 
 // PostGameRequest defines model for PostGameRequest.
 type PostGameRequest struct {
 	// CreatorName ゲーム作成
-	CreatorName string `json:"creatorName"`
+	CreatorName string `form:"creatorName" json:"creatorName"`
 
 	// CreatorPageUrl ゲーム作成者のページのURL
-	CreatorPageUrl *string `json:"creatorPageUrl,omitempty"`
+	CreatorPageUrl *string `form:"creatorPageUrl" json:"creatorPageUrl,omitempty"`
 
 	// Description ゲームの説明
-	Description string `json:"description"`
+	Description string `form:"description" json:"description"`
 
 	// GamePageUrl ゲームページのURL
-	GamePageUrl *string `json:"gamePageUrl,omitempty"`
+	GamePageUrl *string `form:"gamePageUrl" json:"gamePageUrl,omitempty"`
 
 	// Icon ゲームのアイコン画像
-	Icon openapi_types.File `json:"icon"`
+	Icon openapi_types.File `form:"icon" json:"icon"`
 
 	// Image ゲームの画像
-	Image *openapi_types.File `json:"image,omitempty"`
+	Image *openapi_types.File `form:"image" json:"image,omitempty"`
 
 	// Title 展示するゲームタイトル
-	Title string `json:"title"`
+	Title string `form:"title" json:"title"`
 }
 
 // PostTermRequest defines model for PostTermRequest.
