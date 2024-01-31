@@ -25,7 +25,7 @@ func main() {
 		os.Exit(1)
 	}
 
-	baseUrl := ""
+	baseUrl := "/api"
 	swagger.Servers = openapi3.Servers{&openapi3.Server{URL: baseUrl}}
 	// middlewares
 	e.Use(middleware.Recover())
