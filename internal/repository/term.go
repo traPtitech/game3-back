@@ -3,6 +3,7 @@ package repository
 import (
 	"github.com/google/uuid"
 	"github.com/traPtitech/game3-back/internal/api/models"
+	"time"
 )
 
 func (r *Repository) GetTerms() ([]*models.Term, error) {
@@ -16,6 +17,14 @@ func (r *Repository) GetTerms() ([]*models.Term, error) {
 
 func (r *Repository) PostTerm(newTermID uuid.UUID, req *models.PostTermRequest) error {
 	if _, err := r.db.Exec("INSERT INTO term (id, event_slug, is_default, start_at, end_at) VALUES (?, ?, ?, ?, ?)", newTermID, req.EventSlug, false, req.StartAt, req.EndAt); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (r *Repository) CreateDefaultTerm(eventSlug string) error {
+	if _, err := r.db.Exec("INSERT INTO term (id, event_slug, is_default, start_at, end_at) VALUES (?, ?, ?, ?, ?)", uuid.New(), eventSlug, true, time.Time{}, time.Time{}); err != nil {
 		return err
 	}
 
@@ -43,4 +52,14 @@ func (r *Repository) GetEventTerms(eventSlug models.EventSlugInPath) ([]*models.
 	}
 
 	return terms, nil
+}
+
+func (r *Repository) GetDefaultTerm(eventSlug models.EventSlugInPath) (*models.Term, error) {
+	term := &models.Term{}
+	query := "SELECT term.* FROM term JOIN event ON term.event_slug = event.slug WHERE event.slug = ? AND term.is_default = TRUE"
+	if err := r.db.Get(term, query, eventSlug); err != nil {
+		return nil, err
+	}
+
+	return term, nil
 }

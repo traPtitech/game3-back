@@ -30,10 +30,12 @@ func (h *Handler) PostEvent(c echo.Context) (err error) {
 		return echo.NewHTTPError(http.StatusInternalServerError, err.Error())
 	}
 
-	//TODO create default term
-
 	event, err := h.repo.GetEvent(req.Slug)
 	if err != nil {
+		return echo.NewHTTPError(http.StatusInternalServerError, err.Error())
+	}
+
+	if err := h.repo.CreateDefaultTerm(event.Slug); err != nil {
 		return echo.NewHTTPError(http.StatusInternalServerError, err.Error())
 	}
 

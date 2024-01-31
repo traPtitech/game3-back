@@ -61,7 +61,6 @@ func (r *Repository) GetGames(params models.GetGamesParams) ([]*domains.Game, er
 }
 
 func (r *Repository) PostGame(newGameID uuid.UUID, game *models.PostGameRequest) error {
-	// TODO default termId and Session
 	iconData, err := game.Icon.Bytes()
 	if err != nil {
 		return err

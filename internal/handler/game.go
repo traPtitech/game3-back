@@ -38,6 +38,18 @@ func (h *Handler) PostGame(c echo.Context) error {
 		return echo.NewHTTPError(http.StatusInternalServerError, err.Error())
 	}
 
+	event, err := h.repo.GetCurrentEvent()
+	if err != nil {
+		return echo.NewHTTPError(http.StatusInternalServerError, err.Error())
+	}
+	term, err := h.repo.GetDefaultTerm(event.Slug)
+	if err != nil {
+		return echo.NewHTTPError(http.StatusInternalServerError, err.Error())
+	}
+	if err := h.repo.PatchGame(newGameID, &models.PatchGameRequest{TermId: term.Id}); err != nil {
+		return echo.NewHTTPError(http.StatusInternalServerError, err.Error())
+	}
+	
 	game, err := h.repo.GetGame(newGameID)
 	if err != nil {
 		return echo.NewHTTPError(http.StatusInternalServerError, err.Error())
