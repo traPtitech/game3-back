@@ -8,7 +8,7 @@ import (
 )
 
 func selectGameWithoutImagesQuery() string {
-	return "SELECT game.id, game.termId, game.discordUserId, game.creatorName, game.creatorPageUrl, game.gamePageUrl, game.title, game.description, game.place, game.created_at, game.updated_at FROM game "
+	return "SELECT game.id, game.term_id, game.discord_user_id, game.creator_name, game.creator_page_url, game.game_page_url, game.title, game.description, game.place, game.created_at, game.updated_at FROM game "
 }
 
 func (r *Repository) GetGames(params models.GetGamesParams) ([]*domains.Game, error) {

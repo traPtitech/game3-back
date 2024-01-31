@@ -58,7 +58,7 @@ func (h *Handler) GetEvent(c echo.Context, eventSlug models.EventSlugInPath) err
 	return c.JSON(http.StatusOK, event)
 }
 
-func (h *Handler) PatchEvent(c echo.Context, eventId models.EventSlugInPath) (err error) {
+func (h *Handler) PatchEvent(c echo.Context, eventID models.EventSlugInPath) (err error) {
 	req := &models.PatchEventRequest{}
 	if err := c.Bind(req); err != nil {
 		return echo.NewHTTPError(http.StatusBadRequest, err.Error())
@@ -69,24 +69,38 @@ func (h *Handler) PatchEvent(c echo.Context, eventId models.EventSlugInPath) (er
 		return echo.NewHTTPError(http.StatusInternalServerError, "Failed to get image file: "+err.Error())
 	}
 
-	if err := h.repo.PatchEvent(eventId, req); err != nil {
+	if err := h.repo.PatchEvent(eventID, req); err != nil {
 		return echo.NewHTTPError(http.StatusInternalServerError, err.Error())
 	}
 
 	return c.NoContent(http.StatusNoContent)
 }
 
-func (h *Handler) GetEventCsv(c echo.Context, eventId models.EventSlugInPath) error {
-	panic("implement me")
+func (h *Handler) GetEventCsv(c echo.Context, eventID models.EventSlugInPath) error {
+	return echo.NewHTTPError(http.StatusNotImplemented, "not implemented")
 }
-func (h *Handler) GetEventTerms(ctx echo.Context, eventId models.EventSlugInPath) error {
-	//TODO implement me
-	panic("implement me")
+func (h *Handler) GetEventTerms(ctx echo.Context, eventID models.EventSlugInPath) error {
+	events, err := h.repo.GetEventTerms(eventID)
+	if err != nil {
+		return echo.NewHTTPError(http.StatusInternalServerError, err.Error())
+	}
+
+	return ctx.JSON(http.StatusOK, events)
 }
-func (h *Handler) GetEventGames(c echo.Context, eventId models.EventSlugInPath) error {
-	panic("implement me")
+func (h *Handler) GetEventGames(c echo.Context, eventID models.EventSlugInPath) error {
+	games, err := h.repo.GetEventGames(eventID)
+	if err != nil {
+		return echo.NewHTTPError(http.StatusInternalServerError, err.Error())
+	}
+
+	return c.JSON(http.StatusOK, games)
 }
 
-func (h *Handler) GetEventImage(c echo.Context, eventId models.EventSlugInPath) error {
-	panic("implement me")
+func (h *Handler) GetEventImage(c echo.Context, eventID models.EventSlugInPath) error {
+	image, err := h.repo.GetEventImage(eventID)
+	if err != nil {
+		return echo.NewHTTPError(http.StatusInternalServerError, err.Error())
+	}
+
+	return c.Blob(http.StatusOK, "image/png", image)
 }
