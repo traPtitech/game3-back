@@ -1,10 +1,17 @@
 package repository
 
-import "github.com/traPtitech/game3-back/internal/api/models"
+import (
+	"github.com/traPtitech/game3-back/internal/api/models"
+)
+
+func selectEventWithoutImageQuery() string {
+	return "SELECT event.slug, event.title, event.game_submission_period_start, event.game_submission_period_end FROM event "
+}
 
 func (r *Repository) GetEvents() ([]*models.Event, error) {
 	events := []*models.Event{}
-	if err := r.db.Select(&events, "SELECT * FROM event"); err != nil {
+	query := selectEventWithoutImageQuery()
+	if err := r.db.Select(&events, query); err != nil {
 		return nil, err
 	}
 
@@ -20,7 +27,7 @@ func (r *Repository) PostEvent(event *models.PostEventRequest) (err error) {
 		}
 	}
 
-	if _, err = r.db.Exec("INSERT INTO event (slug, title, startAt, endAt, image) VALUES (?, ?, ?, ?, ?)", event.Slug, event.Title, event.GameSubmissionPeriodStart, event.GameSubmissionPeriodEnd, imageData); err != nil {
+	if _, err = r.db.Exec("INSERT INTO event (slug, title, game_submission_period_start, game_submission_period_end, image) VALUES (?, ?, ?, ?, ?)", event.Slug, event.Title, event.GameSubmissionPeriodStart, event.GameSubmissionPeriodEnd, imageData); err != nil {
 		return err
 	}
 
@@ -29,7 +36,8 @@ func (r *Repository) PostEvent(event *models.PostEventRequest) (err error) {
 
 func (r *Repository) GetCurrentEvent() (*models.Event, error) {
 	event := &models.Event{}
-	if err := r.db.Get(event, "SELECT * FROM event WHERE startAt <= NOW() AND endAt >= NOW()"); err != nil {
+	query := selectEventWithoutImageQuery() + "WHERE game_submission_period_start <= NOW() AND game_submission_period_end >= NOW()"
+	if err := r.db.Get(event, query); err != nil {
 		return nil, err
 	}
 
@@ -38,7 +46,8 @@ func (r *Repository) GetCurrentEvent() (*models.Event, error) {
 
 func (r *Repository) GetEvent(eventSlug models.EventSlugInPath) (*models.Event, error) {
 	event := &models.Event{}
-	if err := r.db.Get(event, "SELECT * FROM event WHERE slug = ?", eventSlug); err != nil {
+	query := selectEventWithoutImageQuery() + "WHERE slug = ?"
+	if err := r.db.Get(event, query, eventSlug); err != nil {
 		return nil, err
 	}
 
