@@ -1,7 +1,6 @@
 erDiagram
     session {
         uuid id PK
-        uuid discordUserId
         string redirect
         string access_token
         string refresh_token
@@ -13,34 +12,35 @@ erDiagram
     event {
         string slug PK
         string title
-        timestamp startAt
-        timestamp endAt
+        timestamp game_submission_period_start
+        timestamp game_submission_period_end
+        binary image
         timestamp created_at
         timestamp updated_at
     }
 
     term {
         uuid id PK
-        string eventSlug FK
-        bool isDefault
-        timestamp startAt
-        timestamp endAt
+        string event_slug FK
+        boolean is_default
+        timestamp start_at
+        timestamp end_at
         timestamp created_at
         timestamp updated_at
     }
 
     game {
         uuid id PK
-        uuid termId FK
-        uuid discordUserId
-        string creatorName
-        string creatorPageUrl
-        string gamePageUrl
+        uuid term_id FK
+        uuid discord_user_id
+        string creator_name
+        string creator_page_url
+        string game_page_url
         string title
-        string description
+        text description
         string place
-        string icon
-        string image
+        mediumblob icon
+        longblob image
         timestamp created_at
         timestamp updated_at
     }
