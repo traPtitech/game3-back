@@ -688,26 +688,40 @@ components:
           type: string
           description: 展示するゲームタイトル
           example: 'ゲームタイトル'
+          x-oapi-codegen-extra-tags:
+            form: "title"
         creatorName:
           type: string
           description: ゲーム作成
+          x-oapi-codegen-extra-tags:
+            form: "creatorName"
         creatorPageUrl:
           type: string
           description: ゲーム作成者のページのURL
+          x-oapi-codegen-extra-tags:
+            form: "creatorPageUrl"
         gamePageUrl:
           type: string
           description: ゲームページのURL
+          x-oapi-codegen-extra-tags:
+            form: "gamePageUrl"
         description:
           type: string
           description: ゲームの説明
+          x-oapi-codegen-extra-tags:
+            form: "description"
         icon:
           type: string
           format: binary
           description: ゲームのアイコン画像
+          x-oapi-codegen-extra-tags:
+            form: "icon"
         image:
           type: string
           format: binary
           description: ゲームの画像
+          x-oapi-codegen-extra-tags:
+            form: "image"
       required:
         - title
         - creatorName
@@ -721,37 +735,57 @@ components:
           type: string
           format: uuid
           description: タームID
+          x-oapi-codegen-extra-tags:
+            form: "termId"
         discordUserId:
           type: string
           format: uuid
           description: discordのユーザーID
+          x-oapi-codegen-extra-tags:
+            form: "discordUserId"
         title:
           type: string
           description: 展示するゲームタイトル
           example: 'ゲームタイトル'
+          x-oapi-codegen-extra-tags:
+            form: "title"
         creatorName:
           type: string
           description: ゲーム作成者
+          x-oapi-codegen-extra-tags:
+            form: "creatorName"
         creatorPageUrl:
           type: string
           description: ゲーム作成者のページのURL
+          x-oapi-codegen-extra-tags:
+            form: "creatorPageUrl"
         gamePageUrl:
           type: string
           description: ゲームページのURL
+          x-oapi-codegen-extra-tags:
+            form: "gamePageUrl"
         description:
           type: string
           description: ゲームの説明
+          x-oapi-codegen-extra-tags:
+            form: "description"
         place:
           type: string
           description: 展示場所
+          x-oapi-codegen-extra-tags:
+            form: "place"
         icon:
           type: string
           format: binary
           description: ゲームのアイコン画像
+          x-oapi-codegen-extra-tags:
+            form: "icon"
         image:
           type: string
           format: binary
           description: ゲームの画像
+          x-oapi-codegen-extra-tags:
+            form: "image"
 
     Term:
       type: object
@@ -842,21 +876,31 @@ components:
         slug:
           type: string
           description: 'slug (URL内で使用, unique) 18th等'
+          x-oapi-codegen-extra-tags:
+            form: "slug"
         title:
           type: string
           description: '第18回'
+          x-oapi-codegen-extra-tags:
+            form: "title"
         gameSubmissionPeriodStart:
           type: string
           description: ゲーム展示の募集期間
           format: date-time
+          x-oapi-codegen-extra-tags:
+            form: "gameSubmissionPeriodStart"
         gameSubmissionPeriodEnd:
           type: string
           description: ゲーム展示の募集期間
           format: date-time
+          x-oapi-codegen-extra-tags:
+            form: "gameSubmissionPeriodEnd"
         image:
           type: string
           format: binary
           description: パンフレット用画像
+          x-oapi-codegen-extra-tags:
+            form: "image"
       required:
         - slug
         - title
