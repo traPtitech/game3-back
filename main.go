@@ -8,6 +8,7 @@ import (
 	"github.com/traPtitech/game3-back/internal/handler"
 	"github.com/traPtitech/game3-back/internal/migration"
 	"github.com/traPtitech/game3-back/internal/pkg/config"
+	"github.com/traPtitech/game3-back/internal/pkg/util"
 	"github.com/traPtitech/game3-back/internal/repository"
 	"os"
 
@@ -37,6 +38,7 @@ func main() {
 		e.Logger.Fatal(err)
 	}
 	defer db.Close()
+	sqlx.NameMapper = util.ToSnakeCase
 
 	// migrate tables
 	if err := migration.MigrateTables(db.DB); err != nil {

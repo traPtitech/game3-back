@@ -908,7 +908,36 @@ components:
         - gameSubmissionPeriodEnd
 
     PatchEventRequest:
-      $ref: '#/components/schemas/PostEventRequest'
+      type: object
+      properties:
+        slug:
+          type: string
+          description: 'slug (URL内で使用, unique) 18th等'
+          x-oapi-codegen-extra-tags:
+            form: "slug"
+        title:
+          type: string
+          description: '第18回'
+          x-oapi-codegen-extra-tags:
+            form: "title"
+        gameSubmissionPeriodStart:
+          type: string
+          description: ゲーム展示の募集期間
+          format: date-time
+          x-oapi-codegen-extra-tags:
+            form: "gameSubmissionPeriodStart"
+        gameSubmissionPeriodEnd:
+          type: string
+          description: ゲーム展示の募集期間
+          format: date-time
+          x-oapi-codegen-extra-tags:
+            form: "gameSubmissionPeriodEnd"
+        image:
+          type: string
+          format: binary
+          description: パンフレット用画像
+          x-oapi-codegen-extra-tags:
+            form: "image"
 
     GetEventCSVResponse:
       type: string

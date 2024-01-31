@@ -53,3 +53,7 @@ func (r *Repository) GetEvent(eventSlug models.EventSlugInPath) (*models.Event, 
 
 	return event, nil
 }
+
+func (r *Repository) PatchEvent(eventSlug models.EventSlugInPath, event *models.PatchEventRequest) error {
+	return r.Patch("event", "slug", eventSlug, event)
+}

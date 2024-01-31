@@ -58,8 +58,22 @@ func (h *Handler) GetEvent(c echo.Context, eventSlug models.EventSlugInPath) err
 	return c.JSON(http.StatusOK, event)
 }
 
-func (h *Handler) PatchEvent(c echo.Context, eventId models.EventSlugInPath) error {
-	panic("implement me")
+func (h *Handler) PatchEvent(c echo.Context, eventId models.EventSlugInPath) (err error) {
+	req := &models.PatchEventRequest{}
+	if err := c.Bind(req); err != nil {
+		return echo.NewHTTPError(http.StatusBadRequest, err.Error())
+	}
+
+	req.Image, err = h.handleFile(c, "image")
+	if err != nil {
+		return echo.NewHTTPError(http.StatusInternalServerError, "Failed to get image file: "+err.Error())
+	}
+
+	if err := h.repo.PatchEvent(eventId, req); err != nil {
+		return echo.NewHTTPError(http.StatusInternalServerError, err.Error())
+	}
+
+	return c.NoContent(http.StatusNoContent)
 }
 
 func (h *Handler) GetEventCsv(c echo.Context, eventId models.EventSlugInPath) error {

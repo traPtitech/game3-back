@@ -67,7 +67,22 @@ type GetEventCSVResponse = string
 type ImageResponse = openapi_types.File
 
 // PatchEventRequest defines model for PatchEventRequest.
-type PatchEventRequest = PostEventRequest
+type PatchEventRequest struct {
+	// GameSubmissionPeriodEnd ゲーム展示の募集期間
+	GameSubmissionPeriodEnd *time.Time `form:"gameSubmissionPeriodEnd" json:"gameSubmissionPeriodEnd,omitempty"`
+
+	// GameSubmissionPeriodStart ゲーム展示の募集期間
+	GameSubmissionPeriodStart *time.Time `form:"gameSubmissionPeriodStart" json:"gameSubmissionPeriodStart,omitempty"`
+
+	// Image パンフレット用画像
+	Image *openapi_types.File `form:"image" json:"image,omitempty"`
+
+	// Slug slug (URL内で使用, unique) 18th等
+	Slug *string `form:"slug" json:"slug,omitempty"`
+
+	// Title 第18回
+	Title *string `form:"title" json:"title,omitempty"`
+}
 
 // PatchGameRequest defines model for PatchGameRequest.
 type PatchGameRequest struct {
