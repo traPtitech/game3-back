@@ -625,31 +625,49 @@ components:
           type: string
           format: uuid
           description: ゲームID
+          x-oapi-codegen-extra-tags:
+            db: 'id'
         termId:
           type: string
           format: uuid
           description: タームID
+          x-oapi-codegen-extra-tags:
+              db: 'term_id'
         discordUserId:
           type: string
           description: DiscordのユーザーID
+          x-oapi-codegen-extra-tags:
+              db: 'discord_user_id'
         title:
           type: string
           description: 展示するゲームタイトル
+          x-oapi-codegen-extra-tags:
+              db: 'title'
         creatorName:
           type: string
           description: ゲーム作成者
+          x-oapi-codegen-extra-tags:
+              db: 'creator_name'
         creatorPageUrl:
           type: string
           description: ゲーム作成者のページのURL
+          x-oapi-codegen-extra-tags:
+              db: 'creator_page_url'
         gamePageUrl:
           type: string
           description: ゲームページのURL
+          x-oapi-codegen-extra-tags:
+              db: 'game_page_url'
         description:
           type: string
           description: ゲームの説明
+          x-oapi-codegen-extra-tags:
+              db: 'description'
         place:
           type: string
           description: 展示場所
+          x-oapi-codegen-extra-tags:
+              db: 'place'
       required:
         - id
         - termId
@@ -770,20 +788,30 @@ components:
           type: string
           format: uuid
           description: タームのID
+          x-oapi-codegen-extra-tags:
+            db: 'id'
         eventSlug:
           type: string
           description: イベントのslug
+          x-oapi-codegen-extra-tags:
+            db: 'event_slug'
         isDefault:
           type: boolean
           description: ゲーム登録時に割り当てられるTermならばTrue
+          x-oapi-codegen-extra-tags:
+              db: 'is_default'
         startAt:
           type: string
           format: date-time
           description: タームが始まる時間
+          x-oapi-codegen-extra-tags:
+              db: 'start_at'
         endAt:
           type: string
           format: date-time
           description: タームが終わる時間
+          x-oapi-codegen-extra-tags:
+              db: 'end_at'
       required:
         - id
         - eventSlug
@@ -834,17 +862,25 @@ components:
         slug:
           type: string
           description: イベントslug (イベントのID的な立ち位置)
+          x-oapi-codegen-extra-tags:
+            db: 'slug'
         title:
           type: string
           description: 'イベントのタイトル (例: 第18回)'
+          x-oapi-codegen-extra-tags:
+              db: 'title'
         gameSubmissionPeriodStart:
           type: string
           format: date-time
           description: ゲーム展示の募集開始期間
+          x-oapi-codegen-extra-tags:
+              db: 'game_submission_period_start'
         gameSubmissionPeriodEnd:
           type: string
           format: date-time
           description: ゲーム展示の募集終了期間
+          x-oapi-codegen-extra-tags:
+              db: 'game_submission_period_end'
       required:
         - slug
         - title

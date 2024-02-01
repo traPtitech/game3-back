@@ -18,46 +18,46 @@ const (
 // Event defines model for Event.
 type Event struct {
 	// GameSubmissionPeriodEnd ゲーム展示の募集終了期間
-	GameSubmissionPeriodEnd time.Time `json:"gameSubmissionPeriodEnd"`
+	GameSubmissionPeriodEnd time.Time `db:"game_submission_period_end" json:"gameSubmissionPeriodEnd"`
 
 	// GameSubmissionPeriodStart ゲーム展示の募集開始期間
-	GameSubmissionPeriodStart time.Time `json:"gameSubmissionPeriodStart"`
+	GameSubmissionPeriodStart time.Time `db:"game_submission_period_start" json:"gameSubmissionPeriodStart"`
 
 	// Slug イベントslug (イベントのID的な立ち位置)
-	Slug string `json:"slug"`
+	Slug string `db:"slug" json:"slug"`
 
 	// Title イベントのタイトル (例: 第18回)
-	Title string `json:"title"`
+	Title string `db:"title" json:"title"`
 }
 
 // Game defines model for Game.
 type Game struct {
 	// CreatorName ゲーム作成者
-	CreatorName string `json:"creatorName"`
+	CreatorName string `db:"creator_name" json:"creatorName"`
 
 	// CreatorPageUrl ゲーム作成者のページのURL
-	CreatorPageUrl *string `json:"creatorPageUrl,omitempty"`
+	CreatorPageUrl *string `db:"creator_page_url" json:"creatorPageUrl,omitempty"`
 
 	// Description ゲームの説明
-	Description string `json:"description"`
+	Description string `db:"description" json:"description"`
 
 	// DiscordUserId DiscordのユーザーID
-	DiscordUserId string `json:"discordUserId"`
+	DiscordUserId string `db:"discord_user_id" json:"discordUserId"`
 
 	// GamePageUrl ゲームページのURL
-	GamePageUrl *string `json:"gamePageUrl,omitempty"`
+	GamePageUrl *string `db:"game_page_url" json:"gamePageUrl,omitempty"`
 
 	// Id ゲームID
-	Id openapi_types.UUID `json:"id"`
+	Id openapi_types.UUID `db:"id" json:"id"`
 
 	// Place 展示場所
-	Place *string `json:"place,omitempty"`
+	Place *string `db:"place" json:"place,omitempty"`
 
 	// TermId タームID
-	TermId openapi_types.UUID `json:"termId"`
+	TermId openapi_types.UUID `db:"term_id" json:"termId"`
 
 	// Title 展示するゲームタイトル
-	Title string `json:"title"`
+	Title string `db:"title" json:"title"`
 }
 
 // GetEventCSVResponse defines model for GetEventCSVResponse.
@@ -189,19 +189,19 @@ type PostTermRequest struct {
 // Term defines model for Term.
 type Term struct {
 	// EndAt タームが終わる時間
-	EndAt time.Time `json:"endAt"`
+	EndAt time.Time `db:"end_at" json:"endAt"`
 
 	// EventSlug イベントのslug
-	EventSlug string `json:"eventSlug"`
+	EventSlug string `db:"event_slug" json:"eventSlug"`
 
 	// Id タームのID
-	Id openapi_types.UUID `json:"id"`
+	Id openapi_types.UUID `db:"id" json:"id"`
 
 	// IsDefault ゲーム登録時に割り当てられるTermならばTrue
-	IsDefault bool `json:"isDefault"`
+	IsDefault bool `db:"is_default" json:"isDefault"`
 
 	// StartAt タームが始まる時間
-	StartAt time.Time `json:"startAt"`
+	StartAt time.Time `db:"start_at" json:"startAt"`
 }
 
 // User defines model for User.
