@@ -2,8 +2,9 @@ package repository
 
 import (
 	"github.com/google/uuid"
-	apperrors "github.com/traPtitech/game3-back/internal/errors"
+	"github.com/labstack/echo/v4"
 	"github.com/traPtitech/game3-back/openapi/models"
+	"net/http"
 	"strings"
 )
 
@@ -47,7 +48,7 @@ func (r *Repository) GetGames(params models.GetGamesParams) ([]*models.Game, err
 		if *params.Include == "unpublished" {
 			whereClauses = append(whereClauses, "term.is_default = TRUE")
 		} else {
-			return nil, apperrors.NewBadRequestError("includeに指定できる値は'unpublished'のみ")
+			return nil, echo.NewHTTPError(http.StatusBadRequest, "includeに指定できる値は'unpublished'のみ")
 		}
 	} else {
 		whereClauses = append(whereClauses, "term.is_default = FALSE")
