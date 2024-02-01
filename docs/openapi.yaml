@@ -810,6 +810,10 @@ components:
           description: タームが終わる時間
       required:
         - id
+        - eventSlug
+        - isDefault
+        - startAt
+        - endAt
 
     PostTermRequest:
       type: object
