@@ -786,8 +786,6 @@ components:
           description: ゲームの画像
           x-oapi-codegen-extra-tags:
             form: 'image'
-      required:
-        - id
 
     Term:
       type: object
@@ -849,8 +847,6 @@ components:
           type: string
           format: date-time
           description: タームが終わる時間
-      required:
-        - eventSlug
 
     Event:
       type: object
@@ -943,8 +939,6 @@ components:
           description: パンフレット用画像
           x-oapi-codegen-extra-tags:
             form: 'image'
-      required:
-        - slug
 
     GetEventCSVResponse:
       type: string
