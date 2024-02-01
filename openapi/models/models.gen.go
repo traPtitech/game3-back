@@ -12,6 +12,7 @@ import (
 // Defines values for UserRole.
 const (
 	UserRoleAdmin UserRole = "admin"
+	UserRoleGuest UserRole = "guest"
 	UserRoleUser  UserRole = "user"
 )
 
@@ -206,10 +207,10 @@ type Term struct {
 
 // User defines model for User.
 type User struct {
-	ProfileImageUrl *string   `json:"profileImageUrl,omitempty"`
-	Role            *UserRole `json:"role,omitempty"`
-	UserId          *string   `json:"userId,omitempty"`
-	Username        *string   `json:"username,omitempty"`
+	ProfileImageUrl string   `json:"profileImageUrl"`
+	Role            UserRole `json:"role"`
+	UserId          string   `json:"userId"`
+	Username        string   `json:"username"`
 }
 
 // UserRole defines model for User.Role.
@@ -250,7 +251,7 @@ type GetGamesParams struct {
 	// UserId ユーザーID
 	UserId *string `form:"userId,omitempty" json:"userId,omitempty"`
 
-	// Include 未公開のゲームを含むかどうか
+	// Include 未公開のゲームを含むかどうか。includeに指定できる値は'unpublished'のみで、これが無ければ常にpublishedなGameのみ返す
 	Include *string `form:"include,omitempty" json:"include,omitempty"`
 }
 

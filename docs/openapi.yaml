@@ -991,10 +991,17 @@ components:
           type: string
         username:
           type: string
-        profileImageUrl:
-          type: string
         role:
           type: string
           enum:
-            - admin
+            - guest
             - user
+            - admin
+        profileImageUrl:
+          type: string
+
+      required:
+        - userId
+        - username
+        - role
+        - profileImageUrl
