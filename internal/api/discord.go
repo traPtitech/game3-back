@@ -3,6 +3,7 @@ package api
 import (
 	"encoding/json"
 	"errors"
+	"github.com/traPtitech/game3-back/internal/pkg/util"
 	"github.com/traPtitech/game3-back/openapi/models"
 	"io"
 	"net/http"
@@ -58,12 +59,25 @@ func GetDiscordUserInfo(accessToken *string) (*DiscordUserResponse, error) {
 }
 
 func GetDiscordUserToken(params models.OauthCallbackParams) (*TokenResponse, error) {
+	clientId, err := util.GetEnvOrErr("DISCORD_CLIENT_ID")
+	if err != nil {
+		return nil, err
+	}
+	clientSecret, err := util.GetEnvOrErr("DISCORD_CLIENT_SECRET")
+	if err != nil {
+		return nil, err
+	}
+	clientRedirectURI, err := util.GetEnvOrErr("DISCORD_CLIENT_REDIRECT_URI")
+	if err != nil {
+		return nil, err
+	}
+
 	formData := url.Values{}
-	formData.Set("client_id", "1188893707215315045")
-	formData.Set("client_secret", "HNmgqBqvYE2EowiFr88vSqq8gXAA5gWV")
+	formData.Set("client_id", clientId)
+	formData.Set("client_secret", clientSecret)
 	formData.Set("grant_type", "authorization_code")
 	formData.Set("code", params.Code)
-	formData.Set("redirect_uri", "http://localhost:8080/api/auth/callback")
+	formData.Set("redirect_uri", clientRedirectURI)
 	formData.Set("scope", "identify")
 
 	req, err := http.NewRequest("POST", "https://discordapp.com/api/oauth2/token", strings.NewReader(formData.Encode()))
