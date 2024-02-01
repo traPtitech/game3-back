@@ -4,7 +4,7 @@ import (
 	"github.com/google/uuid"
 	"github.com/labstack/echo/v4"
 	"github.com/traPtitech/game3-back/internal/api"
-	"github.com/traPtitech/game3-back/internal/domains"
+	"github.com/traPtitech/game3-back/internal/domain"
 	"github.com/traPtitech/game3-back/openapi/models"
 	"net/http"
 	"time"
@@ -80,7 +80,7 @@ func (h *Handler) OauthCallback(c echo.Context, params models.OauthCallbackParam
 		return echo.NewHTTPError(http.StatusInternalServerError, err.Error())
 	}
 
-	CreateSessionParams := &domains.Session{
+	CreateSessionParams := &domain.Session{
 		ID:           sessionID,
 		AccessToken:  tokenResponse.AccessToken,
 		RefreshToken: tokenResponse.RefreshToken,
@@ -112,7 +112,7 @@ func (h *Handler) Login(c echo.Context) error {
 		return echo.NewHTTPError(http.StatusInternalServerError, "Failed to generate session token")
 	}
 
-	CreateSessionParams := &domains.Session{
+	CreateSessionParams := &domain.Session{
 		ID:       &sessionToken,
 		Redirect: req.Redirect,
 	}
