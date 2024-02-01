@@ -731,12 +731,6 @@ components:
     PatchGameRequest:
       type: object
       properties:
-        id:
-          type: string
-          format: uuid
-          description: ゲームID
-          x-oapi-codegen-extra-tags:
-            form: 'id'
         termId:
           type: string
           format: uuid
