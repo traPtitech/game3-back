@@ -1,6 +1,7 @@
 package repository
 
 import (
+	"github.com/google/uuid"
 	"github.com/traPtitech/game3-back/internal/domains"
 )
 
@@ -22,7 +23,7 @@ func (r *Repository) UpdateSession(session *domains.Session) error {
 	return nil
 }
 
-func (r *Repository) GetSession(sessionID string) (*domains.Session, error) {
+func (r *Repository) GetSession(sessionID uuid.UUID) (*domains.Session, error) {
 	session := &domains.Session{}
 	if err := r.db.Get(session, "SELECT * FROM session WHERE id = ?", sessionID); err != nil {
 		return nil, err

@@ -1,7 +1,7 @@
 package repository
 
 import (
-	"github.com/traPtitech/game3-back/internal/api/models"
+	"github.com/traPtitech/game3-back/openapi/models"
 )
 
 func selectEventWithoutImageQuery() string {

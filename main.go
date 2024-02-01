@@ -4,12 +4,12 @@ import (
 	"fmt"
 	"github.com/getkin/kin-openapi/openapi3"
 	"github.com/labstack/echo/v4"
-	"github.com/traPtitech/game3-back/internal/api"
 	"github.com/traPtitech/game3-back/internal/handler"
 	"github.com/traPtitech/game3-back/internal/migration"
 	"github.com/traPtitech/game3-back/internal/pkg/config"
 	"github.com/traPtitech/game3-back/internal/pkg/util"
 	"github.com/traPtitech/game3-back/internal/repository"
+	"github.com/traPtitech/game3-back/openapi"
 	"os"
 
 	"github.com/jmoiron/sqlx"
@@ -19,7 +19,7 @@ import (
 func main() {
 	e := echo.New()
 
-	swagger, err := api.GetSwagger()
+	swagger, err := openapi.GetSwagger()
 	if err != nil {
 		fmt.Printf("Error loading swagger spec\n: %s", err)
 		os.Exit(1)
@@ -50,7 +50,7 @@ func main() {
 
 	// setup routes
 	h := handler.New(repo)
-	api.RegisterHandlersWithBaseURL(e, h, baseUrl)
+	openapi.RegisterHandlersWithBaseURL(e, h, baseUrl)
 
 	e.Logger.Fatal(e.Start(config.AppAddr()))
 }

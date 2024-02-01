@@ -201,19 +201,19 @@ type PostTermRequest struct {
 // Term defines model for Term.
 type Term struct {
 	// EndAt タームが終わる時間
-	EndAt *time.Time `json:"endAt,omitempty"`
+	EndAt time.Time `json:"endAt"`
 
 	// EventSlug イベントのslug
-	EventSlug *string `json:"eventSlug,omitempty"`
+	EventSlug string `json:"eventSlug"`
 
 	// Id タームのID
-	Id *openapi_types.UUID `json:"id,omitempty"`
+	Id openapi_types.UUID `json:"id"`
 
 	// IsDefault ゲーム登録時に割り当てられるTermならばTrue
-	IsDefault *bool `json:"isDefault,omitempty"`
+	IsDefault bool `json:"isDefault"`
 
 	// StartAt タームが始まる時間
-	StartAt *time.Time `json:"startAt,omitempty"`
+	StartAt time.Time `json:"startAt"`
 }
 
 // User defines model for User.

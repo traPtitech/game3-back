@@ -3,7 +3,7 @@ package handler
 import (
 	"github.com/google/uuid"
 	"github.com/labstack/echo/v4"
-	"github.com/traPtitech/game3-back/internal/api/models"
+	"github.com/traPtitech/game3-back/openapi/models"
 	"net/http"
 )
 
@@ -46,10 +46,10 @@ func (h *Handler) PostGame(c echo.Context) error {
 	if err != nil {
 		return echo.NewHTTPError(http.StatusInternalServerError, err.Error())
 	}
-	if err := h.repo.PatchGame(newGameID, &models.PatchGameRequest{TermId: term.Id}); err != nil {
+	if err := h.repo.PatchGame(newGameID, &models.PatchGameRequest{TermId: &term.Id}); err != nil {
 		return echo.NewHTTPError(http.StatusInternalServerError, err.Error())
 	}
-	
+
 	game, err := h.repo.GetGame(newGameID)
 	if err != nil {
 		return echo.NewHTTPError(http.StatusInternalServerError, err.Error())

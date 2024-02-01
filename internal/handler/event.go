@@ -2,7 +2,7 @@ package handler
 
 import (
 	"github.com/labstack/echo/v4"
-	"github.com/traPtitech/game3-back/internal/api/models"
+	"github.com/traPtitech/game3-back/openapi/models"
 	"net/http"
 )
 

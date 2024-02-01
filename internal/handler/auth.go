@@ -4,9 +4,9 @@ import (
 	"encoding/json"
 	"github.com/google/uuid"
 	"github.com/labstack/echo/v4"
-	"github.com/traPtitech/game3-back/internal/api/models"
 	"github.com/traPtitech/game3-back/internal/domains"
 	"github.com/traPtitech/game3-back/internal/repository"
+	"github.com/traPtitech/game3-back/openapi/models"
 	"io/ioutil"
 	"net/http"
 	"net/url"
@@ -34,7 +34,7 @@ func (h *Handler) Test(c echo.Context) error {
     <title>リダイレクトテスト</title>
     <script>
       function sendPostRequest() {
-        fetch('http://localhost:8080/auth/login', {
+        fetch('http://localhost:8080/api/auth/login', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json'
@@ -92,7 +92,7 @@ func (h *Handler) OauthCallback(c echo.Context, params models.OauthCallbackParam
 	if err != nil {
 		return echo.NewHTTPError(http.StatusBadRequest, "SessionToken is not found")
 	}
-	sessionToken, err := uuid.Parse(cookie.Value)
+	sessionID, err := uuid.Parse(cookie.Value)
 	if err != nil {
 		return echo.NewHTTPError(http.StatusBadRequest, "SessionToken is invalid")
 	}
@@ -102,7 +102,7 @@ func (h *Handler) OauthCallback(c echo.Context, params models.OauthCallbackParam
 	formData.Set("client_secret", "HNmgqBqvYE2EowiFr88vSqq8gXAA5gWV")
 	formData.Set("grant_type", "authorization_code")
 	formData.Set("code", params.Code)
-	formData.Set("redirect_uri", "http://localhost:8080/auth/callback")
+	formData.Set("redirect_uri", "http://localhost:8080/api/auth/callback")
 	formData.Set("scope", "identify")
 
 	req, err := http.NewRequest("POST", "https://discordapp.com/api/oauth2/token", strings.NewReader(formData.Encode()))
@@ -122,14 +122,13 @@ func (h *Handler) OauthCallback(c echo.Context, params models.OauthCallbackParam
 	if err != nil {
 		return echo.NewHTTPError(http.StatusInternalServerError, err.Error())
 	}
-
 	var tokenResponse TokenResponse
 	if err = json.Unmarshal(body, &tokenResponse); err != nil {
 		return echo.NewHTTPError(http.StatusInternalServerError, err.Error())
 	}
 
 	CreateSessionParams := &domains.Session{
-		ID:           &sessionToken,
+		ID:           &sessionID,
 		AccessToken:  tokenResponse.AccessToken,
 		RefreshToken: tokenResponse.RefreshToken,
 		ExpiresIn:    tokenResponse.ExpiresIn,
@@ -137,7 +136,7 @@ func (h *Handler) OauthCallback(c echo.Context, params models.OauthCallbackParam
 	if err = h.repo.UpdateSession(CreateSessionParams); err != nil {
 		return echo.NewHTTPError(http.StatusInternalServerError, err.Error())
 	}
-	session, err := h.repo.GetSession(sessionToken.String())
+	session, err := h.repo.GetSession(sessionID)
 	if err != nil {
 		return echo.NewHTTPError(http.StatusInternalServerError, err.Error())
 	}
@@ -169,7 +168,7 @@ func (h *Handler) Login(c echo.Context) error {
 	}
 
 	//Discord OAuth URL
-	discordURL := "https://discord.com/api/oauth2/authorize?client_id=1188893707215315045&response_type=code&redirect_uri=http%3A%2F%2Flocalhost%3A8080%2Fauth%2Fcallback&scope=identify"
+	discordURL := "https://discord.com/api/oauth2/authorize?client_id=1188893707215315045&response_type=code&redirect_uri=http%3A%2F%2Flocalhost%3A8080%2Fapi%2Fauth%2Fcallback&scope=identify"
 
 	c.SetCookie(&http.Cookie{
 		Name:     "SessionToken",

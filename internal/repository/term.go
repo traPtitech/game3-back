@@ -2,7 +2,7 @@ package repository
 
 import (
 	"github.com/google/uuid"
-	"github.com/traPtitech/game3-back/internal/api/models"
+	"github.com/traPtitech/game3-back/openapi/models"
 	"time"
 )
 
