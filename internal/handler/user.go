@@ -8,34 +8,15 @@ import (
 	"net/http"
 )
 
-type DiscordUserResponse struct {
-	ID       string `json:"id"`
-	Username string `json:"username"`
-	Avatar   string `json:"avatar"`
-}
-
 func (h *Handler) GetMe(c echo.Context) error {
-	cookie, err := c.Cookie("SessionToken")
-	if err != nil {
-		return echo.NewHTTPError(http.StatusBadRequest, "SessionToken is not found")
-	}
-	sessionID, err := uuid.Parse(cookie.Value)
-	if err != nil {
-		return echo.NewHTTPError(http.StatusBadRequest, "SessionToken is invalid")
-	}
-
-	session, err := h.repo.GetSession(sessionID)
-	if err != nil {
-		return echo.NewHTTPError(http.StatusInternalServerError, err.Error())
-	}
-
-	discordUser, err := api.GetDiscordUserInfo(session.AccessToken)
+	discordUser, err := h.getDiscordUserInfoByCookie(c)
 	if err != nil {
 		return echo.NewHTTPError(http.StatusInternalServerError, err.Error())
 	}
 
 	return c.JSON(http.StatusOK, discordUser)
 }
+
 func (h *Handler) GetMeGames(c echo.Context) error {
 	cookie, err := c.Cookie("SessionToken")
 	if err != nil {
@@ -46,7 +27,7 @@ func (h *Handler) GetMeGames(c echo.Context) error {
 		return echo.NewHTTPError(http.StatusBadRequest, "SessionToken is invalid")
 	}
 
-	session, err := h.repo.GetSession(sessionID)
+	session, err := h.repo.GetSession(&sessionID)
 	if err != nil {
 		return echo.NewHTTPError(http.StatusInternalServerError, err.Error())
 	}

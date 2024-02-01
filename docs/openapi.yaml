@@ -70,7 +70,7 @@ paths:
           name: include
           schema:
             type: string
-          description: 未公開のゲームを含むかどうか
+          description: 未公開のゲームを含むかどうか。includeに指定できる値は'unpublished'のみで、これが無ければ常にpublishedなGameのみ返す
       responses:
         '200':
           description: 成功 - ゲームリスト取得

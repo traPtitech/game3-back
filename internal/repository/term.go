@@ -6,9 +6,13 @@ import (
 	"time"
 )
 
+func selectTermQuery() string {
+	return "SELECT term.id, term.event_slug, term.is_default, term.start_at, term.end_at FROM term "
+}
+
 func (r *Repository) GetTerms() ([]*models.Term, error) {
 	terms := []*models.Term{}
-	if err := r.db.Select(&terms, "SELECT * FROM term"); err != nil {
+	if err := r.db.Select(&terms, selectTermQuery()); err != nil {
 		return nil, err
 	}
 
@@ -33,7 +37,8 @@ func (r *Repository) CreateDefaultTerm(eventSlug string) error {
 
 func (r *Repository) GetTerm(termID uuid.UUID) (*models.Term, error) {
 	term := &models.Term{}
-	if err := r.db.Get(term, "SELECT * FROM term WHERE id = ?", termID); err != nil {
+	query := selectTermQuery() + "WHERE term.id = ?"
+	if err := r.db.Get(term, query, termID); err != nil {
 		return nil, err
 	}
 
@@ -46,7 +51,7 @@ func (r *Repository) PatchTerm(termID uuid.UUID, req *models.PatchTermRequest) e
 
 func (r *Repository) GetEventTerms(eventSlug models.EventSlugInPath) ([]*models.Term, error) {
 	terms := []*models.Term{}
-	query := "SELECT term.* FROM term JOIN event ON term.event_slug = event.slug WHERE event.slug = ?"
+	query := selectTermQuery() + "JOIN event ON term.event_slug = event.slug WHERE event.slug = ?"
 	if err := r.db.Select(&terms, query, eventSlug); err != nil {
 		return nil, err
 	}
@@ -56,7 +61,7 @@ func (r *Repository) GetEventTerms(eventSlug models.EventSlugInPath) ([]*models.
 
 func (r *Repository) GetDefaultTerm(eventSlug models.EventSlugInPath) (*models.Term, error) {
 	term := &models.Term{}
-	query := "SELECT term.* FROM term JOIN event ON term.event_slug = event.slug WHERE event.slug = ? AND term.is_default = TRUE"
+	query := selectTermQuery() + "JOIN event ON term.event_slug = event.slug WHERE event.slug = ? AND term.is_default = TRUE"
 	if err := r.db.Get(term, query, eventSlug); err != nil {
 		return nil, err
 	}

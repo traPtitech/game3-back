@@ -17,24 +17,39 @@ func (h *Handler) GetGames(c echo.Context, params models.GetGamesParams) error {
 }
 
 func (h *Handler) PostGame(c echo.Context) error {
+	user, err := h.getDiscordUserInfoByCookie(c)
+	if err != nil {
+		return echo.NewHTTPError(http.StatusUnauthorized, err.Error())
+	}
+
+	currentEvent, err := h.repo.GetCurrentEvent()
+	if err != nil {
+		return err
+	}
+
+	defaultTerm, err := h.repo.GetDefaultTerm(currentEvent.Slug)
+	if err != nil {
+		return err
+	}
+
 	req := &models.PostGameRequest{}
-	err := c.Bind(req)
+	err = c.Bind(req)
 	if err != nil {
 		return echo.NewHTTPError(http.StatusBadRequest, err.Error())
 	}
 
-	icon, err := h.handleFile(c, "icon")
+	icon, err := handleFile(c, "icon")
 	if err != nil {
 		return echo.NewHTTPError(http.StatusInternalServerError, "Failed to get image file: "+err.Error())
 	}
 	req.Icon = *icon
-	req.Image, err = h.handleFile(c, "image")
+	req.Image, err = handleFile(c, "image")
 	if err != nil {
 		return echo.NewHTTPError(http.StatusInternalServerError, "Failed to get image file: "+err.Error())
 	}
 
 	newGameID := uuid.New()
-	if err := h.repo.PostGame(newGameID, req); err != nil {
+	if err := h.repo.PostGame(newGameID, defaultTerm.Id, user.ID, req); err != nil {
 		return echo.NewHTTPError(http.StatusInternalServerError, err.Error())
 	}
 
@@ -74,11 +89,11 @@ func (h *Handler) PatchGame(c echo.Context, gameID models.GameIdInPath) error {
 		return echo.NewHTTPError(http.StatusBadRequest, err.Error())
 	}
 
-	req.Icon, err = h.handleFile(c, "icon")
+	req.Icon, err = handleFile(c, "icon")
 	if err != nil {
 		return echo.NewHTTPError(http.StatusInternalServerError, "Failed to get image file: "+err.Error())
 	}
-	req.Image, err = h.handleFile(c, "image")
+	req.Image, err = handleFile(c, "image")
 	if err != nil {
 		return echo.NewHTTPError(http.StatusInternalServerError, "Failed to get image file: "+err.Error())
 	}

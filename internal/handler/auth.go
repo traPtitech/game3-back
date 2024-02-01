@@ -70,13 +70,9 @@ func (h *Handler) Test(c echo.Context) error {
 }
 
 func (h *Handler) OauthCallback(c echo.Context, params models.OauthCallbackParams) error {
-	cookie, err := c.Cookie("SessionToken")
+	sessionID, err := getSessionIDByCookie(c)
 	if err != nil {
-		return echo.NewHTTPError(http.StatusBadRequest, "SessionToken is not found")
-	}
-	sessionID, err := uuid.Parse(cookie.Value)
-	if err != nil {
-		return echo.NewHTTPError(http.StatusBadRequest, "SessionToken is invalid")
+		return echo.NewHTTPError(http.StatusUnauthorized, err.Error())
 	}
 
 	tokenResponse, err := api.GetDiscordUserToken(params)
@@ -85,7 +81,7 @@ func (h *Handler) OauthCallback(c echo.Context, params models.OauthCallbackParam
 	}
 
 	CreateSessionParams := &domains.Session{
-		ID:           &sessionID,
+		ID:           sessionID,
 		AccessToken:  tokenResponse.AccessToken,
 		RefreshToken: tokenResponse.RefreshToken,
 		ExpiresIn:    tokenResponse.ExpiresIn,

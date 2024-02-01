@@ -23,7 +23,7 @@ func (r *Repository) UpdateSession(session *domains.Session) error {
 	return nil
 }
 
-func (r *Repository) GetSession(sessionID uuid.UUID) (*domains.Session, error) {
+func (r *Repository) GetSession(sessionID *uuid.UUID) (*domains.Session, error) {
 	session := &domains.Session{}
 	if err := r.db.Get(session, "SELECT * FROM session WHERE id = ?", sessionID); err != nil {
 		return nil, err

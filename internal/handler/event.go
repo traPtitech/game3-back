@@ -21,7 +21,7 @@ func (h *Handler) PostEvent(c echo.Context) (err error) {
 		return echo.NewHTTPError(http.StatusBadRequest, "test "+err.Error())
 	}
 
-	req.Image, err = h.handleFile(c, "image")
+	req.Image, err = handleFile(c, "image")
 	if err != nil {
 		return echo.NewHTTPError(http.StatusInternalServerError, "Failed to get image file: "+err.Error())
 	}
@@ -66,7 +66,7 @@ func (h *Handler) PatchEvent(c echo.Context, eventID models.EventSlugInPath) (er
 		return echo.NewHTTPError(http.StatusBadRequest, err.Error())
 	}
 
-	req.Image, err = h.handleFile(c, "image")
+	req.Image, err = handleFile(c, "image")
 	if err != nil {
 		return echo.NewHTTPError(http.StatusInternalServerError, "Failed to get image file: "+err.Error())
 	}
@@ -90,7 +90,7 @@ func (h *Handler) GetEventTerms(ctx echo.Context, eventID models.EventSlugInPath
 	return ctx.JSON(http.StatusOK, events)
 }
 func (h *Handler) GetEventGames(c echo.Context, eventID models.EventSlugInPath) error {
-	games, err := h.repo.GetEventGames(eventID)
+	games, err := h.repo.GetGames(models.GetGamesParams{EventSlug: &eventID})
 	if err != nil {
 		return echo.NewHTTPError(http.StatusInternalServerError, err.Error())
 	}
