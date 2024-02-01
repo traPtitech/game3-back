@@ -7,7 +7,7 @@ import (
 	"github.com/traPtitech/game3-back/internal/domains"
 	"github.com/traPtitech/game3-back/internal/repository"
 	"github.com/traPtitech/game3-back/openapi/models"
-	"io/ioutil"
+	"io"
 	"net/http"
 	"net/url"
 	"strings"
@@ -117,8 +117,11 @@ func (h *Handler) OauthCallback(c echo.Context, params models.OauthCallbackParam
 		return echo.NewHTTPError(http.StatusInternalServerError, err.Error())
 	}
 	defer resp.Body.Close()
+	if resp.StatusCode != http.StatusOK {
+		return echo.NewHTTPError(http.StatusInternalServerError, "Discord OAuth failed: status: "+resp.Status)
+	}
 
-	body, err := ioutil.ReadAll(resp.Body)
+	body, err := io.ReadAll(resp.Body)
 	if err != nil {
 		return echo.NewHTTPError(http.StatusInternalServerError, err.Error())
 	}
