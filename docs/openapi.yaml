@@ -5,11 +5,11 @@ info:
   description: Game^3 API
   contact:
     name: game3-back
-    url: 'https://github.com/traPtitech/game3-back'
+    url: "https://github.com/traPtitech/game3-back"
 servers:
-  - url: 'http://localhost:8080/api'
+  - url: "http://localhost:8080/api"
     description: ローカル環境
-  - url: 'https://game3.trap.games/api'
+  - url: "https://game3.trap.games/api"
     description: 本番環境
 tags:
   - name: games
@@ -30,7 +30,7 @@ paths:
       summary: サーバーの生存確認
       operationId: pingServer
       responses:
-        '200':
+        "200":
           description: Pong
           content:
             text/plain:
@@ -42,7 +42,7 @@ paths:
       summary: テスト用
       operationId: test
       responses:
-        '200':
+        "200":
           description: OK
 
   /games:
@@ -75,15 +75,15 @@ paths:
             type: string
           description: 未公開のゲームを含むかどうか
       responses:
-        '200':
+        "200":
           description: 成功 - ゲームリスト取得
           content:
             application/json:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/Game'
-        '404':
+                  $ref: "#/components/schemas/Game"
+        "404":
           description: Not Found
     post:
       summary: ゲームを登録
@@ -95,17 +95,17 @@ paths:
         content:
           multipart/form-data:
             schema:
-              $ref: '#/components/schemas/PostGameRequest'
+              $ref: "#/components/schemas/PostGameRequest"
       responses:
-        '201':
+        "201":
           description: Created
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Game'
-        '400':
+                $ref: "#/components/schemas/Game"
+        "400":
           description: Bad Request
-        '403':
+        "403":
           description: Forbidden
 
   /games/{gameId}:
@@ -115,21 +115,21 @@ paths:
       tags:
         - games
       parameters:
-        - $ref: '#/components/parameters/gameIdInPath'
+        - $ref: "#/components/parameters/gameIdInPath"
       requestBody:
         required: true
         content:
           multipart/form-data:
             schema:
-              $ref: '#/components/schemas/PatchGameRequest'
+              $ref: "#/components/schemas/PatchGameRequest"
       responses:
-        '204':
+        "204":
           description: No Content - 変更されました
-        '400':
+        "400":
           description: Bad Request
-        '403':
+        "403":
           description: Forbidden
-        '404':
+        "404":
           description: Not Found
 
     get:
@@ -138,15 +138,15 @@ paths:
       tags:
         - games
       parameters:
-        - $ref: '#/components/parameters/gameIdInPath'
+        - $ref: "#/components/parameters/gameIdInPath"
       responses:
-        '200':
+        "200":
           description: 成功 - ゲーム情報取得
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Game'
-        '404':
+                $ref: "#/components/schemas/Game"
+        "404":
           description: Not Found
   /games/{gameId}/icon:
     get:
@@ -155,15 +155,15 @@ paths:
       tags:
         - games
       parameters:
-        - $ref: '#/components/parameters/gameIdInPath'
+        - $ref: "#/components/parameters/gameIdInPath"
       responses:
-        '200':
+        "200":
           description: 成功 - ゲームのアイコン画像を取得
           content:
             image/png:
               schema:
-                $ref: '#/components/schemas/ImageResponse'
-        '404':
+                $ref: "#/components/schemas/ImageResponse"
+        "404":
           description: Not Found
   /games/{gameId}/image:
     get:
@@ -172,15 +172,15 @@ paths:
       tags:
         - games
       parameters:
-        - $ref: '#/components/parameters/gameIdInPath'
+        - $ref: "#/components/parameters/gameIdInPath"
       responses:
-        '200':
+        "200":
           description: 成功 - ゲームの画像を取得
           content:
             image/png:
               schema:
-                $ref: '#/components/schemas/ImageResponse'
-        '404':
+                $ref: "#/components/schemas/ImageResponse"
+        "404":
           description: Not Found
 
   /terms:
@@ -190,15 +190,15 @@ paths:
       tags:
         - terms
       responses:
-        '200':
+        "200":
           description: 成功 - 全てのタームのリスト取得
           content:
             application/json:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/Term'
-        '404':
+                  $ref: "#/components/schemas/Term"
+        "404":
           description: Not Found
     post:
       summary: タームを登録
@@ -210,15 +210,15 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/PostTermRequest'
+              $ref: "#/components/schemas/PostTermRequest"
       responses:
-        '201':
+        "201":
           description: Created
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Term'
-        '400':
+                $ref: "#/components/schemas/Term"
+        "400":
           description: Bad Request
   /terms/{termId}:
     get:
@@ -227,15 +227,15 @@ paths:
       tags:
         - terms
       parameters:
-        - $ref: '#/components/parameters/termIdInPath'
+        - $ref: "#/components/parameters/termIdInPath"
       responses:
-        '200':
+        "200":
           description: 成功 - ターム情報取得
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Term'
-        '404':
+                $ref: "#/components/schemas/Term"
+        "404":
           description: Not Found
 
     patch:
@@ -244,19 +244,19 @@ paths:
       tags:
         - terms
       parameters:
-        - $ref: '#/components/parameters/termIdInPath'
+        - $ref: "#/components/parameters/termIdInPath"
       requestBody:
         required: true
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/PatchTermRequest'
+              $ref: "#/components/schemas/PatchTermRequest"
       responses:
-        '204':
+        "204":
           description: No Content - 変更されました
-        '400':
+        "400":
           description: Bad Request
-        '404':
+        "404":
           description: Not Found
   /terms/{termId}/games:
     get:
@@ -265,17 +265,17 @@ paths:
       tags:
         - terms
       parameters:
-        - $ref: '#/components/parameters/termIdInPath'
+        - $ref: "#/components/parameters/termIdInPath"
       responses:
-        '200':
+        "200":
           description: 成功 - タームに登録されているゲームのリスト取得
           content:
             application/json:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/Game'
-        '404':
+                  $ref: "#/components/schemas/Game"
+        "404":
           description: Not Found
 
   /events:
@@ -289,16 +289,16 @@ paths:
         content:
           multipart/form-data:
             schema:
-              $ref: '#/components/schemas/PostEventRequest'
+              $ref: "#/components/schemas/PostEventRequest"
 
       responses:
-        '201':
+        "201":
           description: 成功 - イベント登録
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Event'
-        '400':
+                $ref: "#/components/schemas/Event"
+        "400":
           description: Bad Request
 
     get:
@@ -307,15 +307,15 @@ paths:
       tags:
         - events
       responses:
-        '200':
+        "200":
           description: 成功 - イベントリスト取得
           content:
             application/json:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/Event'
-        '404':
+                  $ref: "#/components/schemas/Event"
+        "404":
           description: Not Found
   /events/now:
     get:
@@ -324,13 +324,13 @@ paths:
       tags:
         - events
       responses:
-        '200':
+        "200":
           description: 成功 - 開催中のイベント取得
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Event'
-        '404':
+                $ref: "#/components/schemas/Event"
+        "404":
           description: Not Found
   /events/{eventSlug}:
     patch:
@@ -339,21 +339,21 @@ paths:
       tags:
         - events
       parameters:
-        - $ref: '#/components/parameters/eventSlugInPath'
+        - $ref: "#/components/parameters/eventSlugInPath"
       requestBody:
         required: true
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/PatchEventRequest'
+              $ref: "#/components/schemas/PatchEventRequest"
       responses:
-        '204':
+        "204":
           description: No Content - 変更されました
-        '400':
+        "400":
           description: Bad Request
-        '403':
+        "403":
           description: Forbidden
-        '404':
+        "404":
           description: Not Found
     get:
       summary: イベントの情報を取得
@@ -361,15 +361,15 @@ paths:
       tags:
         - events
       parameters:
-        - $ref: '#/components/parameters/eventSlugInPath'
+        - $ref: "#/components/parameters/eventSlugInPath"
       responses:
-        '200':
+        "200":
           description: 成功 - イベント情報取得
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Event'
-        '404':
+                $ref: "#/components/schemas/Event"
+        "404":
           description: Not Found
   /events/{eventSlug}/image:
     get:
@@ -378,15 +378,15 @@ paths:
       tags:
         - events
       parameters:
-        - $ref: '#/components/parameters/eventSlugInPath'
+        - $ref: "#/components/parameters/eventSlugInPath"
       responses:
-        '200':
+        "200":
           description: 成功 - イベント画像取得
           content:
             image/png:
               schema:
-                $ref: '#/components/schemas/ImageResponse'
-        '404':
+                $ref: "#/components/schemas/ImageResponse"
+        "404":
           description: Not Found
   /events/{eventSlug}/terms:
     get:
@@ -396,17 +396,17 @@ paths:
         - events
         - games
       parameters:
-        - $ref: '#/components/parameters/eventSlugInPath'
+        - $ref: "#/components/parameters/eventSlugInPath"
       responses:
-        '200':
+        "200":
           description: 成功 - イベントに登録されているタームのリスト取得
           content:
             application/json:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/Term'
-        '404':
+                  $ref: "#/components/schemas/Term"
+        "404":
           description: Not Found
   /events/{eventSlug}/games:
     get:
@@ -416,17 +416,17 @@ paths:
         - events
         - games
       parameters:
-        - $ref: '#/components/parameters/eventSlugInPath'
+        - $ref: "#/components/parameters/eventSlugInPath"
       responses:
-        '200':
+        "200":
           description: 成功 - イベントに登録されているゲームのリスト取得
           content:
             application/json:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/Game'
-        '404':
+                  $ref: "#/components/schemas/Game"
+        "404":
           description: Not Found
   /events/{eventSlug}/csv:
     get:
@@ -435,15 +435,15 @@ paths:
       tags:
         - events
       parameters:
-        - $ref: '#/components/parameters/eventSlugInPath'
+        - $ref: "#/components/parameters/eventSlugInPath"
       responses:
-        '200':
+        "200":
           description: 成功 - CSV形式で情報取得
           content:
             text/csv:
               schema:
-                $ref: '#/components/schemas/GetEventCSVResponse'
-        '404':
+                $ref: "#/components/schemas/GetEventCSVResponse"
+        "404":
           description: Not Found
 
   /auth/login:
@@ -464,7 +464,7 @@ paths:
                   type: string
                   description: リダイレクト先のURL
       responses:
-        '302':
+        "302":
           description: Redirect to Discord OAuth URL
           headers:
             Location:
@@ -475,7 +475,7 @@ paths:
               schema:
                 type: string
                 description: セッショントークン
-        '400':
+        "400":
           description: Bad Request
   /auth/callback:
     get:
@@ -491,16 +491,16 @@ paths:
             type: string
           description: Discordからの認証コード
       responses:
-        '302':
+        "302":
           description: Redirect to original URL
           headers:
             Location:
               schema:
                 type: string
                 description: もともと開いていたURL
-        '400':
+        "400":
           description: Bad Request
-        '401':
+        "401":
           description: Unauthorized
   /auth/logout:
     post:
@@ -509,7 +509,7 @@ paths:
       tags:
         - auth
       responses:
-        '204':
+        "204":
           description: No Content - ログアウトしました。
 
   /users/me:
@@ -519,13 +519,13 @@ paths:
       tags:
         - users
       responses:
-        '200':
+        "200":
           description: 成功 - ユーザー情報取得
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/User'
-        '404':
+                $ref: "#/components/schemas/User"
+        "404":
           description: Not Found
   /users/me/games:
     get:
@@ -534,7 +534,7 @@ paths:
       tags:
         - users
       responses:
-        '200':
+        "200":
           description: 成功 - 登録ゲームリスト取得
           content:
             application/json:
@@ -544,8 +544,8 @@ paths:
                   games:
                     type: array
                     items:
-                      $ref: '#/components/schemas/Game'
-        '404':
+                      $ref: "#/components/schemas/Game"
+        "404":
           description: Not Found
   /users/{userId}:
     get:
@@ -554,15 +554,15 @@ paths:
       tags:
         - users
       parameters:
-        - $ref: '#/components/parameters/userIdInPath'
+        - $ref: "#/components/parameters/userIdInPath"
       responses:
-        '200':
+        "200":
           description: 成功 - ユーザー情報取得
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/User'
-        '404':
+                $ref: "#/components/schemas/User"
+        "404":
           description: Not Found
   /users/{userId}/games:
     get:
@@ -571,9 +571,9 @@ paths:
       tags:
         - users
       parameters:
-        - $ref: '#/components/parameters/userIdInPath'
+        - $ref: "#/components/parameters/userIdInPath"
       responses:
-        '200':
+        "200":
           description: 成功 - 登録ゲームリスト取得
           content:
             application/json:
@@ -583,8 +583,8 @@ paths:
                   games:
                     type: array
                     items:
-                      $ref: '#/components/schemas/Game'
-        '404':
+                      $ref: "#/components/schemas/Game"
+        "404":
           description: Not Found
 
   /contacts:
@@ -598,11 +598,11 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/PostContactsRequest'
+              $ref: "#/components/schemas/PostContactsRequest"
       responses:
-        '200':
+        "200":
           description: OK
-        '400':
+        "400":
           description: Bad Request
 
 components:
@@ -687,7 +687,7 @@ components:
         title:
           type: string
           description: 展示するゲームタイトル
-          example: 'ゲームタイトル'
+          example: "ゲームタイトル"
           x-oapi-codegen-extra-tags:
             form: "title"
         creatorName:
@@ -731,6 +731,12 @@ components:
     PatchGameRequest:
       type: object
       properties:
+        id:
+          type: string
+          format: uuid
+          description: ゲームID
+          x-oapi-codegen-extra-tags:
+            form: "id"
         termId:
           type: string
           format: uuid
@@ -746,7 +752,7 @@ components:
         title:
           type: string
           description: 展示するゲームタイトル
-          example: 'ゲームタイトル'
+          example: "ゲームタイトル"
           x-oapi-codegen-extra-tags:
             form: "title"
         creatorName:
@@ -786,6 +792,8 @@ components:
           description: ゲームの画像
           x-oapi-codegen-extra-tags:
             form: "image"
+      required:
+        - id
 
     Term:
       type: object
@@ -808,7 +816,8 @@ components:
           type: string
           format: date-time
           description: タームが終わる時間
-
+      required:
+        - id
 
     PostTermRequest:
       type: object
@@ -846,6 +855,8 @@ components:
           type: string
           format: date-time
           description: タームが終わる時間
+      required:
+        - eventSlug
 
     Event:
       type: object
@@ -855,7 +866,7 @@ components:
           description: イベントslug (イベントのID的な立ち位置)
         title:
           type: string
-          description: 'イベントのタイトル (例: 第18回)'
+          description: "イベントのタイトル (例: 第18回)"
         gameSubmissionPeriodStart:
           type: string
           format: date-time
@@ -875,12 +886,12 @@ components:
       properties:
         slug:
           type: string
-          description: 'slug (URL内で使用, unique) 18th等'
+          description: "slug (URL内で使用, unique) 18th等"
           x-oapi-codegen-extra-tags:
             form: "slug"
         title:
           type: string
-          description: '第18回'
+          description: "第18回"
           x-oapi-codegen-extra-tags:
             form: "title"
         gameSubmissionPeriodStart:
@@ -912,12 +923,12 @@ components:
       properties:
         slug:
           type: string
-          description: 'slug (URL内で使用, unique) 18th等'
+          description: "slug (URL内で使用, unique) 18th等"
           x-oapi-codegen-extra-tags:
             form: "slug"
         title:
           type: string
-          description: '第18回'
+          description: "第18回"
           x-oapi-codegen-extra-tags:
             form: "title"
         gameSubmissionPeriodStart:
@@ -938,6 +949,8 @@ components:
           description: パンフレット用画像
           x-oapi-codegen-extra-tags:
             form: "image"
+      required:
+        - slug
 
     GetEventCSVResponse:
       type: string
