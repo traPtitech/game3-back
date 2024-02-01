@@ -12,6 +12,12 @@ type Handler struct {
 	repo *repository.Repository
 }
 
+func New(repo *repository.Repository) *Handler {
+	return &Handler{
+		repo: repo,
+	}
+}
+
 // handleFile processes a file from the form data and returns a *types.File.
 func (h *Handler) handleFile(c echo.Context, formFileName string) (*types.File, error) {
 	fileHeader, err := c.FormFile(formFileName)

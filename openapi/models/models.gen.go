@@ -132,18 +132,6 @@ type PatchTermRequest struct {
 	StartAt *time.Time `json:"startAt,omitempty"`
 }
 
-// PostContactsRequest defines model for PostContactsRequest.
-type PostContactsRequest struct {
-	// Email メールアドレス
-	Email string `json:"email"`
-
-	// Message お問い合わせ内容
-	Message string `json:"message"`
-
-	// Name 名前
-	Name string `json:"name"`
-}
-
 // PostEventRequest defines model for PostEventRequest.
 type PostEventRequest struct {
 	// GameSubmissionPeriodEnd ゲーム展示の募集期間
@@ -268,9 +256,6 @@ type GetGamesParams struct {
 
 // LoginJSONRequestBody defines body for Login for application/json ContentType.
 type LoginJSONRequestBody LoginJSONBody
-
-// PostContactsJSONRequestBody defines body for PostContacts for application/json ContentType.
-type PostContactsJSONRequestBody = PostContactsRequest
 
 // PostEventMultipartRequestBody defines body for PostEvent for multipart/form-data ContentType.
 type PostEventMultipartRequestBody = PostEventRequest

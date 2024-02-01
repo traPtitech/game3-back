@@ -1,16 +1,12 @@
 package handler
 
 import (
-	"encoding/json"
 	"github.com/google/uuid"
 	"github.com/labstack/echo/v4"
+	"github.com/traPtitech/game3-back/internal/api"
 	"github.com/traPtitech/game3-back/internal/domains"
-	"github.com/traPtitech/game3-back/internal/repository"
 	"github.com/traPtitech/game3-back/openapi/models"
-	"io"
 	"net/http"
-	"net/url"
-	"strings"
 	"time"
 )
 
@@ -73,20 +69,6 @@ func (h *Handler) Test(c echo.Context) error {
 	return c.HTML(http.StatusOK, html)
 }
 
-func New(repo *repository.Repository) *Handler {
-	return &Handler{
-		repo: repo,
-	}
-}
-
-type TokenResponse struct {
-	TokenType    *string `json:"token_type"`
-	AccessToken  *string `json:"access_token"`
-	ExpiresIn    *int    `json:"expires_in"`
-	RefreshToken *string `json:"refresh_token"`
-	Scope        *string `json:"scope"`
-}
-
 func (h *Handler) OauthCallback(c echo.Context, params models.OauthCallbackParams) error {
 	cookie, err := c.Cookie("SessionToken")
 	if err != nil {
@@ -97,36 +79,8 @@ func (h *Handler) OauthCallback(c echo.Context, params models.OauthCallbackParam
 		return echo.NewHTTPError(http.StatusBadRequest, "SessionToken is invalid")
 	}
 
-	formData := url.Values{}
-	formData.Set("client_id", "1188893707215315045")
-	formData.Set("client_secret", "HNmgqBqvYE2EowiFr88vSqq8gXAA5gWV")
-	formData.Set("grant_type", "authorization_code")
-	formData.Set("code", params.Code)
-	formData.Set("redirect_uri", "http://localhost:8080/api/auth/callback")
-	formData.Set("scope", "identify")
-
-	req, err := http.NewRequest("POST", "https://discordapp.com/api/oauth2/token", strings.NewReader(formData.Encode()))
+	tokenResponse, err := api.GetDiscordUserToken(params)
 	if err != nil {
-		return echo.NewHTTPError(http.StatusInternalServerError, err.Error())
-	}
-	req.Header.Add("Content-Type", "application/x-www-form-urlencoded")
-
-	client := &http.Client{}
-	resp, err := client.Do(req)
-	if err != nil {
-		return echo.NewHTTPError(http.StatusInternalServerError, err.Error())
-	}
-	defer resp.Body.Close()
-	if resp.StatusCode != http.StatusOK {
-		return echo.NewHTTPError(http.StatusInternalServerError, "Discord OAuth failed: status: "+resp.Status)
-	}
-
-	body, err := io.ReadAll(resp.Body)
-	if err != nil {
-		return echo.NewHTTPError(http.StatusInternalServerError, err.Error())
-	}
-	var tokenResponse TokenResponse
-	if err = json.Unmarshal(body, &tokenResponse); err != nil {
 		return echo.NewHTTPError(http.StatusInternalServerError, err.Error())
 	}
 
