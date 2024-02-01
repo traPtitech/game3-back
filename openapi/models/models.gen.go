@@ -42,7 +42,7 @@ type Game struct {
 	Description string `json:"description"`
 
 	// DiscordUserId DiscordのユーザーID
-	DiscordUserId openapi_types.UUID `json:"discordUserId"`
+	DiscordUserId string `json:"discordUserId"`
 
 	// GamePageUrl ゲームページのURL
 	GamePageUrl *string `json:"gamePageUrl,omitempty"`
@@ -96,7 +96,7 @@ type PatchGameRequest struct {
 	Description *string `form:"description" json:"description,omitempty"`
 
 	// DiscordUserId discordのユーザーID
-	DiscordUserId *openapi_types.UUID `form:"discordUserId" json:"discordUserId,omitempty"`
+	DiscordUserId *string `form:"discordUserId" json:"discordUserId,omitempty"`
 
 	// GamePageUrl ゲームページのURL
 	GamePageUrl *string `form:"gamePageUrl" json:"gamePageUrl,omitempty"`
@@ -237,7 +237,7 @@ type GameIdInPath = openapi_types.UUID
 type TermIdInPath = openapi_types.UUID
 
 // UserIdInPath ユーザーID
-type UserIdInPath = openapi_types.UUID
+type UserIdInPath = string
 
 // OauthCallbackParams defines parameters for OauthCallback.
 type OauthCallbackParams struct {
@@ -260,7 +260,7 @@ type GetGamesParams struct {
 	EventSlug *string `form:"eventSlug,omitempty" json:"eventSlug,omitempty"`
 
 	// UserId ユーザーID
-	UserId *openapi_types.UUID `form:"userId,omitempty" json:"userId,omitempty"`
+	UserId *string `form:"userId,omitempty" json:"userId,omitempty"`
 
 	// Include 未公開のゲームを含むかどうか
 	Include *string `form:"include,omitempty" json:"include,omitempty"`

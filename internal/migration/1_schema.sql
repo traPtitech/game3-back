@@ -44,7 +44,7 @@ CREATE TABLE game
 (
     id               CHAR(36) PRIMARY KEY,
     term_id          CHAR(36)     NOT NULL,
-    discord_user_id  CHAR(36)     NOT NULL,
+    discord_user_id  CHAR(18)     NOT NULL,
     creator_name     VARCHAR(255) NOT NULL,
     creator_page_url VARCHAR(255),
     game_page_url    VARCHAR(255),

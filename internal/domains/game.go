@@ -29,7 +29,7 @@ CREATE TABLE game
 type Game struct {
 	ID             *uuid.UUID `db:"id" json:"id,omitempty"`
 	TermID         *uuid.UUID `db:"termId" json:"term_id,omitempty"`
-	DiscordUserID  *uuid.UUID `db:"discordUserId" json:"discord_user_id,omitempty"`
+	DiscordUserID  *string    `db:"discordUserId" json:"discord_user_id,omitempty"`
 	CreatorName    *string    `db:"creatorName" json:"creator_name,omitempty"`
 	CreatorPageURL *string    `db:"creatorPageUrl" json:"creator_page_url,omitempty"`
 	GamePageURL    *string    `db:"gamePageUrl" json:"game_page_url,omitempty"`

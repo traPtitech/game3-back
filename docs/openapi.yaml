@@ -67,7 +67,6 @@ paths:
           name: userId
           schema:
             type: string
-            format: uuid
           description: ユーザーID
         - in: query
           name: include
@@ -636,7 +635,6 @@ components:
       required: true
       schema:
         type: string
-        format: uuid
         description: ユーザーID
 
   schemas:
@@ -653,7 +651,6 @@ components:
           description: タームID
         discordUserId:
           type: string
-          format: uuid
           description: DiscordのユーザーID
         title:
           type: string
@@ -739,7 +736,6 @@ components:
             form: 'termId'
         discordUserId:
           type: string
-          format: uuid
           description: discordのユーザーID
           x-oapi-codegen-extra-tags:
             form: 'discordUserId'
