@@ -22,8 +22,6 @@ tags:
     description: 認証API
   - name: users
     description: ユーザーAPI
-  - name: contacts
-    description: コンタクトAPI
 paths:
   /ping:
     get:
@@ -586,24 +584,6 @@ paths:
         '404':
           description: Not Found
 
-  /contacts:
-    post:
-      summary: コンタクト用メールを送信
-      operationId: postContacts
-      tags:
-        - contacts
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/PostContactsRequest'
-      responses:
-        '200':
-          description: OK
-        '400':
-          description: Bad Request
-
 components:
   parameters:
     gameIdInPath:
@@ -942,23 +922,6 @@ components:
 
     GetEventCSVResponse:
       type: string
-
-    PostContactsRequest:
-      type: object
-      properties:
-        name:
-          type: string
-          description: 名前
-        email:
-          type: string
-          description: メールアドレス
-        message:
-          type: string
-          description: お問い合わせ内容
-      required:
-        - name
-        - email
-        - message
 
     ImageResponse:
       type: string
