@@ -3,6 +3,7 @@ package api
 import (
 	"encoding/json"
 	"errors"
+	"github.com/traPtitech/game3-back/internal/enum"
 	"github.com/traPtitech/game3-back/internal/pkg/util"
 	"github.com/traPtitech/game3-back/openapi/models"
 	"io"
@@ -106,4 +107,16 @@ func GetDiscordUserToken(params models.OauthCallbackParams) (*TokenResponse, err
 	}
 
 	return &tokenResponse, nil
+}
+
+func GetDiscordUserRole(discordUserID string) enum.UserRole {
+	//TODO Discordのユーザーのロールを取得する BOTを使う必要がありそう、とりあえずハードコーディング
+	adminUserIDs := []string{"310006192917315585", "222725046987128837", "707176617210019850", "1088448230662099024", "457179092127711232", "855464089496453171", "350623253141782528", "818846297535676456"}
+	for _, id := range adminUserIDs {
+		if id == discordUserID {
+			return enum.Admin
+		}
+	}
+
+	return enum.User
 }
