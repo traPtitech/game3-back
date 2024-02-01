@@ -2,107 +2,122 @@ package handler
 
 import (
 	"github.com/labstack/echo/v4"
+	"github.com/traPtitech/game3-back/internal/apperrors"
 	"github.com/traPtitech/game3-back/openapi/models"
 	"net/http"
 )
 
-func (h *Handler) GetEvents(c echo.Context) error {
-	events, err := h.repo.GetEvents()
-	if err != nil {
-		return echo.NewHTTPError(http.StatusInternalServerError, err.Error())
+func (h *Handler) PostEvent(c echo.Context) (err error) {
+	if _, _, err = h.enforceAdminAccess(c); err != nil {
+		return err
 	}
 
-	return c.JSON(http.StatusOK, events)
-}
-
-func (h *Handler) PostEvent(c echo.Context) (err error) {
 	req := &models.PostEventRequest{}
-	if err := c.Bind(req); err != nil {
-		return echo.NewHTTPError(http.StatusBadRequest, "test "+err.Error())
+	if err = c.Bind(req); err != nil {
+		return apperrors.HandleBindError(err)
 	}
 
 	req.Image, err = handleFile(c, "image")
 	if err != nil {
-		return echo.NewHTTPError(http.StatusInternalServerError, "Failed to get image file: "+err.Error())
+		return apperrors.HandleFileError(err)
 	}
 
-	if err := h.repo.PostEvent(req); err != nil {
-		return echo.NewHTTPError(http.StatusInternalServerError, err.Error())
+	if err = h.repo.PostEvent(req); err != nil {
+		return apperrors.HandleDbError(err)
 	}
 
 	event, err := h.repo.GetEvent(req.Slug)
 	if err != nil {
-		return echo.NewHTTPError(http.StatusInternalServerError, err.Error())
+		return apperrors.HandleDbError(err)
 	}
 
-	if err := h.repo.CreateDefaultTerm(event.Slug); err != nil {
-		return echo.NewHTTPError(http.StatusInternalServerError, err.Error())
+	if err = h.repo.CreateDefaultTerm(event.Slug); err != nil {
+		return apperrors.HandleDbError(err)
 	}
 
 	return c.JSON(http.StatusCreated, event)
 }
 
+func (h *Handler) GetEvents(c echo.Context) error {
+	events, err := h.repo.GetEvents()
+	if err != nil {
+		return apperrors.HandleDbError(err)
+	}
+
+	return c.JSON(http.StatusOK, events)
+}
+
 func (h *Handler) GetCurrentEvent(c echo.Context) error {
 	event, err := h.repo.GetCurrentEvent()
 	if err != nil {
-		return echo.NewHTTPError(http.StatusInternalServerError, err.Error())
-	}
-
-	return c.JSON(http.StatusOK, event)
-}
-
-func (h *Handler) GetEvent(c echo.Context, eventSlug models.EventSlugInPath) error {
-	event, err := h.repo.GetEvent(eventSlug)
-	if err != nil {
-		return echo.NewHTTPError(http.StatusInternalServerError, err.Error())
+		return apperrors.HandleDbError(err)
 	}
 
 	return c.JSON(http.StatusOK, event)
 }
 
 func (h *Handler) PatchEvent(c echo.Context, eventID models.EventSlugInPath) (err error) {
+	if _, _, err = h.enforceAdminAccess(c); err != nil {
+		return err
+	}
+
 	req := &models.PatchEventRequest{}
-	if err := c.Bind(req); err != nil {
-		return echo.NewHTTPError(http.StatusBadRequest, err.Error())
+	if err = c.Bind(req); err != nil {
+		return apperrors.HandleBindError(err)
 	}
 
 	req.Image, err = handleFile(c, "image")
 	if err != nil {
-		return echo.NewHTTPError(http.StatusInternalServerError, "Failed to get image file: "+err.Error())
+		return apperrors.HandleFileError(err)
 	}
 
-	if err := h.repo.PatchEvent(eventID, req); err != nil {
-		return echo.NewHTTPError(http.StatusInternalServerError, err.Error())
+	if err = h.repo.PatchEvent(eventID, req); err != nil {
+		return apperrors.HandleDbError(err)
 	}
 
 	return c.NoContent(http.StatusNoContent)
 }
 
-func (h *Handler) GetEventCsv(c echo.Context, eventID models.EventSlugInPath) error {
-	return echo.NewHTTPError(http.StatusNotImplemented, "not implemented")
-}
-func (h *Handler) GetEventTerms(ctx echo.Context, eventID models.EventSlugInPath) error {
-	events, err := h.repo.GetEventTerms(eventID)
+func (h *Handler) GetEvent(c echo.Context, eventSlug models.EventSlugInPath) error {
+	event, err := h.repo.GetEvent(eventSlug)
 	if err != nil {
-		return echo.NewHTTPError(http.StatusInternalServerError, err.Error())
+		return apperrors.HandleDbError(err)
 	}
 
-	return ctx.JSON(http.StatusOK, events)
-}
-func (h *Handler) GetEventGames(c echo.Context, eventID models.EventSlugInPath) error {
-	games, err := h.repo.GetGames(models.GetGamesParams{EventSlug: &eventID})
-	if err != nil {
-		return echo.NewHTTPError(http.StatusInternalServerError, err.Error())
-	}
-
-	return c.JSON(http.StatusOK, games)
+	return c.JSON(http.StatusOK, event)
 }
 
 func (h *Handler) GetEventImage(c echo.Context, eventID models.EventSlugInPath) error {
 	image, err := h.repo.GetEventImage(eventID)
 	if err != nil {
-		return echo.NewHTTPError(http.StatusInternalServerError, err.Error())
+		return apperrors.HandleDbError(err)
 	}
 
 	return c.Blob(http.StatusOK, "image/png", image)
+}
+
+func (h *Handler) GetEventTerms(c echo.Context, eventID models.EventSlugInPath) error {
+	events, err := h.repo.GetEventTerms(eventID)
+	if err != nil {
+		return apperrors.HandleDbError(err)
+	}
+
+	return c.JSON(http.StatusOK, events)
+}
+
+func (h *Handler) GetEventGames(c echo.Context, eventID models.EventSlugInPath) error {
+	games, err := h.repo.GetGames(models.GetGamesParams{EventSlug: &eventID})
+	if err != nil {
+		return apperrors.HandleDbError(err)
+	}
+
+	return c.JSON(http.StatusOK, games)
+}
+
+func (h *Handler) GetEventCsv(c echo.Context, eventID models.EventSlugInPath) error {
+	if _, _, err := h.enforceAdminAccess(c); err != nil {
+		return err
+	}
+
+	return echo.NewHTTPError(http.StatusNotImplemented, "not implemented")
 }

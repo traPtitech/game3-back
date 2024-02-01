@@ -4,6 +4,7 @@ import (
 	"github.com/google/uuid"
 	"github.com/labstack/echo/v4"
 	"github.com/traPtitech/game3-back/internal/api"
+	"github.com/traPtitech/game3-back/internal/apperrors"
 	"github.com/traPtitech/game3-back/internal/domain"
 	"github.com/traPtitech/game3-back/openapi/models"
 	"net/http"
@@ -87,11 +88,11 @@ func (h *Handler) OauthCallback(c echo.Context, params models.OauthCallbackParam
 		ExpiresIn:    tokenResponse.ExpiresIn,
 	}
 	if err = h.repo.UpdateSession(CreateSessionParams); err != nil {
-		return echo.NewHTTPError(http.StatusInternalServerError, err.Error())
+		return apperrors.HandleDbError(err)
 	}
 	session, err := h.repo.GetSession(sessionID)
 	if err != nil {
-		return echo.NewHTTPError(http.StatusInternalServerError, err.Error())
+		return apperrors.HandleDbError(err)
 	}
 
 	return c.Redirect(http.StatusSeeOther, *session.Redirect)
@@ -100,24 +101,20 @@ func (h *Handler) OauthCallback(c echo.Context, params models.OauthCallbackParam
 func (h *Handler) Login(c echo.Context) error {
 	req := new(models.LoginJSONBody)
 	if err := c.Bind(req); err != nil {
-		return echo.NewHTTPError(http.StatusBadRequest, "Invalid request body")
+		return apperrors.HandleBindError(err)
 	}
 
 	if req.Redirect == nil {
-		return echo.NewHTTPError(http.StatusBadRequest, "Invalid request body")
+		return echo.NewHTTPError(http.StatusBadRequest, "Invalid request body: redirect is required")
 	}
 
-	sessionToken, err := uuid.NewRandom()
-	if err != nil {
-		return echo.NewHTTPError(http.StatusInternalServerError, "Failed to generate session token")
-	}
-
+	sessionToken := uuid.New()
 	CreateSessionParams := &domain.Session{
 		ID:       &sessionToken,
 		Redirect: req.Redirect,
 	}
-	if err = h.repo.CreateSession(CreateSessionParams); err != nil {
-		return echo.NewHTTPError(http.StatusInternalServerError, err.Error())
+	if err := h.repo.CreateSession(CreateSessionParams); err != nil {
+		return apperrors.HandleDbError(err)
 	}
 
 	//Discord OAuth URL
