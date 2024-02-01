@@ -7,6 +7,7 @@ import (
 	"github.com/oapi-codegen/runtime/types"
 	"github.com/traPtitech/game3-back/internal/api"
 	"github.com/traPtitech/game3-back/internal/apperrors"
+	"github.com/traPtitech/game3-back/internal/enum"
 	"github.com/traPtitech/game3-back/internal/repository"
 	"net/http"
 )
@@ -21,7 +22,7 @@ func New(repo *repository.Repository) *Handler {
 	}
 }
 
-// respondWithError returns an error response based on the error type.
+// respondWithError returns an error response based on the error type. (使わなかったので消すかも)
 func respondWithError(c echo.Context, err error) error {
 	//TODO err.Error()をそのまま返すのはセキュリティ的に問題があるので、エラータイプによって適切なエラーメッセージを返すように修正する
 	var notFoundError *apperrors.NotFoundError
@@ -67,6 +68,9 @@ func getSessionIDByCookie(c echo.Context) (*uuid.UUID, error) {
 	if err != nil {
 		return nil, err
 	}
+	if sessionByCookie == nil {
+		return nil, apperrors.NewSessionTokenNotFoundError()
+	}
 	sessionID, err := uuid.Parse(sessionByCookie.Value)
 	if err != nil {
 		return nil, err
@@ -87,4 +91,43 @@ func (h *Handler) getDiscordUserInfoByCookie(c echo.Context) (*api.DiscordUserRe
 	}
 
 	return api.GetDiscordUserInfo(session.AccessToken)
+}
+
+func (h *Handler) getDiscordUserInfoAndRoleByCookie(c echo.Context) (*api.DiscordUserResponse, enum.UserRole, error) {
+	user, err := h.getDiscordUserInfoByCookie(c)
+
+	var notFoundErr *apperrors.SessionTokenNotFoundError
+	if errors.As(err, &notFoundErr) {
+		return nil, enum.Guest, nil
+	}
+	if err != nil {
+		return nil, enum.Guest, err
+	}
+
+	role := api.GetDiscordUserRole(user.ID)
+	return user, role, nil
+}
+
+func (h *Handler) enforceAdminAccess(c echo.Context) (user *api.DiscordUserResponse, role enum.UserRole, err error) {
+	user, role, err = h.getDiscordUserInfoAndRoleByCookie(c)
+	if err != nil {
+		err = apperrors.HandleInternalServerError(err)
+	} else if role.IsGuest() {
+		err = apperrors.HandleUnauthorized()
+	} else if !role.IsAdmin() {
+		err = apperrors.HandleAdminOnly()
+	}
+	return
+}
+
+func (h *Handler) enforceUserOrAboveAccess(c echo.Context) (user *api.DiscordUserResponse, role enum.UserRole, err error) {
+	user, role, err = h.getDiscordUserInfoAndRoleByCookie(c)
+	if err != nil {
+		err = apperrors.HandleInternalServerError(err)
+	} else if role.IsGuest() {
+		err = apperrors.HandleUnauthorized()
+	} else if !role.IsUserOrAbove() {
+		err = apperrors.HandleUserOrAbove()
+	}
+	return
 }

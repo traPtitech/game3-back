@@ -10,7 +10,6 @@ type BadRequestError struct {
 func (e *BadRequestError) Error() string {
 	return e.Message
 }
-
 func NewBadRequestError(message string) *BadRequestError {
 	return &BadRequestError{Message: message}
 }
@@ -23,7 +22,6 @@ type NotFoundError struct {
 func (e *NotFoundError) Error() string {
 	return e.Message
 }
-
 func NewNotFoundError(message string) *NotFoundError {
 	return &NotFoundError{Message: message}
 }
@@ -36,7 +34,6 @@ type ForbiddenError struct {
 func (e *ForbiddenError) Error() string {
 	return e.Message
 }
-
 func NewForbiddenError(message string) *ForbiddenError {
 	return &ForbiddenError{Message: message}
 }
@@ -49,7 +46,6 @@ type UnauthorizedError struct {
 func (e *UnauthorizedError) Error() string {
 	return e.Message
 }
-
 func NewUnauthorizedError(message string) *UnauthorizedError {
 	return &UnauthorizedError{Message: message}
 }
@@ -62,7 +58,16 @@ type InternalServerError struct {
 func (e *InternalServerError) Error() string {
 	return e.Message
 }
-
 func NewInternalServerError(message string) *InternalServerError {
 	return &InternalServerError{Message: message}
+}
+
+// SessionTokenNotFoundError SessionToken cookieが見つからない
+type SessionTokenNotFoundError struct{}
+
+func (e *SessionTokenNotFoundError) Error() string {
+	return "SessionToken cookie not found"
+}
+func NewSessionTokenNotFoundError() error {
+	return &SessionTokenNotFoundError{}
 }
