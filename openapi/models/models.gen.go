@@ -261,8 +261,8 @@ type LoginJSONRequestBody LoginJSONBody
 // PostEventMultipartRequestBody defines body for PostEvent for multipart/form-data ContentType.
 type PostEventMultipartRequestBody = PostEventRequest
 
-// PatchEventJSONRequestBody defines body for PatchEvent for application/json ContentType.
-type PatchEventJSONRequestBody = PatchEventRequest
+// PatchEventMultipartRequestBody defines body for PatchEvent for multipart/form-data ContentType.
+type PatchEventMultipartRequestBody = PatchEventRequest
 
 // PostGameMultipartRequestBody defines body for PostGame for multipart/form-data ContentType.
 type PostGameMultipartRequestBody = PostGameRequest
