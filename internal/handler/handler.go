@@ -66,6 +66,9 @@ func handleFile(c echo.Context, formFileName string) (*types.File, error) {
 func getSessionIDByCookie(c echo.Context) (*uuid.UUID, error) {
 	sessionByCookie, err := c.Cookie("SessionToken")
 	if err != nil {
+		if errors.As(err, &http.ErrNoCookie) {
+			return nil, apperrors.NewSessionTokenNotFoundError()
+		}
 		return nil, err
 	}
 	if sessionByCookie == nil {
