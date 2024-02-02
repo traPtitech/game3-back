@@ -10,9 +10,17 @@ import (
 )
 
 func (h *Handler) GetGames(c echo.Context, params models.GetGamesParams) error {
-	_, _, err := h.enforceAdminAccess(c)
+	user, role, err := h.getDiscordUserInfoAndRoleByCookie(c)
 	if err != nil {
 		return err
+	}
+
+	if params.Include != nil {
+		if (params.UserId != nil && *params.UserId == user.ID) || role.IsAdmin() {
+			// 自分のゲームかAdminであれば見れる
+		} else {
+			return echo.NewHTTPError(http.StatusForbidden, "you can't get other user's unpublished game")
+		}
 	}
 
 	games, err := h.repo.GetGames(params)
