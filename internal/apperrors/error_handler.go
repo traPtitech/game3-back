@@ -9,11 +9,11 @@ import (
 )
 
 func HandleDbError(err error) error {
-	if !errors.Is(err, sql.ErrNoRows) {
+	if errors.As(err, &sql.ErrNoRows) {
 		return echo.NewHTTPError(http.StatusNotFound, fmt.Sprintf("Not Found (DB error: %s)", err.Error()))
 	}
 
-	return echo.NewHTTPError(http.StatusInternalServerError, fmt.Sprintf("Internal Server Error (DB error: %s)"+err.Error()))
+	return echo.NewHTTPError(http.StatusInternalServerError, fmt.Sprintf("Internal Server Error (DB error: %s)", err.Error()))
 }
 
 func HandleBindError(err error) error {
