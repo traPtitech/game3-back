@@ -117,8 +117,10 @@ func (h *Handler) Login(c echo.Context) error {
 		return apperrors.HandleDbError(err)
 	}
 
-	//Discord OAuth URL
-	discordURL := "https://discord.com/api/oauth2/authorize?client_id=1188893707215315045&response_type=code&redirect_uri=http%3A%2F%2Flocalhost%3A8080%2Fapi%2Fauth%2Fcallback&scope=identify"
+	discordURL, err := api.GetDiscordOAuthRedirectURI()
+	if err != nil {
+		return apperrors.HandleInternalServerError(err)
+	}
 
 	c.SetCookie(&http.Cookie{
 		Name:     "SessionToken",
