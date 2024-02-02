@@ -137,5 +137,16 @@ func (h *Handler) Login(c echo.Context) error {
 }
 
 func (h *Handler) Logout(c echo.Context) error {
-	panic("implement me")
+	c.SetCookie(&http.Cookie{
+		Name:     "SessionToken",
+		Value:    "",
+		Path:     "/",
+		HttpOnly: true, // JavaScriptからのアクセスを防ぐ
+		//Secure:   true, // HTTPSを通じてのみCookieを送信
+		SameSite: http.SameSiteLaxMode,
+		Expires:  time.Now().Add(-1 * time.Hour),
+		//Domain:   "localhost",
+	})
+
+	return c.Redirect(http.StatusSeeOther, "/")
 }
