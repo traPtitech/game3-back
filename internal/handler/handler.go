@@ -53,6 +53,7 @@ func handleFile(c echo.Context, formFileName string) (*types.File, error) {
 		if errors.Is(err, http.ErrMissingFile) {
 			return nil, nil
 		}
+
 		return nil, err
 	}
 
@@ -92,6 +93,9 @@ func (h *Handler) getDiscordUserInfoByCookie(c echo.Context) (*api.DiscordUserRe
 	if err != nil {
 		return nil, err
 	}
+	if session.AccessToken == nil {
+		return nil, errors.New("session.AccessToken is not valid")
+	}
 
 	return api.GetDiscordUserInfo(session.AccessToken)
 }
@@ -108,6 +112,7 @@ func (h *Handler) getDiscordUserInfoAndRoleByCookie(c echo.Context) (*api.Discor
 	}
 
 	role := api.GetDiscordUserRole(user.ID)
+
 	return user, role, nil
 }
 
@@ -120,6 +125,7 @@ func (h *Handler) enforceAdminAccess(c echo.Context) (user *api.DiscordUserRespo
 	} else if !role.IsAdmin() {
 		err = apperrors.HandleAdminOnly()
 	}
+
 	return
 }
 
@@ -132,5 +138,6 @@ func (h *Handler) enforceUserOrAboveAccess(c echo.Context) (user *api.DiscordUse
 	} else if !role.IsUserOrAbove() {
 		err = apperrors.HandleUserOrAbove()
 	}
+
 	return
 }
