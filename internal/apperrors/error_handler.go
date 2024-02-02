@@ -9,7 +9,7 @@ import (
 )
 
 func HandleDbError(err error) error {
-	if errors.As(err, &sql.ErrNoRows) {
+	if errors.Is(err, sql.ErrNoRows) {
 		return echo.NewHTTPError(http.StatusNotFound, fmt.Sprintf("Not Found (DB error: %s)", err.Error()))
 	}
 

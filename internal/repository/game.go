@@ -121,7 +121,7 @@ func (r *Repository) GetGameIcon(gameID uuid.UUID) ([]byte, error) {
 
 func (r *Repository) GetGameImage(gameID uuid.UUID) ([]byte, error) {
 	image := []byte{}
-	if err := r.db.Get(&image, "SELECT icon FROM game WHERE id = ?", gameID); err != nil {
+	if err := r.db.Get(&image, "SELECT image FROM game WHERE id = ?", gameID); err != nil {
 		return nil, err
 	}
 
