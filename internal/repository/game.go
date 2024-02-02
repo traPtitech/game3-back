@@ -46,7 +46,7 @@ func (r *Repository) GetGames(params models.GetGamesParams) ([]*models.Game, err
 	}
 	if params.Include != nil {
 		if *params.Include == "unpublished" {
-			whereClauses = append(whereClauses, "term.is_default = TRUE")
+			// 条件を追加しない
 		} else {
 			return nil, echo.NewHTTPError(http.StatusBadRequest, "includeに指定できる値は'unpublished'のみ")
 		}
