@@ -465,22 +465,19 @@ paths:
           description: Not Found
 
   /auth/login:
-    post:
+    get:
       summary: ログイン
       operationId: login
       tags:
         - auth
-      description: Discord OAuthを使ったログイン。ログイン後にリダイレクトするURLを指定。
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                redirect:
-                  type: string
-                  description: リダイレクト先のURL
+      description: Discord OAuthを使ったログイン。ログイン後にリダイレクトするURLをクエリパラメータで指定。
+      parameters:
+        - in: query
+          name: redirect
+          required: true
+          schema:
+            type: string
+          description: リダイレクト先のURL
       responses:
         '302':
           description: Redirect to Discord OAuth URL
@@ -653,42 +650,42 @@ components:
           format: uuid
           description: タームID
           x-oapi-codegen-extra-tags:
-              db: 'term_id'
+            db: 'term_id'
         discordUserId:
           type: string
           description: DiscordのユーザーID
           x-oapi-codegen-extra-tags:
-              db: 'discord_user_id'
+            db: 'discord_user_id'
         title:
           type: string
           description: 展示するゲームタイトル
           x-oapi-codegen-extra-tags:
-              db: 'title'
+            db: 'title'
         creatorName:
           type: string
           description: ゲーム作成者
           x-oapi-codegen-extra-tags:
-              db: 'creator_name'
+            db: 'creator_name'
         creatorPageUrl:
           type: string
           description: ゲーム作成者のページのURL
           x-oapi-codegen-extra-tags:
-              db: 'creator_page_url'
+            db: 'creator_page_url'
         gamePageUrl:
           type: string
           description: ゲームページのURL
           x-oapi-codegen-extra-tags:
-              db: 'game_page_url'
+            db: 'game_page_url'
         description:
           type: string
           description: ゲームの説明
           x-oapi-codegen-extra-tags:
-              db: 'description'
+            db: 'description'
         place:
           type: string
           description: 展示場所
           x-oapi-codegen-extra-tags:
-              db: 'place'
+            db: 'place'
       required:
         - id
         - termId
@@ -820,19 +817,19 @@ components:
           type: boolean
           description: ゲーム登録時に割り当てられるTermならばTrue
           x-oapi-codegen-extra-tags:
-              db: 'is_default'
+            db: 'is_default'
         startAt:
           type: string
           format: date-time
           description: タームが始まる時間
           x-oapi-codegen-extra-tags:
-              db: 'start_at'
+            db: 'start_at'
         endAt:
           type: string
           format: date-time
           description: タームが終わる時間
           x-oapi-codegen-extra-tags:
-              db: 'end_at'
+            db: 'end_at'
       required:
         - id
         - eventSlug
@@ -889,19 +886,19 @@ components:
           type: string
           description: 'イベントのタイトル (例: 第18回)'
           x-oapi-codegen-extra-tags:
-              db: 'title'
+            db: 'title'
         gameSubmissionPeriodStart:
           type: string
           format: date-time
           description: ゲーム展示の募集開始期間
           x-oapi-codegen-extra-tags:
-              db: 'game_submission_period_start'
+            db: 'game_submission_period_start'
         gameSubmissionPeriodEnd:
           type: string
           format: date-time
           description: ゲーム展示の募集終了期間
           x-oapi-codegen-extra-tags:
-              db: 'game_submission_period_end'
+            db: 'game_submission_period_end'
       required:
         - slug
         - title
