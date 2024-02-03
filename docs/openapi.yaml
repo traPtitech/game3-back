@@ -45,7 +45,7 @@ paths:
 
   /games:
     get:
-      summary: ゲームのリストを取得 GET /games?termId=X&eventSlug=X&userId=X&include=unpublished
+      summary: ゲームのリストを取得 GET /games?termId=X&eventSlug=X&userId=X&includeUnpublished=true
       operationId: getGames
       tags:
         - games
