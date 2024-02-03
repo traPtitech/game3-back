@@ -5,7 +5,7 @@ import (
 )
 
 func selectEventWithoutImageQuery() string {
-	return "SELECT event.slug, event.title, event.game_submission_period_start, event.game_submission_period_end FROM event "
+	return "SELECT event.slug, event.title, event.date , event.game_submission_period_start, event.game_submission_period_end FROM event "
 }
 
 func (r *Repository) GetEvents() ([]*models.Event, error) {
@@ -27,7 +27,7 @@ func (r *Repository) PostEvent(event *models.PostEventRequest) (err error) {
 		}
 	}
 
-	if _, err = r.db.Exec("INSERT INTO event (slug, title, game_submission_period_start, game_submission_period_end, image) VALUES (?, ?, ?, ?, ?)", event.Slug, event.Title, event.GameSubmissionPeriodStart, event.GameSubmissionPeriodEnd, imageData); err != nil {
+	if _, err = r.db.Exec("INSERT INTO event (slug, title, date, game_submission_period_start, game_submission_period_end, image) VALUES (?, ?, ?, ?, ?, ?)", event.Slug, event.Title, event.Date, event.GameSubmissionPeriodStart, event.GameSubmissionPeriodEnd, imageData); err != nil {
 		return err
 	}
 

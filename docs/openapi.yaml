@@ -887,6 +887,12 @@ components:
           description: 'イベントのタイトル (例: 第18回)'
           x-oapi-codegen-extra-tags:
             db: 'title'
+        date:
+          type: string
+          format: date-time
+          description: イベント開催日
+          x-oapi-codegen-extra-tags:
+            db: 'date'
         gameSubmissionPeriodStart:
           type: string
           format: date-time
@@ -902,6 +908,7 @@ components:
       required:
         - slug
         - title
+        - date
         - gameSubmissionPeriodStart
         - gameSubmissionPeriodEnd
 
@@ -918,6 +925,12 @@ components:
           description: '第18回'
           x-oapi-codegen-extra-tags:
             form: 'title'
+        date:
+          type: string
+          format: date-time
+          description: イベント開催日
+          x-oapi-codegen-extra-tags:
+            form: 'date'
         gameSubmissionPeriodStart:
           type: string
           description: ゲーム展示の募集期間
@@ -939,6 +952,7 @@ components:
       required:
         - slug
         - title
+        - date
         - gameSubmissionPeriodStart
         - gameSubmissionPeriodEnd
 
@@ -955,6 +969,12 @@ components:
           description: '第18回'
           x-oapi-codegen-extra-tags:
             form: 'title'
+        date:
+          type: string
+          format: date-time
+          description: イベント開催日
+          x-oapi-codegen-extra-tags:
+            form: 'date'
         gameSubmissionPeriodStart:
           type: string
           description: ゲーム展示の募集期間

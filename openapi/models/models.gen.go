@@ -18,6 +18,9 @@ const (
 
 // Event defines model for Event.
 type Event struct {
+	// Date イベント開催日
+	Date time.Time `db:"date" json:"date"`
+
 	// GameSubmissionPeriodEnd ゲーム展示の募集終了期間
 	GameSubmissionPeriodEnd time.Time `db:"game_submission_period_end" json:"gameSubmissionPeriodEnd"`
 
@@ -69,6 +72,9 @@ type ImageResponse = openapi_types.File
 
 // PatchEventRequest defines model for PatchEventRequest.
 type PatchEventRequest struct {
+	// Date イベント開催日
+	Date *time.Time `form:"date" json:"date,omitempty"`
+
 	// GameSubmissionPeriodEnd ゲーム展示の募集期間
 	GameSubmissionPeriodEnd *time.Time `form:"gameSubmissionPeriodEnd" json:"gameSubmissionPeriodEnd,omitempty"`
 
@@ -135,6 +141,9 @@ type PatchTermRequest struct {
 
 // PostEventRequest defines model for PostEventRequest.
 type PostEventRequest struct {
+	// Date イベント開催日
+	Date time.Time `form:"date" json:"date"`
+
 	// GameSubmissionPeriodEnd ゲーム展示の募集期間
 	GameSubmissionPeriodEnd time.Time `form:"gameSubmissionPeriodEnd" json:"gameSubmissionPeriodEnd"`
 

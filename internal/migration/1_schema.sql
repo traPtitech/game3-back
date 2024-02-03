@@ -17,6 +17,7 @@ CREATE TABLE event
 (
     slug                         VARCHAR(255) PRIMARY KEY,
     title                        VARCHAR(255) NOT NULL,
+    date                         TIMESTAMP    NOT NULL,
     game_submission_period_start TIMESTAMP    NOT NULL,
     game_submission_period_end   TIMESTAMP    NOT NULL,
     image                        LONGBLOB,
