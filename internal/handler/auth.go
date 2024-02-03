@@ -31,7 +31,7 @@ func (h *Handler) Test(c echo.Context) error {
     <title>リダイレクトテスト</title>
     <script>
       function sendGetRequest() {
-        window.location.href = 'http://localhost:8080/api/auth/login?redirect=http://localhost:8080/api/ping';
+        window.location.href = 'https://game3.trap.games/api/auth/login?redirect=https://game3.trap.games/api/ping';
       }
     </script>
 </head>

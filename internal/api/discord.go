@@ -122,7 +122,7 @@ func GetDiscordUserRole(discordUserID string) enum.UserRole {
 }
 
 func GetDiscordOAuthRedirectURI() (string, error) {
-	clientId, err := util.GetEnvOrErr("DISCORD_CLIENT_ID")
+	clientID, err := util.GetEnvOrErr("DISCORD_CLIENT_ID")
 	if err != nil {
 		return "", err
 	}
@@ -131,5 +131,17 @@ func GetDiscordOAuthRedirectURI() (string, error) {
 		return "", err
 	}
 
-	return "https://discord.com/api/oauth2/authorize?client_id=" + clientId + "&redirect_uri=" + clientRedirectURI + "&response_type=code&scope=identify", nil
+	discordOAuthBaseURL := "https://discord.com/oauth2/authorize"
+	u, err := url.Parse(discordOAuthBaseURL)
+	if err != nil {
+		return "", err
+	}
+	params := url.Values{}
+	params.Add("client_id", clientID)
+	params.Add("response_type", "code")
+	params.Add("redirect_uri", clientRedirectURI)
+	params.Add("scope", "identify")
+	u.RawQuery = params.Encode()
+
+	return u.String(), nil
 }
