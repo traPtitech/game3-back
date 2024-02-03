@@ -28,8 +28,8 @@ func (h *Handler) GetMeGames(c echo.Context) error {
 		return err
 	}
 
-	include := "unpublished"
-	games, err := h.repo.GetGames(models.GetGamesParams{UserId: &user.ID, Include: &include})
+	includeUnpublished := true
+	games, err := h.repo.GetGames(models.GetGamesParams{UserId: &user.ID, IncludeUnpublished: &includeUnpublished})
 	if err != nil {
 		return apperrors.HandleDbError(err)
 	}

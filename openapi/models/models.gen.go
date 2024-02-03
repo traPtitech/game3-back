@@ -54,6 +54,9 @@ type Game struct {
 	// Id ゲームID
 	Id openapi_types.UUID `db:"id" json:"id"`
 
+	// IsPublished 公開されているかどうか
+	IsPublished bool `db:"is_published" json:"isPublished"`
+
 	// Place 展示場所
 	Place *string `db:"place" json:"place,omitempty"`
 
@@ -113,6 +116,9 @@ type PatchGameRequest struct {
 
 	// Image ゲームの画像
 	Image *openapi_types.File `form:"image" json:"image,omitempty"`
+
+	// IsPublished 公開されているかどうか
+	IsPublished *bool `form:"isPublished" json:"isPublished,omitempty"`
 
 	// Place 展示場所
 	Place *string `form:"place" json:"place,omitempty"`
@@ -260,8 +266,8 @@ type GetGamesParams struct {
 	// UserId ユーザーID
 	UserId *string `form:"userId,omitempty" json:"userId,omitempty"`
 
-	// Include 未公開のゲームを含むかどうか。includeに指定できる値は'unpublished'のみで、これが無ければ常にpublishedなGameのみ返す
-	Include *string `form:"include,omitempty" json:"include,omitempty"`
+	// IncludeUnpublished 未公開のゲームを含むかどうか。includeに指定できる値は'unpublished'のみで、これが無ければ常にpublishedなGameのみ返す
+	IncludeUnpublished *bool `form:"includeUnpublished,omitempty" json:"includeUnpublished,omitempty"`
 }
 
 // PostEventMultipartRequestBody defines body for PostEvent for multipart/form-data ContentType.

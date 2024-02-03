@@ -15,7 +15,7 @@ func (h *Handler) GetGames(c echo.Context, params models.GetGamesParams) error {
 		return err
 	}
 
-	if params.Include != nil {
+	if params.IncludeUnpublished != nil && *params.IncludeUnpublished {
 		if (params.UserId != nil && user != nil && *params.UserId == user.ID) || role.IsAdmin() {
 			// 自分のゲームかAdminであれば見れる
 		} else {
@@ -125,7 +125,7 @@ func (h *Handler) PatchGame(c echo.Context, gameID models.GameIdInPath) error {
 		if game.DiscordUserId != user.ID {
 			return echo.NewHTTPError(http.StatusForbidden, "you can't update other user's game")
 		}
-		if req.DiscordUserId != nil || req.TermId != nil || req.Place != nil {
+		if req.DiscordUserId != nil || req.TermId != nil || req.IsPublished != nil || req.Place != nil {
 			return echo.NewHTTPError(http.StatusBadRequest, "you can't update discordUserId, termId, place")
 		}
 	}

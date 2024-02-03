@@ -2,9 +2,7 @@ package repository
 
 import (
 	"github.com/google/uuid"
-	"github.com/labstack/echo/v4"
 	"github.com/traPtitech/game3-back/openapi/models"
-	"net/http"
 	"strings"
 )
 
@@ -17,7 +15,6 @@ func (r *Repository) GetGames(params models.GetGamesParams) ([]*models.Game, err
 	query := selectGameWithoutImagesQuery()
 	whereClauses := []string{}
 	args := []interface{}{}
-	joinedTerm := false
 
 	// term_idでフィルタ
 	if params.TermId != nil {
@@ -31,7 +28,6 @@ func (r *Repository) GetGames(params models.GetGamesParams) ([]*models.Game, err
                   JOIN event ON term.event_slug = event.slug `
 		whereClauses = append(whereClauses, "event.slug = ?")
 		args = append(args, params.EventSlug)
-		joinedTerm = true
 	}
 
 	// discordUserIdでフィルタ
@@ -40,18 +36,10 @@ func (r *Repository) GetGames(params models.GetGamesParams) ([]*models.Game, err
 		args = append(args, params.UserId)
 	}
 
-	if !joinedTerm {
-		// termテーブルをJOINしていない場合、ここでJOIN
-		query += `JOIN term ON game.term_id = term.id `
-	}
-	if params.Include != nil {
-		if *params.Include == "unpublished" {
-			// 条件を追加しない
-		} else {
-			return nil, echo.NewHTTPError(http.StatusBadRequest, "includeに指定できる値は'unpublished'のみ")
-		}
+	if params.IncludeUnpublished != nil && *params.IncludeUnpublished {
+		// 条件を追加しない
 	} else {
-		whereClauses = append(whereClauses, "term.is_default = FALSE")
+		whereClauses = append(whereClauses, "game.is_published = TRUE")
 	}
 
 	// WHERE句の組み立て

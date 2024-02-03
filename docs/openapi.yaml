@@ -67,9 +67,9 @@ paths:
             type: string
           description: ユーザーID
         - in: query
-          name: include
+          name: includeUnpublished
           schema:
-            type: string
+            type: boolean
           description: 未公開のゲームを含むかどうか。includeに指定できる値は'unpublished'のみで、これが無ければ常にpublishedなGameのみ返す
       responses:
         '200':
@@ -656,6 +656,11 @@ components:
           description: DiscordのユーザーID
           x-oapi-codegen-extra-tags:
             db: 'discord_user_id'
+        isPublished:
+          type: boolean
+          description: 公開されているかどうか
+          x-oapi-codegen-extra-tags:
+            db: 'is_published'
         title:
           type: string
           description: 展示するゲームタイトル
@@ -690,6 +695,7 @@ components:
         - id
         - termId
         - discordUserId
+        - isPublished
         - title
         - creatorName
         - description
@@ -761,6 +767,11 @@ components:
           example: 'ゲームタイトル'
           x-oapi-codegen-extra-tags:
             form: 'title'
+        isPublished:
+          type: boolean
+          description: 公開されているかどうか
+          x-oapi-codegen-extra-tags:
+            form: 'isPublished'
         creatorName:
           type: string
           description: ゲーム作成者

@@ -31,11 +31,11 @@ CREATE TABLE term
 (
     id         CHAR(36) PRIMARY KEY,
     event_slug VARCHAR(255) NOT NULL,
-    is_default BOOLEAN      NOT NULL,
+    is_default BOOLEAN      NOT NULL DEFAULT FALSE,
     start_at   TIMESTAMP    NOT NULL,
     end_at     TIMESTAMP    NOT NULL,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    created_at TIMESTAMP             DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP             DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     FOREIGN KEY (event_slug) REFERENCES event (slug)
 );
 -- +goose StatementEnd
@@ -46,6 +46,7 @@ CREATE TABLE game
     id               CHAR(36) PRIMARY KEY,
     term_id          CHAR(36)     NOT NULL,
     discord_user_id  CHAR(18)     NOT NULL,
+    is_published     BOOLEAN      NOT NULL DEFAULT FALSE,
     creator_name     VARCHAR(255) NOT NULL,
     creator_page_url VARCHAR(255),
     game_page_url    VARCHAR(255),
@@ -54,8 +55,8 @@ CREATE TABLE game
     place            VARCHAR(255),
     icon             MEDIUMBLOB   NOT NULL,
     image            LONGBLOB,
-    created_at       TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    updated_at       TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    created_at       TIMESTAMP             DEFAULT CURRENT_TIMESTAMP,
+    updated_at       TIMESTAMP             DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     FOREIGN KEY (term_id) REFERENCES term (id)
 );
 -- +goose StatementEnd
