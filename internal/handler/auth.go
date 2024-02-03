@@ -98,20 +98,11 @@ func (h *Handler) OauthCallback(c echo.Context, params models.OauthCallbackParam
 	return c.Redirect(http.StatusSeeOther, *session.Redirect)
 }
 
-func (h *Handler) Login(c echo.Context) error {
-	req := new(models.LoginJSONBody)
-	if err := c.Bind(req); err != nil {
-		return apperrors.HandleBindError(err)
-	}
-
-	if req.Redirect == nil {
-		return echo.NewHTTPError(http.StatusBadRequest, "Invalid request body: redirect is required")
-	}
-
+func (h *Handler) Login(c echo.Context, params models.LoginParams) error {
 	sessionToken := uuid.New()
 	CreateSessionParams := &domain.Session{
 		ID:       &sessionToken,
-		Redirect: req.Redirect,
+		Redirect: &params.Redirect,
 	}
 	if err := h.repo.CreateSession(CreateSessionParams); err != nil {
 		return apperrors.HandleDbError(err)

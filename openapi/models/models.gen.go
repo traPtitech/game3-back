@@ -234,10 +234,10 @@ type OauthCallbackParams struct {
 	Code string `form:"code" json:"code"`
 }
 
-// LoginJSONBody defines parameters for Login.
-type LoginJSONBody struct {
+// LoginParams defines parameters for Login.
+type LoginParams struct {
 	// Redirect リダイレクト先のURL
-	Redirect *string `json:"redirect,omitempty"`
+	Redirect string `form:"redirect" json:"redirect"`
 }
 
 // GetGamesParams defines parameters for GetGames.
@@ -254,9 +254,6 @@ type GetGamesParams struct {
 	// Include 未公開のゲームを含むかどうか。includeに指定できる値は'unpublished'のみで、これが無ければ常にpublishedなGameのみ返す
 	Include *string `form:"include,omitempty" json:"include,omitempty"`
 }
-
-// LoginJSONRequestBody defines body for Login for application/json ContentType.
-type LoginJSONRequestBody LoginJSONBody
 
 // PostEventMultipartRequestBody defines body for PostEvent for multipart/form-data ContentType.
 type PostEventMultipartRequestBody = PostEventRequest
