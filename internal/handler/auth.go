@@ -98,6 +98,8 @@ func (h *Handler) Login(c echo.Context, params models.LoginParams) error {
 		//Domain:   "localhost",
 	})
 
+	c.Response().Header().Set("Access-Control-Allow-Origin", "*")
+
 	return c.Redirect(http.StatusSeeOther, discordURL)
 }
 
