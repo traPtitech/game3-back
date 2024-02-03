@@ -30,39 +30,13 @@ func (h *Handler) Test(c echo.Context) error {
 <head>
     <title>リダイレクトテスト</title>
     <script>
-      function sendPostRequest() {
-        fetch('http://localhost:8080/api/auth/login', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify({"redirect": "dekita"}),
-          redirect: 'follow'
-        })
-          .then(response => {
-            if (response.ok) {
-              if (response.redirected) {
-                window.location.href = response.url;
-              } else {
-                return response.json();
-              }
-            } else {
-              throw new Error('Network response was not ok');
-            }
-          })
-          .then(data => {
-            if (data) {
-              console.log(data);
-            }
-          })
-          .catch(error => {
-            console.error('Fetch error:', error);
-          });
+      function sendGetRequest() {
+        window.location.href = 'http://localhost:8080/api/auth/login?redirect=http://localhost:8080/api/ping';
       }
     </script>
 </head>
 <body>
-<button onClick='sendPostRequest()'>Submit</button>
+<button onClick='sendGetRequest()'>Submit</button>
 </body>
 </html>
 
