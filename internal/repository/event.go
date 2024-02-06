@@ -1,6 +1,8 @@
 package repository
 
 import (
+	"database/sql"
+	"errors"
 	"github.com/traPtitech/game3-back/openapi/models"
 )
 
@@ -35,13 +37,24 @@ func (r *Repository) PostEvent(event *models.PostEventRequest) (err error) {
 }
 
 func (r *Repository) GetCurrentEvent() (*models.Event, error) {
-	event := &models.Event{}
-	query := selectEventWithoutImageQuery() + "WHERE game_submission_period_start <= NOW() AND game_submission_period_end >= NOW()"
-	if err := r.db.Get(event, query); err != nil {
+	var event models.Event
+
+	futureQuery := selectEventWithoutImageQuery() + "WHERE date > NOW() ORDER BY date LIMIT 1"
+	err := r.db.Get(&event, futureQuery)
+	if err == nil {
+		return &event, nil // 未来のイベントが見つかった
+	}
+	if !errors.Is(err, sql.ErrNoRows) {
 		return nil, err
 	}
 
-	return event, nil
+	pastQuery := selectEventWithoutImageQuery() + "WHERE date <= NOW() ORDER BY date DESC LIMIT 1"
+	err = r.db.Get(&event, pastQuery)
+	if err == nil {
+		return &event, nil // 過去のイベントが見つかった
+	}
+
+	return nil, err
 }
 
 func (r *Repository) GetEvent(eventSlug models.EventSlugInPath) (*models.Event, error) {
