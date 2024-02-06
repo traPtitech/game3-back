@@ -1,6 +1,7 @@
 package api
 
 import (
+	"bytes"
 	"encoding/json"
 	"errors"
 	"github.com/traPtitech/game3-back/internal/enum"
@@ -14,10 +15,20 @@ import (
 	"github.com/labstack/echo/v4"
 )
 
-type DiscordUserResponse struct {
+type GetDiscordUserInfoResponse struct {
 	ID       string `json:"id"`
 	Username string `json:"username"`
 	Avatar   string `json:"avatar"`
+}
+
+type GetDiscordUserGuildsResponse struct {
+	ID             string   `json:"id"`
+	Name           string   `json:"name"`
+	Icon           *string  `json:"icon"`
+	Owner          bool     `json:"owner"`
+	Permissions    int      `json:"permissions"`
+	PermissionsNew string   `json:"permissions_new"`
+	Features       []string `json:"features"`
 }
 
 type TokenResponse struct {
@@ -28,7 +39,7 @@ type TokenResponse struct {
 	Scope        *string `json:"scope"`
 }
 
-func GetDiscordUserInfo(accessToken *string) (*DiscordUserResponse, error) {
+func GetDiscordUserInfo(accessToken *string) (*GetDiscordUserInfoResponse, error) {
 	req, err := http.NewRequest("GET", "https://discordapp.com/api/users/@me", nil)
 	if err != nil {
 		return nil, echo.NewHTTPError(http.StatusInternalServerError, err.Error())
@@ -51,7 +62,7 @@ func GetDiscordUserInfo(accessToken *string) (*DiscordUserResponse, error) {
 		return nil, echo.NewHTTPError(http.StatusInternalServerError, err.Error())
 	}
 
-	var discordUser DiscordUserResponse
+	var discordUser GetDiscordUserInfoResponse
 	if err = json.Unmarshal(body, &discordUser); err != nil {
 		return nil, echo.NewHTTPError(http.StatusInternalServerError, err.Error())
 	}
@@ -59,8 +70,74 @@ func GetDiscordUserInfo(accessToken *string) (*DiscordUserResponse, error) {
 	return &discordUser, nil
 }
 
+func GetDiscordUserServers(accessToken *string) ([]GetDiscordUserGuildsResponse, error) {
+	req, err := http.NewRequest("GET", "https://discordapp.com/api/users/@me/guilds", nil)
+	if err != nil {
+		return nil, echo.NewHTTPError(http.StatusInternalServerError, err.Error())
+	}
+	req.Header.Set("Authorization", "Bearer "+*accessToken)
+
+	client := &http.Client{}
+	resp, err := client.Do(req)
+	if err != nil {
+		return nil, echo.NewHTTPError(http.StatusInternalServerError, err.Error())
+	}
+	defer resp.Body.Close()
+
+	if resp.StatusCode != http.StatusOK {
+		return nil, echo.NewHTTPError(http.StatusInternalServerError, "Failed to get Discord user guilds: status "+resp.Status)
+	}
+
+	body, err := io.ReadAll(resp.Body)
+	if err != nil {
+		return nil, echo.NewHTTPError(http.StatusInternalServerError, err.Error())
+	}
+
+	var discordUserGuilds []GetDiscordUserGuildsResponse
+	if err = json.Unmarshal(body, &discordUserGuilds); err != nil {
+		return nil, echo.NewHTTPError(http.StatusInternalServerError, err.Error())
+	}
+
+	return discordUserGuilds, nil
+}
+
+func AddUserToGuild(accessToken *string, guildID string, userID string) error {
+	var buf bytes.Buffer
+	err := json.NewEncoder(&buf).Encode(map[string]string{
+		"access_token": *accessToken,
+	})
+	if err != nil {
+		return err
+	}
+
+	req, err := http.NewRequest("PUT", "https://discord.com/api/guilds/"+guildID+"/members/"+userID, &buf)
+	if err != nil {
+		return err
+	}
+
+	botToken, err := util.GetEnvOrErr("DISCORD_BOT_TOKEN")
+	if err != nil {
+		return err
+	}
+	req.Header.Set("Authorization", "Bot "+botToken)
+	req.Header.Set("Content-Type", "application/json")
+
+	client := &http.Client{}
+	resp, err := client.Do(req)
+	if err != nil {
+		return err
+	}
+
+	defer resp.Body.Close()
+	if resp.StatusCode != http.StatusCreated {
+		return errors.New("Failed to add user to guild: status " + resp.Status)
+	}
+
+	return nil
+}
+
 func GetDiscordUserToken(params models.OauthCallbackParams) (*TokenResponse, error) {
-	clientId, err := util.GetEnvOrErr("DISCORD_CLIENT_ID")
+	clientID, err := util.GetEnvOrErr("DISCORD_CLIENT_ID")
 	if err != nil {
 		return nil, err
 	}
@@ -74,7 +151,7 @@ func GetDiscordUserToken(params models.OauthCallbackParams) (*TokenResponse, err
 	}
 
 	formData := url.Values{}
-	formData.Set("client_id", clientId)
+	formData.Set("client_id", clientID)
 	formData.Set("client_secret", clientSecret)
 	formData.Set("grant_type", "authorization_code")
 	formData.Set("code", params.Code)

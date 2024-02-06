@@ -83,7 +83,7 @@ func getSessionIDByCookie(c echo.Context) (*uuid.UUID, error) {
 	return &sessionID, nil
 }
 
-func (h *Handler) getDiscordUserInfoByCookie(c echo.Context) (*api.DiscordUserResponse, error) {
+func (h *Handler) getDiscordUserInfoByCookie(c echo.Context) (*api.GetDiscordUserInfoResponse, error) {
 	sessionID, err := getSessionIDByCookie(c)
 	if err != nil {
 		return nil, err
@@ -100,7 +100,7 @@ func (h *Handler) getDiscordUserInfoByCookie(c echo.Context) (*api.DiscordUserRe
 	return api.GetDiscordUserInfo(session.AccessToken)
 }
 
-func (h *Handler) getDiscordUserInfoAndRoleByCookie(c echo.Context) (*api.DiscordUserResponse, enum.UserRole, error) {
+func (h *Handler) getDiscordUserInfoAndRoleByCookie(c echo.Context) (*api.GetDiscordUserInfoResponse, enum.UserRole, error) {
 	user, err := h.getDiscordUserInfoByCookie(c)
 
 	var notFoundErr *apperrors.SessionTokenNotFoundError
@@ -116,7 +116,7 @@ func (h *Handler) getDiscordUserInfoAndRoleByCookie(c echo.Context) (*api.Discor
 	return user, role, nil
 }
 
-func (h *Handler) enforceAdminAccess(c echo.Context) (user *api.DiscordUserResponse, role enum.UserRole, err error) {
+func (h *Handler) enforceAdminAccess(c echo.Context) (user *api.GetDiscordUserInfoResponse, role enum.UserRole, err error) {
 	user, role, err = h.getDiscordUserInfoAndRoleByCookie(c)
 	if err != nil {
 		err = apperrors.HandleInternalServerError(err)
@@ -129,7 +129,7 @@ func (h *Handler) enforceAdminAccess(c echo.Context) (user *api.DiscordUserRespo
 	return
 }
 
-func (h *Handler) enforceUserOrAboveAccess(c echo.Context) (user *api.DiscordUserResponse, role enum.UserRole, err error) {
+func (h *Handler) enforceUserOrAboveAccess(c echo.Context) (user *api.GetDiscordUserInfoResponse, role enum.UserRole, err error) {
 	user, role, err = h.getDiscordUserInfoAndRoleByCookie(c)
 	if err != nil {
 		err = apperrors.HandleInternalServerError(err)

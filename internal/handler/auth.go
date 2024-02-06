@@ -6,6 +6,7 @@ import (
 	"github.com/traPtitech/game3-back/internal/api"
 	"github.com/traPtitech/game3-back/internal/apperrors"
 	"github.com/traPtitech/game3-back/internal/domain"
+	"github.com/traPtitech/game3-back/internal/pkg/util"
 	"github.com/traPtitech/game3-back/openapi/models"
 	"net/http"
 	"time"
@@ -31,7 +32,7 @@ func (h *Handler) Test(c echo.Context) error {
     <title>リダイレクトテスト</title>
     <script>
       function sendGetRequest() {
-        window.location.href = 'https://game3.trap.games/api/auth/login?redirect=https://game3.trap.games/api/ping';
+        window.location.href = 'http://localhost:8080/api/auth/login?redirect=http://localhost:8080/api/ping';
       }
     </script>
 </head>
@@ -41,6 +42,7 @@ func (h *Handler) Test(c echo.Context) error {
 </html>
 
 `
+
 	return c.HTML(http.StatusOK, html)
 }
 
@@ -55,12 +57,30 @@ func (h *Handler) OauthCallback(c echo.Context, params models.OauthCallbackParam
 		return echo.NewHTTPError(http.StatusInternalServerError, err.Error())
 	}
 
+	userServers, err := api.GetDiscordUserServers(tokenResponse.AccessToken)
+	if err != nil {
+		return err
+	}
+
+	isInGame3Server, err := checkUserIsInGame3Server(userServers)
+	if err != nil {
+		return echo.NewHTTPError(http.StatusInternalServerError, err.Error())
+	}
+
+	if isInGame3Server == false {
+		err = addUserToGame3Guild(tokenResponse.AccessToken)
+		if err != nil {
+			return err
+		}
+	}
+
 	CreateSessionParams := &domain.Session{
 		ID:           sessionID,
 		AccessToken:  tokenResponse.AccessToken,
 		RefreshToken: tokenResponse.RefreshToken,
 		ExpiresIn:    tokenResponse.ExpiresIn,
 	}
+
 	if err = h.repo.UpdateSession(CreateSessionParams); err != nil {
 		return apperrors.HandleDbError(err)
 	}
@@ -70,6 +90,37 @@ func (h *Handler) OauthCallback(c echo.Context, params models.OauthCallbackParam
 	}
 
 	return c.Redirect(http.StatusSeeOther, *session.Redirect)
+}
+
+func checkUserIsInGame3Server(userServers []api.GetDiscordUserGuildsResponse) (bool, error) {
+	game3ServerID, err := util.GetEnvOrErr("DISCORD_SERVER_ID")
+	if err != nil {
+		return false, err
+	}
+	for _, server := range userServers {
+		if server.ID == game3ServerID {
+			return true, nil
+		}
+	}
+
+	return false, nil
+}
+
+func addUserToGame3Guild(accessToken *string) error {
+	game3ServerID, err := util.GetEnvOrErr("DISCORD_SERVER_ID")
+	if err != nil {
+		return err
+	}
+	user, err := api.GetDiscordUserInfo(accessToken)
+	if err != nil {
+		return err
+	}
+	err = api.AddUserToGuild(accessToken, game3ServerID, user.ID)
+	if err != nil {
+		return err
+	}
+
+	return nil
 }
 
 func (h *Handler) Login(c echo.Context, params models.LoginParams) error {
