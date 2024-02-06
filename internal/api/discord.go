@@ -140,7 +140,8 @@ func GetDiscordOAuthRedirectURI() (string, error) {
 	params.Add("client_id", clientID)
 	params.Add("response_type", "code")
 	params.Add("redirect_uri", clientRedirectURI)
-	params.Add("scope", "identify")
+	scopes := "identify guilds guilds.join"
+	params.Add("scope", scopes)
 	u.RawQuery = params.Encode()
 
 	return u.String(), nil
