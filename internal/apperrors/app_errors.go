@@ -71,3 +71,15 @@ func (e *SessionTokenNotFoundError) Error() string {
 func NewSessionTokenNotFoundError() error {
 	return &SessionTokenNotFoundError{}
 }
+
+// AlreadyInGuildError 既にギルドに所属している
+type AlreadyInGuildError struct{}
+
+func (e *AlreadyInGuildError) Error() string {
+	return "Already in the guild"
+}
+
+// NewAlreadyInGuildError 既にギルドに所属しているエラーを返す
+func NewAlreadyInGuildError() error {
+	return &AlreadyInGuildError{}
+}

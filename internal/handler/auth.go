@@ -1,6 +1,7 @@
 package handler
 
 import (
+	"errors"
 	"github.com/google/uuid"
 	"github.com/labstack/echo/v4"
 	"github.com/traPtitech/game3-back/internal/api"
@@ -67,8 +68,11 @@ func (h *Handler) OauthCallback(c echo.Context, params models.OauthCallbackParam
 		return echo.NewHTTPError(http.StatusInternalServerError, err.Error())
 	}
 
-	if isInGame3Server == false {
+	if !isInGame3Server {
 		err = addUserToGame3Guild(tokenResponse.AccessToken)
+		if errors.Is(err, apperrors.NewAlreadyInGuildError()) {
+			// 起きないはずだけど pass
+		}
 		if err != nil {
 			return err
 		}

@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"encoding/json"
 	"errors"
+	"github.com/traPtitech/game3-back/internal/apperrors"
 	"github.com/traPtitech/game3-back/internal/enum"
 	"github.com/traPtitech/game3-back/internal/pkg/util"
 	"github.com/traPtitech/game3-back/openapi/models"
@@ -118,7 +119,9 @@ func AddUserToGuild(accessToken *string, guildID string, userID string) error {
 	botToken, err := util.GetEnvOrErr("DISCORD_BOT_TOKEN")
 	if err != nil {
 		return err
+
 	}
+
 	req.Header.Set("Authorization", "Bot "+botToken)
 	req.Header.Set("Content-Type", "application/json")
 
@@ -129,8 +132,16 @@ func AddUserToGuild(accessToken *string, guildID string, userID string) error {
 	}
 
 	defer resp.Body.Close()
+	if resp.StatusCode == http.StatusNoContent {
+		return apperrors.NewAlreadyInGuildError()
+	}
 	if resp.StatusCode != http.StatusCreated {
-		return errors.New("Failed to add user to guild: status " + resp.Status)
+		body, err := io.ReadAll(resp.Body)
+		if err != nil {
+			return err
+		}
+
+		return errors.New("Failed to add user to guild: status " + resp.Status + " body: " + string(body))
 	}
 
 	return nil
