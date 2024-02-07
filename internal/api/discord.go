@@ -102,10 +102,11 @@ func GetDiscordUserServers(accessToken *string) ([]GetDiscordUserGuildsResponse,
 	return discordUserGuilds, nil
 }
 
-func AddUserToGuild(accessToken *string, guildID string, userID string) error {
+func AddUserToGuild(accessToken *string, guildID string, userID string, userRoles []string) error {
 	var buf bytes.Buffer
-	err := json.NewEncoder(&buf).Encode(map[string]string{
+	err := json.NewEncoder(&buf).Encode(map[string]interface{}{
 		"access_token": *accessToken,
+		"roles":        userRoles,
 	})
 	if err != nil {
 		return err

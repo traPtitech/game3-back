@@ -119,7 +119,15 @@ func addUserToGame3Guild(accessToken *string) error {
 	if err != nil {
 		return err
 	}
-	err = api.AddUserToGuild(accessToken, game3ServerID, user.ID)
+
+	roles := []string{}
+	normalParticipantRoleID, err := util.GetEnvOrErr("DISCORD_NORMAL_PARTICIPANT_ROLE_ID")
+	if err != nil {
+		return err
+	}
+	roles = append(roles, normalParticipantRoleID)
+
+	err = api.AddUserToGuild(accessToken, game3ServerID, user.ID, roles)
 	if err != nil {
 		return err
 	}
