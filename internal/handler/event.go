@@ -2,7 +2,9 @@ package handler
 
 import (
 	"github.com/labstack/echo/v4"
+	"github.com/oapi-codegen/runtime/types"
 	"github.com/traPtitech/game3-back/internal/apperrors"
+	"github.com/traPtitech/game3-back/internal/pkg/constants"
 	"github.com/traPtitech/game3-back/openapi/models"
 	"net/http"
 )
@@ -17,7 +19,7 @@ func (h *Handler) PostEvent(c echo.Context) (err error) {
 		return apperrors.HandleBindError(err)
 	}
 
-	req.Image, err = handleFile(c, "image")
+	req.Image, err = handleEventImage(c)
 	if err != nil {
 		return apperrors.HandleFileError(err)
 	}
@@ -66,7 +68,7 @@ func (h *Handler) PatchEvent(c echo.Context, eventID models.EventSlugInPath) (er
 		return apperrors.HandleBindError(err)
 	}
 
-	req.Image, err = handleFile(c, "image")
+	req.Image, err = handleEventImage(c)
 	if err != nil {
 		return apperrors.HandleFileError(err)
 	}
@@ -120,4 +122,8 @@ func (h *Handler) GetEventCsv(c echo.Context, eventID models.EventSlugInPath) er
 	}
 
 	return echo.NewHTTPError(http.StatusNotImplemented, "not implemented")
+}
+
+func handleEventImage(c echo.Context) (*types.File, error) {
+	return handleImageFileAndConvertImageToPNGAndResizeImage(c, "image", constants.EventImageWidth, constants.EventImageHeight)
 }

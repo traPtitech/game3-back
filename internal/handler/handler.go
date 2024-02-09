@@ -8,6 +8,7 @@ import (
 	"github.com/traPtitech/game3-back/internal/api"
 	"github.com/traPtitech/game3-back/internal/apperrors"
 	"github.com/traPtitech/game3-back/internal/enum"
+	"github.com/traPtitech/game3-back/internal/pkg/util"
 	"github.com/traPtitech/game3-back/internal/repository"
 	"net/http"
 )
@@ -46,19 +47,36 @@ func respondWithError(c echo.Context, err error) error {
 	}
 }
 
-// handleFile processes a file from the form data and returns a *types.File.
-func handleFile(c echo.Context, formFileName string) (*types.File, error) {
+// handleImageFileAndConvertImageToPNGAndResizeImage reads the image file from the form and converts it to PNG format.
+func handleImageFileAndConvertImageToPNGAndResizeImage(c echo.Context, formFileName string, maxWidth, maxHeight int) (*types.File, error) {
 	fileHeader, err := c.FormFile(formFileName)
 	if err != nil {
 		if errors.Is(err, http.ErrMissingFile) {
 			return nil, nil
 		}
+		return nil, err
+	}
 
+	fileSrc, err := fileHeader.Open()
+	if err != nil {
+		return nil, err
+	}
+	defer fileSrc.Close()
+
+	// 画像をPNG形式に変換
+	pngData, err := util.EncodeImageToPNG(fileSrc)
+	if err != nil {
+		return nil, err
+	}
+
+	// 画像をリサイズ
+	resizedPngData, err := util.ResizeImageMaintainingAspectRatio(pngData, maxWidth, maxHeight)
+	if err != nil {
 		return nil, err
 	}
 
 	file := types.File{}
-	file.InitFromMultipart(fileHeader)
+	file.InitFromBytes(resizedPngData, fileHeader.Filename)
 
 	return &file, nil
 }

@@ -3,8 +3,10 @@ package handler
 import (
 	"github.com/google/uuid"
 	"github.com/labstack/echo/v4"
+	"github.com/oapi-codegen/runtime/types"
 	"github.com/traPtitech/game3-back/internal/apperrors"
 	"github.com/traPtitech/game3-back/internal/enum"
+	"github.com/traPtitech/game3-back/internal/pkg/constants"
 	"github.com/traPtitech/game3-back/openapi/models"
 	"net/http"
 )
@@ -52,12 +54,12 @@ func (h *Handler) PostGame(c echo.Context) error {
 		return apperrors.HandleBindError(err)
 	}
 
-	icon, err := handleFile(c, "icon")
+	icon, err := handleGameIcon(c)
 	if err != nil {
 		return apperrors.HandleFileError(err)
 	}
 	req.Icon = *icon
-	req.Image, err = handleFile(c, "image")
+	req.Image, err = handleGameImage(c)
 	if err != nil {
 		return apperrors.HandleFileError(err)
 	}
@@ -108,11 +110,11 @@ func (h *Handler) PatchGame(c echo.Context, gameID models.GameIdInPath) error {
 		return apperrors.HandleBindError(err)
 	}
 
-	req.Icon, err = handleFile(c, "icon")
+	req.Icon, err = handleGameIcon(c)
 	if err != nil {
 		return apperrors.HandleFileError(err)
 	}
-	req.Image, err = handleFile(c, "image")
+	req.Image, err = handleGameImage(c)
 	if err != nil {
 		return apperrors.HandleFileError(err)
 	}
@@ -157,4 +159,12 @@ func (h *Handler) GetGameImage(c echo.Context, gameID models.GameIdInPath) error
 	}
 
 	return c.Blob(http.StatusOK, "image/png", image)
+}
+
+func handleGameImage(c echo.Context) (*types.File, error) {
+	return handleImageFileAndConvertImageToPNGAndResizeImage(c, "image", constants.GameImageWidth, constants.GameImageHeight)
+}
+
+func handleGameIcon(c echo.Context) (*types.File, error) {
+	return handleImageFileAndConvertImageToPNGAndResizeImage(c, "icon", constants.GameIconSize, constants.GameIconSize)
 }
