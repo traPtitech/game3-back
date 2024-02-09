@@ -95,7 +95,12 @@ func (h *Handler) GetEventImage(c echo.Context, eventID models.EventSlugInPath) 
 		return apperrors.HandleDbError(err)
 	}
 
-	return c.Blob(http.StatusOK, "image/png", image)
+	err = validateCacheAndUpdateHeader(c, image.UpdatedAt.String())
+	if err != nil {
+		return err
+	}
+
+	return c.Blob(http.StatusOK, "image/png", image.Image)
 }
 
 func (h *Handler) GetEventTerms(c echo.Context, eventID models.EventSlugInPath) error {

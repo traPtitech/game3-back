@@ -150,15 +150,26 @@ func (h *Handler) GetGameIcon(c echo.Context, gameID models.GameIdInPath) error 
 		return apperrors.HandleDbError(err)
 	}
 
-	return c.Blob(http.StatusOK, "image/png", icon)
+	err = validateCacheAndUpdateHeader(c, icon.UpdatedAt.String())
+	if err != nil {
+		return err
+	}
+
+	return c.Blob(http.StatusOK, "image/png", icon.Image)
 }
+
 func (h *Handler) GetGameImage(c echo.Context, gameID models.GameIdInPath) error {
 	image, err := h.repo.GetGameImage(gameID)
 	if err != nil {
 		return apperrors.HandleDbError(err)
 	}
 
-	return c.Blob(http.StatusOK, "image/png", image)
+	err = validateCacheAndUpdateHeader(c, image.UpdatedAt.String())
+	if err != nil {
+		return err
+	}
+
+	return c.Blob(http.StatusOK, "image/png", image.Image)
 }
 
 func handleGameImage(c echo.Context) (*types.File, error) {

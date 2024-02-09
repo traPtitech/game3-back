@@ -2,6 +2,7 @@ package repository
 
 import (
 	"github.com/google/uuid"
+	"github.com/traPtitech/game3-back/internal/domain"
 	"github.com/traPtitech/game3-back/openapi/models"
 	"strings"
 )
@@ -98,18 +99,18 @@ func (r *Repository) DeleteGame(gameID uuid.UUID) error {
 	return nil
 }
 
-func (r *Repository) GetGameIcon(gameID uuid.UUID) ([]byte, error) {
-	icon := []byte{}
-	if err := r.db.Get(&icon, "SELECT icon FROM game WHERE id = ?", gameID); err != nil {
+func (r *Repository) GetGameIcon(gameID uuid.UUID) (*domain.Icon, error) {
+	icon := &domain.Icon{}
+	if err := r.db.Get(icon, "SELECT icon, updated_at FROM game WHERE id = ?", gameID); err != nil {
 		return nil, err
 	}
 
 	return icon, nil
 }
 
-func (r *Repository) GetGameImage(gameID uuid.UUID) ([]byte, error) {
-	image := []byte{}
-	if err := r.db.Get(&image, "SELECT image FROM game WHERE id = ?", gameID); err != nil {
+func (r *Repository) GetGameImage(gameID uuid.UUID) (*domain.Image, error) {
+	image := &domain.Image{}
+	if err := r.db.Get(image, "SELECT image, updated_at FROM game WHERE id = ?", gameID); err != nil {
 		return nil, err
 	}
 

@@ -159,3 +159,13 @@ func (h *Handler) enforceUserOrAboveAccess(c echo.Context) (user *api.GetDiscord
 
 	return
 }
+
+func validateCacheAndUpdateHeader(c echo.Context, lastModifiedTime string) error {
+	ifModifiedSince := c.Request().Header.Get("If-Modified-Since")
+	if ifModifiedSince == lastModifiedTime {
+		return c.NoContent(http.StatusNotModified)
+	}
+	c.Response().Header().Set("Last-Modified", lastModifiedTime)
+
+	return nil
+}

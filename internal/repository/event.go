@@ -3,6 +3,7 @@ package repository
 import (
 	"database/sql"
 	"errors"
+	"github.com/traPtitech/game3-back/internal/domain"
 	"github.com/traPtitech/game3-back/openapi/models"
 )
 
@@ -80,10 +81,10 @@ func (r *Repository) DeleteEvent(eventSlug models.EventSlugInPath) error {
 	return nil
 }
 
-func (r *Repository) GetEventImage(eventSlug models.EventSlugInPath) ([]byte, error) {
-	file := []byte{}
-	query := "SELECT image FROM event WHERE slug = ?"
-	if err := r.db.Get(&file, query, eventSlug); err != nil {
+func (r *Repository) GetEventImage(eventSlug models.EventSlugInPath) (*domain.Image, error) {
+	file := &domain.Image{}
+	query := "SELECT image, updated_at FROM event WHERE slug = ?"
+	if err := r.db.Get(file, query, eventSlug); err != nil {
 		return nil, err
 	}
 
