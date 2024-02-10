@@ -11,7 +11,6 @@ CREATE TABLE session
     updated_at    TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 );
 -- +goose StatementEnd
-
 -- +goose StatementBegin
 CREATE TABLE event
 (
@@ -25,7 +24,6 @@ CREATE TABLE event
     updated_at                   TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 );
 -- +goose StatementEnd
-
 -- +goose StatementBegin
 CREATE TABLE term
 (
@@ -39,7 +37,6 @@ CREATE TABLE term
     FOREIGN KEY (event_slug) REFERENCES event (slug)
 );
 -- +goose StatementEnd
-
 -- +goose StatementBegin
 CREATE TABLE game
 (
