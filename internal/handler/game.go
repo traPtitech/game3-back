@@ -18,9 +18,7 @@ func (h *Handler) GetGames(c echo.Context, params models.GetGamesParams) error {
 	}
 
 	if params.IncludeUnpublished != nil && *params.IncludeUnpublished {
-		if (params.UserId != nil && user != nil && *params.UserId == user.ID) || role.IsAdmin() {
-			// 自分のゲームかAdminであれば見れる
-		} else {
+		if !(params.UserId != nil && user != nil && *params.UserId == user.ID) && !role.IsAdmin() {
 			return echo.NewHTTPError(http.StatusForbidden, "you can't get other user's unpublished game")
 		}
 	}

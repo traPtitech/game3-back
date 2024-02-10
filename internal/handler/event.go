@@ -121,7 +121,7 @@ func (h *Handler) GetEventGames(c echo.Context, eventID models.EventSlugInPath) 
 	return c.JSON(http.StatusOK, games)
 }
 
-func (h *Handler) GetEventCsv(c echo.Context, eventID models.EventSlugInPath) error {
+func (h *Handler) GetEventCsv(c echo.Context, _ models.EventSlugInPath) error {
 	if _, _, err := h.enforceAdminAccess(c); err != nil {
 		return err
 	}

@@ -70,10 +70,7 @@ func (h *Handler) OauthCallback(c echo.Context, params models.OauthCallbackParam
 
 	if !isInGame3Server {
 		err = addUserToGame3Guild(tokenResponse.AccessToken)
-		if errors.Is(err, apperrors.NewAlreadyInGuildError()) {
-			// 起きないはずだけど pass
-		}
-		if err != nil {
+		if err != nil && !errors.Is(err, apperrors.NewAlreadyInGuildError()) {
 			return err
 		}
 	}

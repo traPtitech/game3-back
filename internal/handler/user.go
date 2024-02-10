@@ -37,12 +37,12 @@ func (h *Handler) GetMeGames(c echo.Context) error {
 	return c.JSON(http.StatusOK, games)
 }
 
-func (h *Handler) GetUser(c echo.Context, userId models.UserIdInPath) error {
+func (h *Handler) GetUser(c echo.Context, _ models.UserIdInPath) error {
 	return c.JSON(http.StatusNotImplemented, nil)
 }
 
-func (h *Handler) GetUserGames(c echo.Context, userId models.UserIdInPath) error {
-	games, err := h.repo.GetGames(models.GetGamesParams{UserId: &userId})
+func (h *Handler) GetUserGames(c echo.Context, userID models.UserIdInPath) error {
+	games, err := h.repo.GetGames(models.GetGamesParams{UserId: &userID})
 	if err != nil {
 		return apperrors.HandleDbError(err)
 	}

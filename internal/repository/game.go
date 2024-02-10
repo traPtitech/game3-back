@@ -37,9 +37,7 @@ func (r *Repository) GetGames(params models.GetGamesParams) ([]*models.Game, err
 		args = append(args, params.UserId)
 	}
 
-	if params.IncludeUnpublished != nil && *params.IncludeUnpublished {
-		// 条件を追加しない
-	} else {
+	if params.IncludeUnpublished == nil || !*params.IncludeUnpublished {
 		whereClauses = append(whereClauses, "game.is_published = TRUE")
 	}
 

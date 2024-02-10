@@ -24,7 +24,7 @@ func New(repo *repository.Repository) *Handler {
 }
 
 // respondWithError returns an error response based on the error type. (使わなかったので消すかも)
-func respondWithError(c echo.Context, err error) error {
+func _(c echo.Context, err error) error {
 	//TODO err.Error()をそのまま返すのはセキュリティ的に問題があるので、エラータイプによって適切なエラーメッセージを返すように修正する
 	var notFoundError *apperrors.NotFoundError
 	var badRequestError *apperrors.BadRequestError
@@ -54,6 +54,7 @@ func handleImageFileAndConvertImageToPNGAndResizeImage(c echo.Context, formFileN
 		if errors.Is(err, http.ErrMissingFile) {
 			return nil, nil
 		}
+
 		return nil, err
 	}
 
@@ -85,9 +86,10 @@ func handleImageFileAndConvertImageToPNGAndResizeImage(c echo.Context, formFileN
 func getSessionIDByCookie(c echo.Context) (*uuid.UUID, error) {
 	sessionByCookie, err := c.Cookie("SessionToken")
 	if err != nil {
-		if errors.As(err, &http.ErrNoCookie) {
+		if errors.Is(err, http.ErrNoCookie) {
 			return nil, apperrors.NewSessionTokenNotFoundError()
 		}
+
 		return nil, err
 	}
 	if sessionByCookie == nil {
