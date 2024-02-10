@@ -148,21 +148,62 @@ func AddUserToGuild(accessToken *string, guildID string, userID string, userRole
 	return nil
 }
 
-func ChangeUserRole(accessToken *string, guildID string, userID string, userRoles []string) error {
+// AddRoleToDiscordUser PUT guilds/{guild.id}/members/{user.id}/roles/{role.id}
+// Adds a role to a guild member. Requires the MANAGE_ROLES permission. Returns a 204 empty response on success. Fires a Guild Member Update Gateway event.
+func AddRoleToDiscordUser(guildID string, userID string, roleID string) error {
+	req, err := http.NewRequest("PUT", "https://discord.com/api/guilds/"+guildID+"/members/"+userID+"/roles/"+roleID, nil)
+	if err != nil {
+		return err
+	}
+
+	botToken, err := util.GetEnvOrErr("DISCORD_BOT_TOKEN")
+	if err != nil {
+		return err
+	}
+
+	req.Header.Set("Authorization", "Bot "+botToken)
+	req.Header.Set("Content-Type", "application/json")
+
+	client := &http.Client{}
+	resp, err := client.Do(req)
+	if err != nil {
+		return err
+	}
+
+	defer resp.Body.Close()
+	if resp.StatusCode != http.StatusNoContent {
+		body, err := io.ReadAll(resp.Body)
+		if err != nil {
+			return err
+		}
+
+		return errors.New("Failed to add user role: status " + resp.Status + " body: " + string(body))
+	}
+
+	return nil
+}
+
+// CreateDiscordMessage POST /channels/{channel.id}/messages
+func CreateDiscordMessage(channelID string, content string) error {
 	var buf bytes.Buffer
-	err := json.NewEncoder(&buf).Encode(map[string]interface{}{
-		"roles": userRoles,
+	err := json.NewEncoder(&buf).Encode(map[string]string{
+		"content": content,
 	})
 	if err != nil {
 		return err
 	}
 
-	req, err := http.NewRequest("PATCH", "https://discord.com/api/guilds/"+guildID+"/members/"+userID, &buf)
+	req, err := http.NewRequest("POST", "https://discord.com/api/channels/"+channelID+"/messages", &buf)
 	if err != nil {
 		return err
 	}
 
-	req.Header.Set("Authorization", "Bearer "+*accessToken)
+	botToken, err := util.GetEnvOrErr("DISCORD_BOT_TOKEN")
+	if err != nil {
+		return err
+	}
+
+	req.Header.Set("Authorization", "Bot "+botToken)
 	req.Header.Set("Content-Type", "application/json")
 
 	client := &http.Client{}
@@ -178,7 +219,7 @@ func ChangeUserRole(accessToken *string, guildID string, userID string, userRole
 			return err
 		}
 
-		return errors.New("Failed to change user role: status " + resp.Status + " body: " + string(body))
+		return errors.New("Failed to create message: status " + resp.Status + " body: " + string(body))
 	}
 
 	return nil

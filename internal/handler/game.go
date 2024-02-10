@@ -4,9 +4,11 @@ import (
 	"github.com/google/uuid"
 	"github.com/labstack/echo/v4"
 	"github.com/oapi-codegen/runtime/types"
+	"github.com/traPtitech/game3-back/internal/api"
 	"github.com/traPtitech/game3-back/internal/pkg/apperrors"
 	"github.com/traPtitech/game3-back/internal/pkg/constants"
 	"github.com/traPtitech/game3-back/internal/pkg/enum"
+	"github.com/traPtitech/game3-back/internal/pkg/util"
 	"github.com/traPtitech/game3-back/openapi/models"
 	"net/http"
 )
@@ -84,7 +86,36 @@ func (h *Handler) PostGame(c echo.Context) error {
 		return apperrors.HandleDbError(err)
 	}
 
+	err = addExhibitorRoleToDiscordUser(user.ID)
+	if err != nil {
+		return err
+	}
+
+	err = createGamePostedMessageToDiscord(game)
+
 	return c.JSON(http.StatusCreated, game)
+}
+
+func addExhibitorRoleToDiscordUser(discordUserId string) error {
+	game3ServerID, err := util.GetEnvOrErr("DISCORD_SERVER_ID")
+	if err != nil {
+		return err
+	}
+	exhibitorRole, err := util.GetEnvOrErr("DISCORD_EXHIBITOR_PARTICIPANT_ROLE_ID")
+	if err != nil {
+		return err
+	}
+
+	return api.AddRoleToDiscordUser(game3ServerID, discordUserId, exhibitorRole)
+}
+
+func createGamePostedMessageToDiscord(game *models.Game) error {
+	game3ChannelID, err := util.GetEnvOrErr("DISCORD_BOT_CHANNEL_ID")
+	if err != nil {
+		return err
+	}
+
+	return api.CreateDiscordMessage(game3ChannelID, "新しいゲームが投稿されました: https://game3.trap.games/entry/"+game.Id.String())
 }
 
 func (h *Handler) GetGame(c echo.Context, gameID models.GameIdInPath) error {
