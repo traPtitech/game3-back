@@ -4,8 +4,8 @@ import (
 	"bytes"
 	"encoding/json"
 	"errors"
-	"github.com/traPtitech/game3-back/internal/apperrors"
-	"github.com/traPtitech/game3-back/internal/enum"
+	"github.com/traPtitech/game3-back/internal/pkg/apperrors"
+	"github.com/traPtitech/game3-back/internal/pkg/enum"
 	"github.com/traPtitech/game3-back/internal/pkg/util"
 	"github.com/traPtitech/game3-back/openapi/models"
 	"io"
@@ -143,6 +143,42 @@ func AddUserToGuild(accessToken *string, guildID string, userID string, userRole
 		}
 
 		return errors.New("Failed to add user to guild: status " + resp.Status + " body: " + string(body))
+	}
+
+	return nil
+}
+
+func ChangeUserRole(accessToken *string, guildID string, userID string, userRoles []string) error {
+	var buf bytes.Buffer
+	err := json.NewEncoder(&buf).Encode(map[string]interface{}{
+		"roles": userRoles,
+	})
+	if err != nil {
+		return err
+	}
+
+	req, err := http.NewRequest("PATCH", "https://discord.com/api/guilds/"+guildID+"/members/"+userID, &buf)
+	if err != nil {
+		return err
+	}
+
+	req.Header.Set("Authorization", "Bearer "+*accessToken)
+	req.Header.Set("Content-Type", "application/json")
+
+	client := &http.Client{}
+	resp, err := client.Do(req)
+	if err != nil {
+		return err
+	}
+
+	defer resp.Body.Close()
+	if resp.StatusCode != http.StatusOK {
+		body, err := io.ReadAll(resp.Body)
+		if err != nil {
+			return err
+		}
+
+		return errors.New("Failed to change user role: status " + resp.Status + " body: " + string(body))
 	}
 
 	return nil
