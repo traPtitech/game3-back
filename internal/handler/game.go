@@ -92,11 +92,14 @@ func (h *Handler) PostGame(c echo.Context) error {
 	}
 
 	err = createGamePostedMessageToDiscord(game)
+	if err != nil {
+		return err
+	}
 
 	return c.JSON(http.StatusCreated, game)
 }
 
-func addExhibitorRoleToDiscordUser(discordUserId string) error {
+func addExhibitorRoleToDiscordUser(discordUserID string) error {
 	game3ServerID, err := util.GetEnvOrErr("DISCORD_SERVER_ID")
 	if err != nil {
 		return err
@@ -106,7 +109,7 @@ func addExhibitorRoleToDiscordUser(discordUserId string) error {
 		return err
 	}
 
-	return api.AddRoleToDiscordUser(game3ServerID, discordUserId, exhibitorRole)
+	return api.AddRoleToDiscordUser(game3ServerID, discordUserID, exhibitorRole)
 }
 
 func createGamePostedMessageToDiscord(game *models.Game) error {
