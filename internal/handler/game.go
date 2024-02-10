@@ -4,9 +4,9 @@ import (
 	"github.com/google/uuid"
 	"github.com/labstack/echo/v4"
 	"github.com/oapi-codegen/runtime/types"
-	"github.com/traPtitech/game3-back/internal/apperrors"
-	"github.com/traPtitech/game3-back/internal/enum"
+	"github.com/traPtitech/game3-back/internal/pkg/apperrors"
 	"github.com/traPtitech/game3-back/internal/pkg/constants"
+	"github.com/traPtitech/game3-back/internal/pkg/enum"
 	"github.com/traPtitech/game3-back/openapi/models"
 	"net/http"
 )
