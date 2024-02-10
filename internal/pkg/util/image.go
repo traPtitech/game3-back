@@ -24,6 +24,8 @@ func EncodeImageToPNG(img io.Reader) ([]byte, error) {
 	return buf.Bytes(), nil
 }
 
+// ResizeImageMaintainingAspectRatio は画像を最大幅と最大高さを保ちつつアスペクト比を維持してリサイズします。
+// 画像が最大サイズを超えていない場合はそのまま返します。
 func ResizeImageMaintainingAspectRatio(imageBytes []byte, maxWidth, maxHeight int) ([]byte, error) {
 	img, _, err := image.Decode(bytes.NewReader(imageBytes))
 	if err != nil {
@@ -33,6 +35,11 @@ func ResizeImageMaintainingAspectRatio(imageBytes []byte, maxWidth, maxHeight in
 	srcBounds := img.Bounds()
 	srcWidth := srcBounds.Dx()
 	srcHeight := srcBounds.Dy()
+
+	// 画像が最大サイズを超えていない場合はそのまま返す
+	if srcWidth <= maxWidth && srcHeight <= maxHeight {
+		return imageBytes, nil
+	}
 
 	widthRatio := float64(maxWidth) / float64(srcWidth)
 	heightRatio := float64(maxHeight) / float64(srcHeight)
