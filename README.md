@@ -85,5 +85,7 @@
   - ロギングライブラリは好みに合ったものを使うと良い
 
 ## TODO
+- add transaction
+- fix discord_user_id to int64
 - テストを書く
 - DBの中に保存している画像を、オブジェクトストレージに移行する。
