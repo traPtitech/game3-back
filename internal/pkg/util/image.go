@@ -4,6 +4,8 @@ import (
 	"bytes"
 	"golang.org/x/image/draw"
 	"image"
+	_ "image/gif"
+	_ "image/jpeg"
 	"image/png"
 	"io"
 	"math"
