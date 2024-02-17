@@ -6,7 +6,7 @@ import (
 	"github.com/labstack/echo/v4"
 	"github.com/oapi-codegen/runtime/types"
 	"github.com/traPtitech/game3-back/internal/api"
-	apperrors "github.com/traPtitech/game3-back/internal/pkg/apperrors"
+	"github.com/traPtitech/game3-back/internal/pkg/apperrors"
 	"github.com/traPtitech/game3-back/internal/pkg/enum"
 	"github.com/traPtitech/game3-back/internal/pkg/util"
 	"github.com/traPtitech/game3-back/internal/repository"
@@ -47,7 +47,7 @@ func _(c echo.Context, err error) error {
 	}
 }
 
-// handleImageFileAndConvertImageToPNGAndResizeImage reads the image file from the form and converts it to PNG format.
+// handleImageFileAndConvertImageToPNGAndResizeImage reads the image file from the form and converts it to PNG or GIF format.
 func handleImageFileAndConvertImageToPNGAndResizeImage(c echo.Context, formFileName string, maxWidth, maxHeight int) (*types.File, error) {
 	fileHeader, err := c.FormFile(formFileName)
 	if err != nil {
@@ -64,20 +64,44 @@ func handleImageFileAndConvertImageToPNGAndResizeImage(c echo.Context, formFileN
 	}
 	defer fileSrc.Close()
 
-	// 画像をPNG形式に変換
-	pngData, err := util.EncodeImageToPNG(fileSrc)
+	srcImg, format, err := util.DecodeImage(fileSrc)
 	if err != nil {
 		return nil, err
 	}
 
-	// 画像をリサイズ
-	resizedPngData, err := util.ResizeImageMaintainingAspectRatio(pngData, maxWidth, maxHeight)
-	if err != nil {
-		return nil, err
+	var resizedImageData []byte
+	if format == "gif" {
+		gifData, err := util.DecodeGifImage(fileSrc)
+		if err != nil {
+			return nil, err
+		}
+
+		// 画像をリサイズ
+		resizedGifData, err := util.ResizeGifImageMaintainingAspectRatio(c, gifData, maxWidth, maxHeight)
+		if err != nil {
+			return nil, err
+		}
+
+		resizedImageData, err = util.EncodeGifImage(resizedGifData)
+		if err != nil {
+			return nil, err
+		}
+	} else {
+		// 画像をPNG形式に変換
+		pngData, err := util.EncodeImageToPNG(srcImg)
+		if err != nil {
+			return nil, err
+		}
+
+		// 画像をリサイズ
+		resizedImageData, err = util.ResizePngImageMaintainingAspectRatio(pngData, maxWidth, maxHeight)
+		if err != nil {
+			return nil, err
+		}
 	}
 
 	file := types.File{}
-	file.InitFromBytes(resizedPngData, fileHeader.Filename)
+	file.InitFromBytes(resizedImageData, fileHeader.Filename)
 
 	return &file, nil
 }

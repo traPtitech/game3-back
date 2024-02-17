@@ -6,7 +6,7 @@ import (
 	"github.com/labstack/echo/v4"
 	"github.com/traPtitech/game3-back/internal/api"
 	"github.com/traPtitech/game3-back/internal/domain"
-	apperrors "github.com/traPtitech/game3-back/internal/pkg/apperrors"
+	"github.com/traPtitech/game3-back/internal/pkg/apperrors"
 	"github.com/traPtitech/game3-back/internal/pkg/util"
 	"github.com/traPtitech/game3-back/openapi/models"
 	"net/http"
