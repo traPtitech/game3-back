@@ -1,6 +1,6 @@
 module github.com/traPtitech/game3-back // NOTE: github.com/ORGANIZATION/REPO_NAME などが好ましい
 
-go 1.20
+go 1.22.0
 
 require (
 	github.com/getkin/kin-openapi v0.122.0
@@ -8,6 +8,7 @@ require (
 	github.com/google/uuid v1.4.0
 	github.com/jmoiron/sqlx v1.3.5
 	github.com/labstack/echo/v4 v4.11.3
+	github.com/logica0419/resigif v0.0.0-20240217001801-bedf89b60f46
 	github.com/oapi-codegen/runtime v1.1.0
 	github.com/pressly/goose/v3 v3.11.2
 	golang.org/x/image v0.15.0
@@ -30,6 +31,7 @@ require (
 	github.com/valyala/fasttemplate v1.2.2 // indirect
 	golang.org/x/crypto v0.14.0 // indirect
 	golang.org/x/net v0.17.0 // indirect
+	golang.org/x/sync v0.6.0 // indirect
 	golang.org/x/sys v0.13.0 // indirect
 	golang.org/x/text v0.14.0 // indirect
 	golang.org/x/time v0.3.0 // indirect
