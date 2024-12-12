@@ -275,16 +275,49 @@ func GetDiscordUserToken(params models.OauthCallbackParams) (*TokenResponse, err
 	return &tokenResponse, nil
 }
 
-func GetDiscordUserRole(discordUserID string) enum.UserRole {
-	//TODO Discordのユーザーのロールを取得する BOTを使う必要がありそう、とりあえずハードコーディング
-	adminUserIDs := []string{"310006192917315585", "222725046987128837", "707176617210019850", "1088448230662099024", "457179092127711232", "855464089496453171", "350623253141782528", "818846297535676456"}
-	for _, id := range adminUserIDs {
-		if id == discordUserID {
-			return enum.Admin
+func GetDiscordUserRole(discordUserID, guildID, adminRoleID string) (enum.UserRole, error) {
+	botToken, err := util.GetEnvOrErr("DISCORD_BOT_TOKEN")
+	if err != nil {
+		return enum.User, err
+	}
+
+	u := "https://discord.com/api/guilds/" + guildID + "/members/" + discordUserID
+	req, err := http.NewRequest("GET", u, nil)
+	if err != nil {
+		return enum.User, err
+	}
+	req.Header.Set("Authorization", "Bot "+botToken)
+
+	client := &http.Client{}
+	resp, err := client.Do(req)
+	if err != nil {
+		return enum.User, err
+	}
+	defer resp.Body.Close()
+
+	if resp.StatusCode != http.StatusOK {
+		return enum.User, errors.New("failed to get user roles: status " + resp.Status)
+	}
+
+	body, err := io.ReadAll(resp.Body)
+	if err != nil {
+		return enum.User, err
+	}
+
+	var member struct {
+		Roles []string `json:"roles"`
+	}
+	if err := json.Unmarshal(body, &member); err != nil {
+		return enum.User, err
+	}
+
+	for _, roleID := range member.Roles {
+		if roleID == adminRoleID {
+			return enum.Admin, nil
 		}
 	}
 
-	return enum.User
+	return enum.User, nil
 }
 
 func GetDiscordOAuthRedirectURI() (string, error) {

@@ -122,7 +122,6 @@ func (h *Handler) getDiscordUserInfoByCookie(c echo.Context) (*api.GetDiscordUse
 
 func (h *Handler) getDiscordUserInfoAndRoleByCookie(c echo.Context) (*api.GetDiscordUserInfoResponse, enum.UserRole, error) {
 	user, err := h.getDiscordUserInfoByCookie(c)
-
 	var notFoundErr *apperrors.SessionTokenNotFoundError
 	if errors.As(err, &notFoundErr) {
 		return nil, enum.Guest, nil
@@ -131,9 +130,17 @@ func (h *Handler) getDiscordUserInfoAndRoleByCookie(c echo.Context) (*api.GetDis
 		return nil, enum.Guest, err
 	}
 
-	role := api.GetDiscordUserRole(user.ID)
+	game3ServerID, err := util.GetEnvOrErr("DISCORD_SERVER_ID")
+	if err != nil {
+		return nil, enum.Guest, err
+	}
+	adminRoleID, err := util.GetEnvOrErr("DISCORD_ADMIN_ROLE_ID")
+	if err != nil {
+		return nil, enum.Guest, err
+	}
+	role, err2 := api.GetDiscordUserRole(user.ID, game3ServerID, adminRoleID)
 
-	return user, role, nil
+	return user, role, err2
 }
 
 func (h *Handler) enforceAdminAccess(c echo.Context) (user *api.GetDiscordUserInfoResponse, role enum.UserRole, err error) {
